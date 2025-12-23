@@ -1,0 +1,27 @@
+{
+    "name": "haida/filament-notify-whatsapp",
+    "version": "1.0.0",
+    "description": "WhatsApp Cloud API channel for Filament Notify.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "haida/filament-notify-core": "*",
+        "illuminate/support": "^11.0|^12.0",
+        "illuminate/http": "^11.0|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haida\\FilamentNotify\\WhatsApp\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Haida\\FilamentNotify\\WhatsApp\\FilamentNotifyWhatsAppServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

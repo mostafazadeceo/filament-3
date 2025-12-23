@@ -1,0 +1,27 @@
+{
+    "name": "haida/filament-notify-bale",
+    "version": "1.0.0",
+    "description": "Bale messenger channel for Filament Notify.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "haida/filament-notify-core": "*",
+        "illuminate/http": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haida\\FilamentNotify\\Bale\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Haida\\FilamentNotify\\Bale\\FilamentNotifyBaleServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
