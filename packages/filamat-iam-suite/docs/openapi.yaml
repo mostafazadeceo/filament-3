@@ -1,0 +1,237 @@
+openapi: 3.0.3
+info:
+  title: مستندات ای‌پی‌آی Filamat IAM Suite
+  version: v1
+servers:
+  - url: /api/v1
+security:
+  - bearerAuth: []
+  - apiKeyAuth: []
+paths:
+  /tenants:
+    get:
+      summary: لیست فضاهای کاری
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ایجاد فضای کاری
+      responses:
+        '201': { description: Created }
+  /tenants/{id}:
+    get:
+      summary: نمایش فضای کاری
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+    patch:
+      summary: ویرایش فضای کاری
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+    delete:
+      summary: حذف فضای کاری
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+  /users:
+    get:
+      summary: لیست کاربران
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ایجاد کاربر
+      responses:
+        '201': { description: Created }
+  /users/{id}:
+    get:
+      summary: نمایش کاربر
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+    patch:
+      summary: ویرایش کاربر
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+    delete:
+      summary: حذف کاربر
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+  /roles:
+    get:
+      summary: لیست نقش‌ها
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ایجاد نقش
+      responses:
+        '201': { description: Created }
+  /permissions:
+    get:
+      summary: لیست مجوزها
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ایجاد مجوز
+      responses:
+        '201': { description: Created }
+  /groups:
+    get:
+      summary: لیست گروه‌ها
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ایجاد گروه
+      responses:
+        '201': { description: Created }
+  /wallets:
+    get:
+      summary: لیست کیف پول‌ها
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ایجاد کیف پول
+      responses:
+        '201': { description: Created }
+  /wallets/{id}/credit:
+    post:
+      summary: افزایش موجودی کیف پول
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '201': { description: Created }
+  /wallets/{id}/debit:
+    post:
+      summary: کاهش موجودی کیف پول
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '201': { description: Created }
+  /wallets/transfer:
+    post:
+      summary: انتقال داخلی بین کیف پول‌ها
+      responses:
+        '201': { description: Created }
+  /wallets/{id}/holds:
+    post:
+      summary: ایجاد هولد روی کیف پول
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '201': { description: Created }
+  /transactions:
+    get:
+      summary: لیست تراکنش‌ها
+      responses:
+        '200': { description: موفق }
+  /wallet-holds:
+    get:
+      summary: لیست هولدها
+      responses:
+        '200': { description: موفق }
+  /wallet-holds/{id}:
+    get:
+      summary: نمایش هولد
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+  /wallet-holds/{id}/capture:
+    post:
+      summary: تسویه هولد
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+  /wallet-holds/{id}/release:
+    post:
+      summary: آزادسازی هولد
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+  /plans:
+    get:
+      summary: لیست پلن‌ها
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ایجاد پلن
+      responses:
+        '201': { description: Created }
+  /subscriptions:
+    get:
+      summary: لیست اشتراک‌ها
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ایجاد اشتراک
+      responses:
+        '201': { description: Created }
+  /notifications/send:
+    post:
+      summary: ارسال اعلان
+      responses:
+        '202': { description: Accepted }
+  /webhooks/notification-plugin:
+    post:
+      summary: وبهوک اعلان
+      responses:
+        '200': { description: موفق }
+  /webhooks/payment-provider:
+    post:
+      summary: وبهوک پرداخت
+      responses:
+        '200': { description: OK }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key

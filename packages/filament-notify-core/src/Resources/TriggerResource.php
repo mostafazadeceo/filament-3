@@ -36,7 +36,7 @@ class TriggerResource extends Resource
                     ->badge(),
                 TextColumn::make('updated_at')
                     ->label('آخرین بروزرسانی')
-                    ->dateTime(),
+                    ->jalaliDateTime(),
             ])
             ->defaultSort('updated_at', 'desc');
     }

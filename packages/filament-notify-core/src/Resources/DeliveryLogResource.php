@@ -36,7 +36,7 @@ class DeliveryLogResource extends Resource
                         'danger' => 'failed',
                         'warning' => 'skipped',
                     ]),
-                TextColumn::make('created_at')->label('زمان')->dateTime(),
+                TextColumn::make('created_at')->label('زمان')->jalaliDateTime(),
             ])
             ->defaultSort('created_at', 'desc');
     }

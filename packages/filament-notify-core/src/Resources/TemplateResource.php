@@ -84,7 +84,7 @@ class TemplateResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('نام')->searchable(),
                 TextColumn::make('channel')->label('کانال')->badge(),
-                TextColumn::make('updated_at')->label('آخرین بروزرسانی')->dateTime(),
+                TextColumn::make('updated_at')->label('آخرین بروزرسانی')->jalaliDateTime(),
             ])
             ->defaultSort('updated_at', 'desc');
     }

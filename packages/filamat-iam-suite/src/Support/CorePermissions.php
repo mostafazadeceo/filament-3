@@ -1,0 +1,223 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Filamat\IamSuite\Support;
+
+final class CorePermissions
+{
+    /**
+     * @return array<int, string>
+     */
+    public static function all(): array
+    {
+        return [
+            'iam.view',
+            'iam.manage',
+            'organization.view',
+            'organization.manage',
+            'tenant.view',
+            'tenant.manage',
+            'user.view',
+            'user.manage',
+            'user.invite',
+            'user.suspend',
+            'user.activate',
+            'user.impersonate',
+            'user.reset_otp',
+            'role.view',
+            'role.manage',
+            'permission.view',
+            'permission.manage',
+            'group.view',
+            'group.manage',
+            'permission_template.view',
+            'permission_template.manage',
+            'permission_override.view',
+            'permission_override.manage',
+            'access_request.view',
+            'access_request.manage',
+            'access_request.approve',
+            'access_request.deny',
+            'permission_snapshot.view',
+            'permission_snapshot.capture',
+            'permission_snapshot.diff',
+            'delegated_admin.view',
+            'delegated_admin.manage',
+            'wallet.view',
+            'wallet.manage',
+            'wallet.credit',
+            'wallet.debit',
+            'wallet.hold',
+            'wallet.capture',
+            'wallet.release',
+            'wallet.transfer',
+            'wallet.export',
+            'wallet_transaction.view',
+            'wallet_transaction.export',
+            'wallet_hold.view',
+            'wallet_hold.manage',
+            'subscription.view',
+            'subscription.manage',
+            'subscription.cancel',
+            'subscription.renew',
+            'subscription_plan.view',
+            'subscription_plan.manage',
+            'notification.view',
+            'notification.send',
+            'notification.manage',
+            'webhook.view',
+            'webhook.manage',
+            'api.view',
+            'api.manage',
+            'api.key.manage',
+            'api.docs.view',
+            'api.docs.manage',
+            'security.view',
+            'security.manage',
+            'audit.view',
+            'settings.manage',
+        ];
+    }
+
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public static function roleTemplates(): array
+    {
+        $all = self::all();
+
+        return [
+            'super_admin' => $all,
+            'tenant_owner' => [
+                'iam.view',
+                'iam.manage',
+                'organization.view',
+                'tenant.view',
+                'tenant.manage',
+                'user.view',
+                'user.manage',
+                'user.invite',
+                'user.reset_otp',
+                'role.view',
+                'role.manage',
+                'permission.view',
+                'permission.manage',
+                'group.view',
+                'group.manage',
+                'wallet.view',
+                'wallet.manage',
+                'wallet.transfer',
+                'subscription.view',
+                'subscription.manage',
+                'subscription.cancel',
+                'subscription.renew',
+                'notification.view',
+                'notification.send',
+                'webhook.view',
+                'webhook.manage',
+                'api.view',
+                'api.manage',
+                'api.docs.manage',
+                'security.view',
+                'audit.view',
+                'settings.manage',
+            ],
+            'tenant_admin' => [
+                'iam.view',
+                'user.view',
+                'user.manage',
+                'user.invite',
+                'user.reset_otp',
+                'role.view',
+                'permission.view',
+                'group.view',
+                'group.manage',
+                'wallet.view',
+                'subscription.view',
+                'notification.view',
+                'api.view',
+                'security.view',
+            ],
+            'finance_manager' => [
+                'wallet.view',
+                'wallet.manage',
+                'wallet.credit',
+                'wallet.debit',
+                'wallet.transfer',
+                'wallet.export',
+                'subscription.view',
+            ],
+            'support' => [
+                'user.view',
+                'notification.view',
+                'security.view',
+                'audit.view',
+            ],
+        ];
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    public static function planTemplates(): array
+    {
+        return [
+            'basic' => [
+                'name' => 'پایه',
+                'price' => 0,
+                'currency' => 'irr',
+                'period_days' => 30,
+                'trial_days' => 7,
+                'features' => [
+                    'users' => 3,
+                    'wallet' => true,
+                    'permissions' => [
+                        'iam.view',
+                        'user.view',
+                        'wallet.view',
+                        'subscription.view',
+                        'notification.view',
+                        'api.view',
+                    ],
+                ],
+            ],
+            'pro' => [
+                'name' => 'حرفه‌ای',
+                'price' => 1000000,
+                'currency' => 'irr',
+                'period_days' => 30,
+                'trial_days' => 7,
+                'features' => [
+                    'users' => 10,
+                    'wallet' => true,
+                    'notifications' => true,
+                    'permissions' => [
+                        'iam.view',
+                        'iam.manage',
+                        'user.manage',
+                        'wallet.manage',
+                        'wallet.transfer',
+                        'subscription.view',
+                        'notification.send',
+                        'api.view',
+                    ],
+                ],
+            ],
+            'enterprise' => [
+                'name' => 'سازمانی',
+                'price' => 5000000,
+                'currency' => 'irr',
+                'period_days' => 30,
+                'trial_days' => 14,
+                'features' => [
+                    'users' => 100,
+                    'wallet' => true,
+                    'notifications' => true,
+                    'security' => true,
+                    'permissions' => self::all(),
+                ],
+            ],
+        ];
+    }
+}

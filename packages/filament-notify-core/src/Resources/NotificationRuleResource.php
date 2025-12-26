@@ -183,7 +183,7 @@ class NotificationRuleResource extends Resource
                 TextColumn::make('name')->label('عنوان')->searchable(),
                 TextColumn::make('trigger.label')->label('تریگر'),
                 IconColumn::make('enabled')->label('فعال')->boolean(),
-                TextColumn::make('updated_at')->label('آخرین بروزرسانی')->dateTime(),
+                TextColumn::make('updated_at')->label('آخرین بروزرسانی')->jalaliDateTime(),
             ])
             ->defaultSort('updated_at', 'desc');
     }

@@ -4,3 +4,4 @@
 @source '../../../../resources/views/filament/**';
 @source '../../../../vendor/diogogpinto/filament-auth-ui-enhancer/resources/**/*.blade.php';
 @source '../../../../vendor/mohamedsabil83/filament-hijri-picker/resources/**/*.blade.php';
+@source '../../../../vendor/zpmlabs/filament-api-docs-builder/resources/views/filament/**/*';
