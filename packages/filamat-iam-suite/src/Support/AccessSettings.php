@@ -248,6 +248,7 @@ final class AccessSettings
             'security' => 'امنیت',
             'audit' => 'ممیزی',
             'settings' => 'تنظیمات',
+            'accounting' => 'حسابداری',
             default => $prefix,
         };
     }

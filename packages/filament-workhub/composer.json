@@ -1,0 +1,32 @@
+{
+    "name": "haida/filament-workhub",
+    "version": "1.0.0",
+    "description": "Jira-inspired Workhub module for Filament v4.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^4.0",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/events": "^11.0|^12.0",
+        "illuminate/http": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haida\\FilamentWorkhub\\": "src/",
+            "Haida\\FilamentWorkhub\\Database\\Factories\\": "database/factories/",
+            "Haida\\FilamentWorkhub\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Haida\\FilamentWorkhub\\FilamentWorkhubServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

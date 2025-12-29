@@ -40,7 +40,7 @@ class CurrencyRateSettingsPage extends SettingsPage
                 ->label('همگام‌سازی الان')
                 ->icon('heroicon-o-arrow-path')
                 ->action(function () {
-                    SyncCurrencyRatesJob::dispatch();
+                    SyncCurrencyRatesJob::dispatch(true);
                     \Filament\Notifications\Notification::make()
                         ->title('همگام‌سازی در صف قرار گرفت.')
                         ->success()

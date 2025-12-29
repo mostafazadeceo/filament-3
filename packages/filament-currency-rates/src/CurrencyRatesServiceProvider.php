@@ -2,6 +2,7 @@
 
 namespace Haida\FilamentCurrencyRates;
 
+use Haida\FilamentCurrencyRates\Jobs\AutoSyncCurrencyRatesJob;
 use Haida\FilamentCurrencyRates\Services\CurrencyRateApiProvider;
 use Haida\FilamentCurrencyRates\Services\CurrencyRateManager;
 use Haida\FilamentCurrencyRates\Services\CurrencyRateScraper;
@@ -62,6 +63,18 @@ class CurrencyRatesServiceProvider extends PackageServiceProvider
             $expression = "*/{$minutes} * * * *";
 
             $schedule->call([CurrencyRateScheduler::class, 'sync'])->cron($expression);
+
+            AutoSyncCurrencyRatesJob::ensureScheduled($minutes);
         });
+
+        if (! app()->runningInConsole()) {
+            $this->app->terminating(function () {
+                try {
+                    app(CurrencyRateSyncService::class)->syncIfStale();
+                } catch (Throwable) {
+                    // Skip to avoid breaking HTTP responses.
+                }
+            });
+        }
     }
 }

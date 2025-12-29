@@ -108,7 +108,7 @@ class CurrencyRateResource extends Resource
                     ->label('همگام‌سازی نرخ‌ها')
                     ->icon('heroicon-o-arrow-path')
                     ->action(function () {
-                        SyncCurrencyRatesJob::dispatch();
+                        SyncCurrencyRatesJob::dispatch(true);
                         Notification::make()
                             ->title('همگام‌سازی در صف قرار گرفت.')
                             ->success()

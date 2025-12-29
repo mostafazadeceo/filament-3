@@ -1,0 +1,33 @@
+{
+    "name": "haida/filament-petty-cash-ir",
+    "version": "1.0.0",
+    "description": "Petty cash management for Iranian restaurants with Filament v4.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^4.0",
+        "filamat/filamat-iam-suite": "dev-main",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/events": "^11.0|^12.0",
+        "illuminate/http": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haida\\FilamentPettyCashIr\\": "src/",
+            "Haida\\FilamentPettyCashIr\\Database\\Factories\\": "database/factories/",
+            "Haida\\FilamentPettyCashIr\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Haida\\FilamentPettyCashIr\\FilamentPettyCashIrServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

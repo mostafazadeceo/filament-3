@@ -8,7 +8,12 @@ use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filamat\IamSuite\FilamatIamSuitePlugin;
 use Haida\FilamentNotify\Core\FilamentNotifyPlugin;
 use Haida\FilamentCurrencyRates\CurrencyRatesPlugin;
+use Haida\FilamentPettyCashIr\FilamentPettyCashIrPlugin;
 use Haida\FilamentRelograde\RelogradePlugin;
+use Haida\FilamentRestaurantOps\FilamentRestaurantOpsPlugin;
+use Haida\FilamentWorkhub\FilamentWorkhubPlugin;
+use Vendor\FilamentAccountingIr\FilamentAccountingIrPlugin;
+use Vendor\FilamentPayrollAttendanceIr\FilamentPayrollAttendanceIrPlugin;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -90,6 +95,11 @@ class AdminPanelProvider extends PanelProvider
         $plugins[] = FilamentNotifyPlugin::make();
         $plugins[] = CurrencyRatesPlugin::make();
         $plugins[] = RelogradePlugin::make();
+        $plugins[] = FilamentWorkhubPlugin::make();
+        $plugins[] = FilamentAccountingIrPlugin::make();
+        $plugins[] = FilamentPayrollAttendanceIrPlugin::make();
+        $plugins[] = FilamentRestaurantOpsPlugin::make();
+        $plugins[] = FilamentPettyCashIrPlugin::make();
         $plugins[] = FilamatIamSuitePlugin::make()
             ->superAdminPanels(['admin'])
             ->tenantPanels(['tenant']);

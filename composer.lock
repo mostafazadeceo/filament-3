@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "34d71c8d6da3937fcbad891d2fe2a828",
+    "content-hash": "5de8b5a64e43b93e44d09efbaa205c86",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -215,6 +215,83 @@
                 }
             ],
             "time": "2025-11-26T15:20:43+00:00"
+        },
+        {
+            "name": "barryvdh/laravel-dompdf",
+            "version": "v3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/barryvdh/laravel-dompdf.git",
+                "reference": "8e71b99fc53bb8eb77f316c3c452dd74ab7cb25d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/barryvdh/laravel-dompdf/zipball/8e71b99fc53bb8eb77f316c3c452dd74ab7cb25d",
+                "reference": "8e71b99fc53bb8eb77f316c3c452dd74ab7cb25d",
+                "shasum": ""
+            },
+            "require": {
+                "dompdf/dompdf": "^3.0",
+                "illuminate/support": "^9|^10|^11|^12",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "larastan/larastan": "^2.7|^3.0",
+                "orchestra/testbench": "^7|^8|^9|^10",
+                "phpro/grumphp": "^2.5",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "PDF": "Barryvdh\\DomPDF\\Facade\\Pdf",
+                        "Pdf": "Barryvdh\\DomPDF\\Facade\\Pdf"
+                    },
+                    "providers": [
+                        "Barryvdh\\DomPDF\\ServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Barryvdh\\DomPDF\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Barry vd. Heuvel",
+                    "email": "barryvdh@gmail.com"
+                }
+            ],
+            "description": "A DOMPDF Wrapper for Laravel",
+            "keywords": [
+                "dompdf",
+                "laravel",
+                "pdf"
+            ],
+            "support": {
+                "issues": "https://github.com/barryvdh/laravel-dompdf/issues",
+                "source": "https://github.com/barryvdh/laravel-dompdf/tree/v3.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://fruitcake.nl",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/barryvdh",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-02-13T15:07:54+00:00"
         },
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -1124,6 +1201,161 @@
             "time": "2024-02-05T11:56:58+00:00"
         },
         {
+            "name": "dompdf/dompdf",
+            "version": "v3.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dompdf/dompdf.git",
+                "reference": "db712c90c5b9868df3600e64e68da62e78a34623"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/db712c90c5b9868df3600e64e68da62e78a34623",
+                "reference": "db712c90c5b9868df3600e64e68da62e78a34623",
+                "shasum": ""
+            },
+            "require": {
+                "dompdf/php-font-lib": "^1.0.0",
+                "dompdf/php-svg-lib": "^1.0.0",
+                "ext-dom": "*",
+                "ext-mbstring": "*",
+                "masterminds/html5": "^2.0",
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "ext-gd": "*",
+                "ext-json": "*",
+                "ext-zip": "*",
+                "mockery/mockery": "^1.3",
+                "phpunit/phpunit": "^7.5 || ^8 || ^9 || ^10 || ^11",
+                "squizlabs/php_codesniffer": "^3.5",
+                "symfony/process": "^4.4 || ^5.4 || ^6.2 || ^7.0"
+            },
+            "suggest": {
+                "ext-gd": "Needed to process images",
+                "ext-gmagick": "Improves image processing performance",
+                "ext-imagick": "Improves image processing performance",
+                "ext-zlib": "Needed for pdf stream compression"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dompdf\\": "src/"
+                },
+                "classmap": [
+                    "lib/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "The Dompdf Community",
+                    "homepage": "https://github.com/dompdf/dompdf/blob/master/AUTHORS.md"
+                }
+            ],
+            "description": "DOMPDF is a CSS 2.1 compliant HTML to PDF converter",
+            "homepage": "https://github.com/dompdf/dompdf",
+            "support": {
+                "issues": "https://github.com/dompdf/dompdf/issues",
+                "source": "https://github.com/dompdf/dompdf/tree/v3.1.4"
+            },
+            "time": "2025-10-29T12:43:30+00:00"
+        },
+        {
+            "name": "dompdf/php-font-lib",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dompdf/php-font-lib.git",
+                "reference": "6137b7d4232b7f16c882c75e4ca3991dbcf6fe2d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dompdf/php-font-lib/zipball/6137b7d4232b7f16c882c75e4ca3991dbcf6fe2d",
+                "reference": "6137b7d4232b7f16c882c75e4ca3991dbcf6fe2d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^3 || ^4 || ^5 || ^6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FontLib\\": "src/FontLib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "The FontLib Community",
+                    "homepage": "https://github.com/dompdf/php-font-lib/blob/master/AUTHORS.md"
+                }
+            ],
+            "description": "A library to read, parse, export and make subsets of different types of font files.",
+            "homepage": "https://github.com/dompdf/php-font-lib",
+            "support": {
+                "issues": "https://github.com/dompdf/php-font-lib/issues",
+                "source": "https://github.com/dompdf/php-font-lib/tree/1.0.1"
+            },
+            "time": "2024-12-02T14:37:59+00:00"
+        },
+        {
+            "name": "dompdf/php-svg-lib",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dompdf/php-svg-lib.git",
+                "reference": "eb045e518185298eb6ff8d80d0d0c6b17aecd9af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dompdf/php-svg-lib/zipball/eb045e518185298eb6ff8d80d0d0c6b17aecd9af",
+                "reference": "eb045e518185298eb6ff8d80d0d0c6b17aecd9af",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": "^7.1 || ^8.0",
+                "sabberworm/php-css-parser": "^8.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Svg\\": "src/Svg"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "The SvgLib Community",
+                    "homepage": "https://github.com/dompdf/php-svg-lib/blob/master/AUTHORS.md"
+                }
+            ],
+            "description": "A library to read, parse and export to PDF SVG files.",
+            "homepage": "https://github.com/dompdf/php-svg-lib",
+            "support": {
+                "issues": "https://github.com/dompdf/php-svg-lib/issues",
+                "source": "https://github.com/dompdf/php-svg-lib/tree/1.0.0"
+            },
+            "time": "2024-04-29T13:26:35+00:00"
+        },
+        {
             "name": "dragonmantank/cron-expression",
             "version": "v3.6.0",
             "source": {
@@ -1253,6 +1485,56 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
+        },
+        {
+            "name": "filamat/filamat-iam-suite",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/filamat-iam-suite",
+                "reference": "7e83d6b8329e67bfb66d79ebc7c61222bc32fed6"
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "laravel/framework": "^11.28 || ^12.0",
+                "laravel/sanctum": "^4.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16",
+                "spatie/laravel-permission": "^6.0"
+            },
+            "require-dev": {
+                "nunomaduro/collision": "^8.0",
+                "orchestra/testbench": "^9.0",
+                "pestphp/pest": "^3.0",
+                "pestphp/pest-plugin-laravel": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Filamat\\IamSuite\\FilamatIamSuiteServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Filamat\\IamSuite\\": "src/",
+                    "Filamat\\IamSuite\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Filamat\\IamSuite\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Filamat 4 IAM Suite for Filament v4",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "filament/actions",
@@ -2371,6 +2653,60 @@
             "time": "2025-08-22T14:27:06+00:00"
         },
         {
+            "name": "haida/filament-currency-rates",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/filament-currency-rates",
+                "reference": "16e77695af031fb057ca7ea3d917d7739f6564bf"
+            },
+            "require": {
+                "filament/filament": "^3.0|^4.0",
+                "illuminate/bus": "^10.0|^11.0|^12.0",
+                "illuminate/cache": "^10.0|^11.0|^12.0",
+                "illuminate/console": "^10.0|^11.0|^12.0",
+                "illuminate/contracts": "^10.0|^11.0|^12.0",
+                "illuminate/database": "^10.0|^11.0|^12.0",
+                "illuminate/http": "^10.0|^11.0|^12.0",
+                "illuminate/queue": "^10.0|^11.0|^12.0",
+                "illuminate/support": "^10.0|^11.0|^12.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16",
+                "spatie/laravel-settings": "^3.6"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
+                "pestphp/pest": "^2.0|^3.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Haida\\FilamentCurrencyRates\\CurrencyRatesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Haida\\FilamentCurrencyRates\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Haida\\FilamentCurrencyRates\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "افزونه فیلامنت برای همگام‌سازی و ارائه نرخ ارز به ریال ایران.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "haida/filament-notify-bale",
             "version": "1.0.0",
             "dist": {
@@ -2587,6 +2923,184 @@
                 "proprietary"
             ],
             "description": "WhatsApp Cloud API channel for Filament Notify.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "haida/filament-petty-cash-ir",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/filament-petty-cash-ir",
+                "reference": "f424d94df3ac5fb7baa02a557f6425e3f21bcb17"
+            },
+            "require": {
+                "filamat/filamat-iam-suite": "dev-main",
+                "filament/filament": "^4.0",
+                "illuminate/database": "^11.0|^12.0",
+                "illuminate/events": "^11.0|^12.0",
+                "illuminate/http": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Haida\\FilamentPettyCashIr\\FilamentPettyCashIrServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Haida\\FilamentPettyCashIr\\": "src/",
+                    "Haida\\FilamentPettyCashIr\\Database\\Factories\\": "database/factories/",
+                    "Haida\\FilamentPettyCashIr\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Petty cash management for Iranian restaurants with Filament v4.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "haida/filament-relograde",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/filament-relograde",
+                "reference": "df3876d72f5f43c8105b8abac52506571fe3456a"
+            },
+            "require": {
+                "filament/filament": "^3.0|^4.0",
+                "illuminate/bus": "^10.0|^11.0|^12.0",
+                "illuminate/cache": "^10.0|^11.0|^12.0",
+                "illuminate/console": "^10.0|^11.0|^12.0",
+                "illuminate/contracts": "^10.0|^11.0|^12.0",
+                "illuminate/database": "^10.0|^11.0|^12.0",
+                "illuminate/http": "^10.0|^11.0|^12.0",
+                "illuminate/queue": "^10.0|^11.0|^12.0",
+                "illuminate/support": "^10.0|^11.0|^12.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
+                "pestphp/pest": "^2.0|^3.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Haida\\FilamentRelograde\\RelogradeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Haida\\FilamentRelograde\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Haida\\FilamentRelograde\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Filament plugin for Relograde API integration.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "haida/filament-restaurant-ops",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/filament-restaurant-ops",
+                "reference": "b52cedf5a32ec13cbe288ef432e03d5a117e9e81"
+            },
+            "require": {
+                "filamat/filamat-iam-suite": "dev-main",
+                "filament/filament": "^4.0",
+                "illuminate/database": "^11.0|^12.0",
+                "illuminate/events": "^11.0|^12.0",
+                "illuminate/http": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Haida\\FilamentRestaurantOps\\FilamentRestaurantOpsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Haida\\FilamentRestaurantOps\\": "src/",
+                    "Haida\\FilamentRestaurantOps\\Database\\Factories\\": "database/factories/",
+                    "Haida\\FilamentRestaurantOps\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Restaurant procurement, inventory, and cost control module for Filament v4.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "haida/filament-workhub",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/filament-workhub",
+                "reference": "45dbf902c73af2c40e76f2eb9d830c10025cd05c"
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "illuminate/database": "^11.0|^12.0",
+                "illuminate/events": "^11.0|^12.0",
+                "illuminate/http": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Haida\\FilamentWorkhub\\FilamentWorkhubServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Haida\\FilamentWorkhub\\": "src/",
+                    "Haida\\FilamentWorkhub\\Database\\Factories\\": "database/factories/",
+                    "Haida\\FilamentWorkhub\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Jira-inspired Workhub module for Filament v4.",
             "transport-options": {
                 "symlink": true,
                 "relative": true
@@ -2935,6 +3449,69 @@
                 "source": "https://github.com/laravel/prompts/tree/v0.3.8"
             },
             "time": "2025-11-21T20:52:52+00:00"
+        },
+        {
+            "name": "laravel/sanctum",
+            "version": "v4.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/sanctum.git",
+                "reference": "f5fb373be39a246c74a060f2cf2ae2c2145b3664"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/sanctum/zipball/f5fb373be39a246c74a060f2cf2ae2c2145b3664",
+                "reference": "f5fb373be39a246c74a060f2cf2ae2c2145b3664",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "illuminate/console": "^11.0|^12.0",
+                "illuminate/contracts": "^11.0|^12.0",
+                "illuminate/database": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2",
+                "symfony/console": "^7.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^9.15|^10.8",
+                "phpstan/phpstan": "^1.10"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Sanctum\\SanctumServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Sanctum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Laravel Sanctum provides a featherweight authentication system for SPAs and simple APIs.",
+            "keywords": [
+                "auth",
+                "laravel",
+                "sanctum"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/sanctum/issues",
+                "source": "https://github.com/laravel/sanctum"
+            },
+            "time": "2025-11-21T13:59:03+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -5950,6 +6527,72 @@
             "time": "2025-02-25T09:09:36+00:00"
         },
         {
+            "name": "sabberworm/php-css-parser",
+            "version": "v8.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MyIntervals/PHP-CSS-Parser.git",
+                "reference": "d8e916507b88e389e26d4ab03c904a082aa66bb9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MyIntervals/PHP-CSS-Parser/zipball/d8e916507b88e389e26d4ab03c904a082aa66bb9",
+                "reference": "d8e916507b88e389e26d4ab03c904a082aa66bb9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-iconv": "*",
+                "php": "^5.6.20 || ^7.0.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.7.27 || 6.5.14 || 7.5.20 || 8.5.41",
+                "rawr/cross-data-providers": "^2.0.0"
+            },
+            "suggest": {
+                "ext-mbstring": "for parsing UTF-8 CSS"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "9.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sabberworm\\CSS\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raphael Schweikert"
+                },
+                {
+                    "name": "Oliver Klee",
+                    "email": "github@oliverklee.de"
+                },
+                {
+                    "name": "Jake Hotson",
+                    "email": "jake.github@qzdesign.co.uk"
+                }
+            ],
+            "description": "Parser for CSS Files written in PHP",
+            "homepage": "https://www.sabberworm.com/blog/2010/6/10/php-css-parser",
+            "keywords": [
+                "css",
+                "parser",
+                "stylesheet"
+            ],
+            "support": {
+                "issues": "https://github.com/MyIntervals/PHP-CSS-Parser/issues",
+                "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v8.9.0"
+            },
+            "time": "2025-07-11T13:20:48+00:00"
+        },
+        {
             "name": "scrivo/highlight.php",
             "version": "v9.18.1.10",
             "source": {
@@ -6146,6 +6789,89 @@
                 }
             ],
             "time": "2025-07-17T15:46:43+00:00"
+        },
+        {
+            "name": "spatie/laravel-permission",
+            "version": "6.24.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-permission.git",
+                "reference": "76adb1fc8d07c16a0721c35c4cc330b7a12598d7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/76adb1fc8d07c16a0721c35c4cc330b7a12598d7",
+                "reference": "76adb1fc8d07c16a0721c35c4cc330b7a12598d7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/auth": "^8.12|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/container": "^8.12|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/contracts": "^8.12|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/database": "^8.12|^9.0|^10.0|^11.0|^12.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "laravel/passport": "^11.0|^12.0",
+                "laravel/pint": "^1.0",
+                "orchestra/testbench": "^6.23|^7.0|^8.0|^9.0|^10.0",
+                "phpunit/phpunit": "^9.4|^10.1|^11.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\Permission\\PermissionServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "6.x-dev",
+                    "dev-master": "6.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Spatie\\Permission\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Permission handling for Laravel 8.0 and up",
+            "homepage": "https://github.com/spatie/laravel-permission",
+            "keywords": [
+                "acl",
+                "laravel",
+                "permission",
+                "permissions",
+                "rbac",
+                "roles",
+                "security",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-permission/issues",
+                "source": "https://github.com/spatie/laravel-permission/tree/6.24.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-12-13T21:45:21+00:00"
         },
         {
             "name": "spatie/laravel-settings",
@@ -9179,6 +9905,64 @@
             "time": "2025-10-27T20:36:44+00:00"
         },
         {
+            "name": "tempest/highlight",
+            "version": "2.14.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tempestphp/highlight.git",
+                "reference": "e5120a01be2878ce58d06266921dfcc5e5f104fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tempestphp/highlight/zipball/e5120a01be2878ce58d06266921dfcc5e5f104fb",
+                "reference": "e5120a01be2878ce58d06266921dfcc5e5f104fb",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "assertchris/ellison": "^1.0.2",
+                "friendsofphp/php-cs-fixer": "^3.84",
+                "league/commonmark": "^2.4",
+                "phpstan/phpstan": "^1.12.0",
+                "phpunit/phpunit": "^10.0",
+                "symfony/var-dumper": "^6.4|^7.0"
+            },
+            "suggest": {
+                "assertchris/ellison": "Allows you to analyse sentence complexity",
+                "league/commonmark": "Adds markdown support"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tempest\\Highlight\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Roose",
+                    "email": "brendt@stitcher.io"
+                }
+            ],
+            "description": "Fast, extensible, server-side code highlighting",
+            "support": {
+                "issues": "https://github.com/tempestphp/highlight/issues",
+                "source": "https://github.com/tempestphp/highlight/tree/2.14.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/brendt",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-11-17T07:31:35+00:00"
+        },
+        {
             "name": "tijsverkoyen/css-to-inline-styles",
             "version": "v2.4.0",
             "source": {
@@ -9301,6 +10085,94 @@
                 }
             ],
             "time": "2025-06-26T14:11:46+00:00"
+        },
+        {
+            "name": "vendor/filament-accounting-ir",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/filament-accounting-ir",
+                "reference": "83fe09b6fef2b8f10d5dbc4539059d9ebbe3937a"
+            },
+            "require": {
+                "filamat/filamat-iam-suite": "dev-main",
+                "filament/filament": "^4.0",
+                "illuminate/database": "^11.0|^12.0",
+                "illuminate/events": "^11.0|^12.0",
+                "illuminate/http": "^11.0|^12.0",
+                "illuminate/queue": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16",
+                "spatie/laravel-settings": "^3.6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Vendor\\FilamentAccountingIr\\FilamentAccountingIrServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Vendor\\FilamentAccountingIr\\": "src/",
+                    "Vendor\\FilamentAccountingIr\\Database\\Factories\\": "database/factories/",
+                    "Vendor\\FilamentAccountingIr\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "افزونه جامع حسابداری ایران برای Filament v4 با پشتیبانی چندشرکتی و چندشعبه‌ای.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "vendor/filament-payroll-attendance-ir",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/filament-payroll-attendance-ir",
+                "reference": "35fa1c443706eaea16bc337405c2d849b1193d3a"
+            },
+            "require": {
+                "filamat/filamat-iam-suite": "dev-main",
+                "filament/filament": "^4.0",
+                "illuminate/database": "^11.0|^12.0",
+                "illuminate/events": "^11.0|^12.0",
+                "illuminate/http": "^11.0|^12.0",
+                "illuminate/queue": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16",
+                "vendor/filament-accounting-ir": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Vendor\\FilamentPayrollAttendanceIr\\FilamentPayrollAttendanceIrServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Vendor\\FilamentPayrollAttendanceIr\\": "src/",
+                    "Vendor\\FilamentPayrollAttendanceIr\\Database\\Factories\\": "database/factories/",
+                    "Vendor\\FilamentPayrollAttendanceIr\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "سیستم جامع حقوق و دستمزد و حضور و غیاب ایران برای Filament v4.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "vlucas/phpdotenv",
@@ -9548,9 +10420,212 @@
                 }
             ],
             "time": "2025-12-18T14:27:35+00:00"
+        },
+        {
+            "name": "zpmlabs/filament-api-docs-builder",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ZPMLabs/filament-api-docs.git",
+                "reference": "23157abe47f3d83050fcb927dd3f70fcea3b1d68"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ZPMLabs/filament-api-docs/zipball/23157abe47f3d83050fcb927dd3f70fcea3b1d68",
+                "reference": "23157abe47f3d83050fcb927dd3f70fcea3b1d68",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.15.0",
+                "tempest/highlight": "^2.10",
+                "zpmlabs/filament-icon-picker": "^1.0.0"
+            },
+            "require-dev": {
+                "nunomaduro/collision": "^7.9",
+                "orchestra/testbench": "^8.0",
+                "pestphp/pest": "^2.1",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "FilamentApiDocsBuilder": "ZPMLabs\\FilamentApiDocsBuilder\\Facades\\FilamentApiDocsBuilder"
+                    },
+                    "providers": [
+                        "ZPMLabs\\FilamentApiDocsBuilder\\FilamentApiDocsBuilderServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ZPMLabs\\FilamentApiDocsBuilder\\": "src/",
+                    "ZPMLabs\\FilamentApiDocsBuilder\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "ZPMLabs",
+                    "email": "developer@infinity-x.tech",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This package will give you the best API docs building experience.",
+            "homepage": "https://github.com/zpmlabs/filament-api-docs-builder",
+            "keywords": [
+                "filament-api-docs-builder",
+                "laravel",
+                "zpmlabs"
+            ],
+            "support": {
+                "issues": "https://github.com/zpmlabs/filament-api-docs-builder/issues",
+                "source": "https://github.com/zpmlabs/filament-api-docs-builder"
+            },
+            "time": "2025-07-07T12:44:53+00:00"
+        },
+        {
+            "name": "zpmlabs/filament-icon-picker",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sasaorasanin/filament-icon-picker.git",
+                "reference": "b9962cb76cc67a61aba2ccc3888cee583ea02055"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sasaorasanin/filament-icon-picker/zipball/b9962cb76cc67a61aba2ccc3888cee583ea02055",
+                "reference": "b9962cb76cc67a61aba2ccc3888cee583ea02055",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7.0|^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ZPMLabs\\FilamentIconPicker\\FilamentIconPickerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ZPMLabs\\FilamentIconPicker\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sasa Orasanin",
+                    "email": "development@zpmlabs.com"
+                }
+            ],
+            "description": "A filament plugin that adds an icon picker field.",
+            "support": {
+                "issues": "https://github.com/sasaorasanin/filament-icon-picker/issues",
+                "source": "https://github.com/sasaorasanin/filament-icon-picker/tree/v1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/SasaOrasanin",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-07-07T12:31:54+00:00"
         }
     ],
     "packages-dev": [
+        {
+            "name": "composer/semver",
+            "version": "3.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/semver.git",
+                "reference": "198166618906cb2de69b95d7d47e5fa8aa1b2b95"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/semver/zipball/198166618906cb2de69b95d7d47e5fa8aa1b2b95",
+                "reference": "198166618906cb2de69b95d7d47e5fa8aa1b2b95",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.11",
+                "symfony/phpunit-bridge": "^3 || ^7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Semver\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                },
+                {
+                    "name": "Rob Bast",
+                    "email": "rob.bast@gmail.com",
+                    "homepage": "http://robbast.nl"
+                }
+            ],
+            "description": "Semver library that offers utilities, version constraint parsing and validation.",
+            "keywords": [
+                "semantic",
+                "semver",
+                "validation",
+                "versioning"
+            ],
+            "support": {
+                "irc": "ircs://irc.libera.chat:6697/composer",
+                "issues": "https://github.com/composer/semver/issues",
+                "source": "https://github.com/composer/semver/tree/3.4.4"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-08-20T19:15:30+00:00"
+        },
         {
             "name": "fakerphp/faker",
             "version": "v1.24.1",
@@ -10186,6 +11261,423 @@
                 }
             ],
             "time": "2025-11-20T02:55:25+00:00"
+        },
+        {
+            "name": "orchestra/canvas",
+            "version": "v10.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orchestral/canvas.git",
+                "reference": "6e63f56acd46b0ee842e922d0ebb18af8f7a60f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orchestral/canvas/zipball/6e63f56acd46b0ee842e922d0ebb18af8f7a60f6",
+                "reference": "6e63f56acd46b0ee842e922d0ebb18af8f7a60f6",
+                "shasum": ""
+            },
+            "require": {
+                "composer-runtime-api": "^2.2",
+                "composer/semver": "^3.0",
+                "illuminate/console": "^12.40.0",
+                "illuminate/database": "^12.40.0",
+                "illuminate/filesystem": "^12.40.0",
+                "illuminate/support": "^12.40.0",
+                "orchestra/canvas-core": "^10.1.2",
+                "orchestra/sidekick": "^1.2.7",
+                "orchestra/testbench-core": "^10.8.0",
+                "php": "^8.2",
+                "symfony/polyfill-php83": "^1.33",
+                "symfony/yaml": "^7.2.0"
+            },
+            "conflict": {
+                "laravel/framework": "<12.40.0|>=13.0.0"
+            },
+            "require-dev": {
+                "laravel/framework": "^12.40.0",
+                "laravel/pint": "^1.24",
+                "mockery/mockery": "^1.6.12",
+                "phpstan/phpstan": "^2.1.14",
+                "phpunit/phpunit": "^11.5.18|^12.0",
+                "spatie/laravel-ray": "^1.42.0"
+            },
+            "bin": [
+                "canvas"
+            ],
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Orchestra\\Canvas\\LaravelServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Orchestra\\Canvas\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                },
+                {
+                    "name": "Mior Muhammad Zaki",
+                    "email": "crynobone@gmail.com"
+                }
+            ],
+            "description": "Code Generators for Laravel Applications and Packages",
+            "support": {
+                "issues": "https://github.com/orchestral/canvas/issues",
+                "source": "https://github.com/orchestral/canvas/tree/v10.1.1"
+            },
+            "time": "2025-11-24T04:53:34+00:00"
+        },
+        {
+            "name": "orchestra/canvas-core",
+            "version": "v10.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orchestral/canvas-core.git",
+                "reference": "af1ac73bb0e4f5a65eeb3aadc1030983c6ea0aea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orchestral/canvas-core/zipball/af1ac73bb0e4f5a65eeb3aadc1030983c6ea0aea",
+                "reference": "af1ac73bb0e4f5a65eeb3aadc1030983c6ea0aea",
+                "shasum": ""
+            },
+            "require": {
+                "composer-runtime-api": "^2.2",
+                "composer/semver": "^3.0",
+                "illuminate/console": "^12.40.0",
+                "illuminate/support": "^12.40.0",
+                "orchestra/sidekick": "^1.2.0",
+                "php": "^8.2",
+                "symfony/polyfill-php83": "^1.33"
+            },
+            "require-dev": {
+                "laravel/framework": "^12.40.0",
+                "laravel/pint": "^1.24",
+                "mockery/mockery": "^1.6.10",
+                "orchestra/testbench-core": "^10.8.0",
+                "phpstan/phpstan": "^2.1.14",
+                "phpunit/phpunit": "^11.5.12|^12.0.1",
+                "spatie/laravel-ray": "^1.40.2",
+                "symfony/yaml": "^7.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Orchestra\\Canvas\\Core\\LaravelServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Orchestra\\Canvas\\Core\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                },
+                {
+                    "name": "Mior Muhammad Zaki",
+                    "email": "crynobone@gmail.com"
+                }
+            ],
+            "description": "Code Generators Builder for Laravel Applications and Packages",
+            "support": {
+                "issues": "https://github.com/orchestral/canvas/issues",
+                "source": "https://github.com/orchestral/canvas-core/tree/v10.1.2"
+            },
+            "time": "2025-11-24T04:41:15+00:00"
+        },
+        {
+            "name": "orchestra/sidekick",
+            "version": "v1.2.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orchestral/sidekick.git",
+                "reference": "0e080ef62eed6c45aaea3619566a1fce02b62094"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orchestral/sidekick/zipball/0e080ef62eed6c45aaea3619566a1fce02b62094",
+                "reference": "0e080ef62eed6c45aaea3619566a1fce02b62094",
+                "shasum": ""
+            },
+            "require": {
+                "composer-runtime-api": "^2.2",
+                "composer/semver": "^3.0",
+                "php": "^8.1",
+                "symfony/polyfill-php83": "^1.32"
+            },
+            "require-dev": {
+                "fakerphp/faker": "^1.21",
+                "laravel/framework": "^10.48.29|^11.44.7|^12.1.1|^13.0",
+                "laravel/pint": "^1.4",
+                "mockery/mockery": "^1.5.1",
+                "orchestra/testbench-core": "^8.37.0|^9.14.0|^10.2.0|^11.0",
+                "phpstan/phpstan": "^2.1.14",
+                "phpunit/phpunit": "^10.0|^11.0|^12.0",
+                "symfony/process": "^6.0|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Eloquent/functions.php",
+                    "src/Http/functions.php",
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Orchestra\\Sidekick\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mior Muhammad Zaki",
+                    "email": "crynobone@gmail.com"
+                }
+            ],
+            "description": "Packages Toolkit Utilities and Helpers for Laravel",
+            "support": {
+                "issues": "https://github.com/orchestral/sidekick/issues",
+                "source": "https://github.com/orchestral/sidekick/tree/v1.2.18"
+            },
+            "time": "2025-11-29T15:16:23+00:00"
+        },
+        {
+            "name": "orchestra/testbench",
+            "version": "v10.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orchestral/testbench.git",
+                "reference": "003922508c1d9f75bbe44f68364616d5ddee1939"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orchestral/testbench/zipball/003922508c1d9f75bbe44f68364616d5ddee1939",
+                "reference": "003922508c1d9f75bbe44f68364616d5ddee1939",
+                "shasum": ""
+            },
+            "require": {
+                "composer-runtime-api": "^2.2",
+                "fakerphp/faker": "^1.23",
+                "laravel/framework": "^12.40.0",
+                "mockery/mockery": "^1.6.10",
+                "orchestra/testbench-core": "^10.8.0",
+                "orchestra/workbench": "^10.0.7",
+                "php": "^8.2",
+                "phpunit/phpunit": "^11.5.3|^12.0.1",
+                "symfony/process": "^7.2",
+                "symfony/yaml": "^7.2",
+                "vlucas/phpdotenv": "^5.6.1"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mior Muhammad Zaki",
+                    "email": "crynobone@gmail.com",
+                    "homepage": "https://github.com/crynobone"
+                }
+            ],
+            "description": "Laravel Testing Helper for Packages Development",
+            "homepage": "https://packages.tools/testbench/",
+            "keywords": [
+                "BDD",
+                "TDD",
+                "dev",
+                "laravel",
+                "laravel-packages",
+                "testing"
+            ],
+            "support": {
+                "issues": "https://github.com/orchestral/testbench/issues",
+                "source": "https://github.com/orchestral/testbench/tree/v10.8.0"
+            },
+            "time": "2025-11-24T09:44:51+00:00"
+        },
+        {
+            "name": "orchestra/testbench-core",
+            "version": "v10.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orchestral/testbench-core.git",
+                "reference": "f1da36cedc677d015d2a46d36abee54ffd5ba711"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orchestral/testbench-core/zipball/f1da36cedc677d015d2a46d36abee54ffd5ba711",
+                "reference": "f1da36cedc677d015d2a46d36abee54ffd5ba711",
+                "shasum": ""
+            },
+            "require": {
+                "composer-runtime-api": "^2.2",
+                "orchestra/sidekick": "~1.1.21|~1.2.18",
+                "php": "^8.2",
+                "symfony/deprecation-contracts": "^2.5|^3.0",
+                "symfony/polyfill-php83": "^1.32"
+            },
+            "conflict": {
+                "brianium/paratest": "<7.3.0|>=8.0.0",
+                "laravel/framework": "<12.40.0|>=13.0.0",
+                "laravel/serializable-closure": "<1.3.0|>=2.0.0 <2.0.3|>=3.0.0",
+                "nunomaduro/collision": "<8.0.0|>=9.0.0",
+                "phpunit/phpunit": "<10.5.35|>=11.0.0 <11.5.3|12.0.0|>=12.6.0"
+            },
+            "require-dev": {
+                "fakerphp/faker": "^1.24",
+                "laravel/framework": "^12.40.0",
+                "laravel/pint": "^1.24",
+                "laravel/serializable-closure": "^1.3|^2.0.4",
+                "mockery/mockery": "^1.6.10",
+                "phpstan/phpstan": "^2.1.19",
+                "phpunit/phpunit": "^10.5.35|^11.5.3|^12.0.1",
+                "spatie/laravel-ray": "^1.42.0",
+                "symfony/process": "^7.2.0",
+                "symfony/yaml": "^7.2.0",
+                "vlucas/phpdotenv": "^5.6.1"
+            },
+            "suggest": {
+                "brianium/paratest": "Allow using parallel testing (^7.3).",
+                "ext-pcntl": "Required to use all features of the console signal trapping.",
+                "fakerphp/faker": "Allow using Faker for testing (^1.23).",
+                "laravel/framework": "Required for testing (^12.40.0).",
+                "mockery/mockery": "Allow using Mockery for testing (^1.6).",
+                "nunomaduro/collision": "Allow using Laravel style tests output and parallel testing (^8.0).",
+                "orchestra/testbench-dusk": "Allow using Laravel Dusk for testing (^10.0).",
+                "phpunit/phpunit": "Allow using PHPUnit for testing (^10.5.35|^11.5.3|^12.0.1).",
+                "symfony/process": "Required to use Orchestra\\Testbench\\remote function (^7.2).",
+                "symfony/yaml": "Required for Testbench CLI (^7.2).",
+                "vlucas/phpdotenv": "Required for Testbench CLI (^5.6.1)."
+            },
+            "bin": [
+                "testbench"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Orchestra\\Testbench\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mior Muhammad Zaki",
+                    "email": "crynobone@gmail.com",
+                    "homepage": "https://github.com/crynobone"
+                }
+            ],
+            "description": "Testing Helper for Laravel Development",
+            "homepage": "https://packages.tools/testbench",
+            "keywords": [
+                "BDD",
+                "TDD",
+                "dev",
+                "laravel",
+                "laravel-packages",
+                "testing"
+            ],
+            "support": {
+                "issues": "https://github.com/orchestral/testbench/issues",
+                "source": "https://github.com/orchestral/testbench-core"
+            },
+            "time": "2025-12-08T08:07:27+00:00"
+        },
+        {
+            "name": "orchestra/workbench",
+            "version": "v10.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orchestral/workbench.git",
+                "reference": "7e41a6cbda2f553b725b4b0c104c684ae5d0f2b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orchestral/workbench/zipball/7e41a6cbda2f553b725b4b0c104c684ae5d0f2b6",
+                "reference": "7e41a6cbda2f553b725b4b0c104c684ae5d0f2b6",
+                "shasum": ""
+            },
+            "require": {
+                "composer-runtime-api": "^2.2",
+                "fakerphp/faker": "^1.23",
+                "laravel/framework": "^12.40.0",
+                "laravel/pail": "^1.2.2",
+                "laravel/tinker": "^2.10.1",
+                "nunomaduro/collision": "^8.6",
+                "orchestra/canvas": "^10.1.1",
+                "orchestra/sidekick": "^1.2.17",
+                "orchestra/testbench-core": "^10.8.0",
+                "php": "^8.2",
+                "symfony/polyfill-php83": "^1.32",
+                "symfony/process": "^7.2",
+                "symfony/yaml": "^7.2"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.22.0",
+                "mockery/mockery": "^1.6.12",
+                "phpstan/phpstan": "^2.1.14",
+                "phpunit/phpunit": "^11.5.3|^12.0.1",
+                "spatie/laravel-ray": "^1.42.0"
+            },
+            "suggest": {
+                "ext-pcntl": "Required to use all features of the console signal trapping."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Orchestra\\Workbench\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mior Muhammad Zaki",
+                    "email": "crynobone@gmail.com"
+                }
+            ],
+            "description": "Workbench Companion for Laravel Packages Development",
+            "keywords": [
+                "dev",
+                "laravel",
+                "laravel-packages",
+                "testing"
+            ],
+            "support": {
+                "issues": "https://github.com/orchestral/workbench/issues",
+                "source": "https://github.com/orchestral/workbench/tree/v10.0.7"
+            },
+            "time": "2025-11-24T06:50:12+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -11916,7 +13408,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "filamat/filamat-iam-suite": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -21,13 +21,18 @@
         "haida/filament-notify-telegram": "^1.0",
         "haida/filament-notify-webpush": "^1.0",
         "haida/filament-notify-whatsapp": "^1.0",
+        "haida/filament-petty-cash-ir": "^1.0",
         "haida/filament-relograde": "^1.0",
+        "haida/filament-restaurant-ops": "^1.0",
+        "haida/filament-workhub": "^1.0",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "mohamedsabil83/filament-hijri-picker": "^2.1",
         "spatie/laravel-permission": "^6.0",
         "spatie/laravel-settings": "^3.6",
+        "vendor/filament-accounting-ir": "^1.0",
+        "vendor/filament-payroll-attendance-ir": "^1.0",
         "zpmlabs/filament-api-docs-builder": "*"
     },
     "require-dev": {
@@ -146,7 +151,42 @@
         },
         {
             "type": "path",
+            "url": "packages/filament-petty-cash-ir",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "packages/filament-currency-rates",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-workhub",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-accounting-ir",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-restaurant-ops",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-payroll-attendance-ir",
             "options": {
                 "symlink": true
             }

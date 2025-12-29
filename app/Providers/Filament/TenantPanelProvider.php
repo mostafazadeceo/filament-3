@@ -4,6 +4,11 @@ namespace App\Providers\Filament;
 
 use Filamat\IamSuite\FilamatIamSuitePlugin;
 use Filamat\IamSuite\Models\Tenant;
+use Haida\FilamentRestaurantOps\FilamentRestaurantOpsPlugin;
+use Haida\FilamentPettyCashIr\FilamentPettyCashIrPlugin;
+use Haida\FilamentWorkhub\FilamentWorkhubPlugin;
+use Vendor\FilamentAccountingIr\FilamentAccountingIrPlugin;
+use Vendor\FilamentPayrollAttendanceIr\FilamentPayrollAttendanceIrPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -37,6 +42,11 @@ class TenantPanelProvider extends PanelProvider
                 AccountWidget::class,
             ])
             ->plugins([
+                FilamentWorkhubPlugin::make(),
+                FilamentAccountingIrPlugin::make(),
+                FilamentPayrollAttendanceIrPlugin::make(),
+                FilamentRestaurantOpsPlugin::make(),
+                FilamentPettyCashIrPlugin::make(),
                 FilamatIamSuitePlugin::make()
                     ->superAdminPanels(['admin'])
                     ->tenantPanels(['tenant']),

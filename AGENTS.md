@@ -15,6 +15,7 @@ Build production-grade, extensible Filament v4 modules and plugins for this mult
 - Authorization required for all UI (Filament) and API endpoints.
 - Prefer package/plugin architecture; avoid editing host app unless explicitly requested.
 - No surveillance features.
+- Git operations only when explicitly requested; otherwise work in the local tree only.
 
 ## Project architecture (deep scan)
 - Panels: Admin panel uses `App\Providers\Filament\AdminPanelProvider`; tenant panel exists in `app/Providers/Filament/TenantPanelProvider.php`.
@@ -23,6 +24,13 @@ Build production-grade, extensible Filament v4 modules and plugins for this mult
 - Notifications: `haida/filament-notify-core` and channel packages (telegram, whatsapp, webpush, sms, bale).
 - API docs: `zpmlabs/filament-api-docs-builder` is installed and used.
 - Localization: Jalali/Hijri packages are present; date rendering uses Jalali where applicable.
+- Active core modules (packages):
+  - `packages/filament-accounting-ir`
+  - `packages/filament-restaurant-ops`
+  - `packages/filament-petty-cash-ir`
+  - `packages/filament-payroll-attendance-ir`
+  - `packages/filament-workhub`
+  - `packages/filament-notify-*` (notification stack)
 
 ## Localization
 - Use clear Persian labels for permissions, navigation, forms, and settings.
@@ -48,6 +56,7 @@ Build production-grade, extensible Filament v4 modules and plugins for this mult
 - Use `Filamat\IamSuite\Support\IamAuthorization::allows()` in policies and API guards.
 - Register permissions with the IAM capability registry (`CapabilityRegistry`).
 - Provide Persian permission labels (use `PermissionLabels` pattern for fallback naming).
+- Ensure subscription gating is satisfied when running tenant scenarios (IAM subscription enforcement is enabled by default).
 
 ## API conventions
 - Base path: `/api/v1/<module>/...` per module.
@@ -66,11 +75,17 @@ Build production-grade, extensible Filament v4 modules and plugins for this mult
 - Use transactions for money/ledger or critical state changes.
 - Use tests for core domain behaviors (permissions, tenancy, wallet/billing, webhooks).
 - Avoid global formatting across the repo; format only the module/package being changed.
+- Ensure new package migrations are registered in the package service provider `->hasMigrations([...])`.
+- When running migrations in production, use `php artisan migrate --force`.
 
 ## Run commands (if available)
 - php artisan test
 - ./vendor/bin/pint packages/<module>
 - phpstan/larastan (if installed)
+
+## Scenario validation
+- Use `scripts/deep_scenario_runner.php` for deep end-to-end validation across tenants/modules.
+- Keep the scenario runner idempotent and safe to re-run.
 
 ## Output style
 - Small milestones; after each: summarize diffs + commands run + next steps.

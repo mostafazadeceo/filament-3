@@ -1,0 +1,35 @@
+{
+    "name": "vendor/filament-accounting-ir",
+    "version": "1.0.0",
+    "description": "افزونه جامع حسابداری ایران برای Filament v4 با پشتیبانی چندشرکتی و چندشعبه‌ای.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^4.0",
+        "filamat/filamat-iam-suite": "dev-main",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/events": "^11.0|^12.0",
+        "illuminate/http": "^11.0|^12.0",
+        "illuminate/queue": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.16",
+        "spatie/laravel-settings": "^3.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vendor\\FilamentAccountingIr\\": "src/",
+            "Vendor\\FilamentAccountingIr\\Database\\Factories\\": "database/factories/",
+            "Vendor\\FilamentAccountingIr\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Vendor\\FilamentAccountingIr\\FilamentAccountingIrServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

@@ -45,6 +45,8 @@ return [
     'schedule' => [
         'enabled' => true,
         'every_minutes' => 30,
+        'http_fallback' => true,
+        'queue_auto' => true,
     ],
 
     'api' => [

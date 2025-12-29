@@ -16,8 +16,18 @@ class SyncCurrencyRatesJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    public function __construct(
+        public bool $force = false,
+    ) {}
+
     public function handle(CurrencyRateSyncService $service): void
     {
-        $service->sync();
+        if ($this->force) {
+            $service->sync();
+
+            return;
+        }
+
+        $service->syncIfStale(true);
     }
 }

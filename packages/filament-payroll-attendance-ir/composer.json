@@ -1,0 +1,35 @@
+{
+    "name": "vendor/filament-payroll-attendance-ir",
+    "version": "1.0.0",
+    "description": "سیستم جامع حقوق و دستمزد و حضور و غیاب ایران برای Filament v4.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^4.0",
+        "filamat/filamat-iam-suite": "dev-main",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/events": "^11.0|^12.0",
+        "illuminate/http": "^11.0|^12.0",
+        "illuminate/queue": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.16",
+        "vendor/filament-accounting-ir": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vendor\\FilamentPayrollAttendanceIr\\": "src/",
+            "Vendor\\FilamentPayrollAttendanceIr\\Database\\Factories\\": "database/factories/",
+            "Vendor\\FilamentPayrollAttendanceIr\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Vendor\\FilamentPayrollAttendanceIr\\FilamentPayrollAttendanceIrServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

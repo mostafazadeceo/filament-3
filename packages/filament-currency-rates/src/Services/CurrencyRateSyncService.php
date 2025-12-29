@@ -7,7 +7,9 @@ use Haida\FilamentCurrencyRates\Models\CurrencyRateRun;
 use Haida\FilamentCurrencyRates\Settings\CurrencyRateSettings;
 use Haida\FilamentCurrencyRates\Support\CurrencyRateLabels;
 use Haida\FilamentCurrencyRates\Support\CurrencyUnit;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 use RuntimeException;
 use Throwable;
 
@@ -78,6 +80,49 @@ class CurrencyRateSyncService
             ]);
 
             throw $exception;
+        }
+    }
+
+    public function syncIfStale(bool $ignoreHttpFallback = false): void
+    {
+        if (! $ignoreHttpFallback && ! config('currency-rates.schedule.http_fallback', true)) {
+            return;
+        }
+
+        if (! Schema::hasTable('currency_rate_runs')) {
+            return;
+        }
+
+        if (! Schema::hasTable('settings')) {
+            return;
+        }
+
+        $settings = app(CurrencyRateSettings::class);
+        if (! $settings->enabled) {
+            return;
+        }
+
+        $interval = max(5, min(60, (int) $settings->interval_minutes));
+        $lastRun = CurrencyRateRun::query()->latest('fetched_at')->value('fetched_at');
+        if ($lastRun) {
+            $last = $lastRun instanceof Carbon ? $lastRun : Carbon::parse($lastRun);
+            if ($last->diffInMinutes(now()) < $interval) {
+                return;
+            }
+        }
+
+        $lockKey = 'currency_rates:auto_sync';
+        $lockTtl = max(60, $interval * 60);
+        if (! Cache::add($lockKey, true, $lockTtl)) {
+            return;
+        }
+
+        try {
+            $this->sync();
+        } catch (Throwable $exception) {
+            report($exception);
+        } finally {
+            Cache::forget($lockKey);
         }
     }
 

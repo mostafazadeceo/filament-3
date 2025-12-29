@@ -6,7 +6,7 @@ use Haida\FilamentCurrencyRates\Jobs\SyncCurrencyRatesJob;
 
 class CurrencyRateScheduler
 {
-    public function sync(): void
+    public static function sync(): void
     {
         SyncCurrencyRatesJob::dispatch();
     }

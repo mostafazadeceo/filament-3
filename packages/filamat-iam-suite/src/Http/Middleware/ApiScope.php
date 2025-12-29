@@ -27,8 +27,15 @@ class ApiScope
         }
 
         $user = $request->user();
-        if ($user && $user->currentAccessToken() && ! $this->abilitiesAllow($user->currentAccessToken()->abilities ?? [], $permission)) {
-            return response()->json(['message' => 'توکن مجاز نیست.'], 403);
+        if ($user && $user->currentAccessToken()) {
+            $token = $user->currentAccessToken();
+            if (method_exists($token, 'can')) {
+                if (! $token->can($permission)) {
+                    return response()->json(['message' => 'توکن مجاز نیست.'], 403);
+                }
+            } elseif (! $this->abilitiesAllow($token->abilities ?? [], $permission)) {
+                return response()->json(['message' => 'توکن مجاز نیست.'], 403);
+            }
         }
 
         if ($user && ! IamAuthorization::allows($permission, TenantContext::getTenant(), $user)) {

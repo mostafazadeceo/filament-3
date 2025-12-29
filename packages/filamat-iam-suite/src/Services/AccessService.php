@@ -13,6 +13,7 @@ use Filamat\IamSuite\Support\AccessSettings;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class AccessService
 {
@@ -264,7 +265,9 @@ class AccessService
     {
         if (method_exists($user, 'hasPermissionTo')) {
             try {
-                return $user->hasPermissionTo($permissionKey, $tenant->getKey());
+                app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
+
+                return $user->hasPermissionTo($permissionKey);
             } catch (\Throwable) {
                 // Fallback to manual checks.
             }
