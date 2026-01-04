@@ -52,6 +52,15 @@ class PettyCashOpenApi
                 '/api/v1/petty-cash/expenses/{expense}/post' => [
                     'post' => ['summary' => 'Post expense'],
                 ],
+                '/api/v1/petty-cash/expenses/{expense}/ai-suggest' => [
+                    'post' => ['summary' => 'AI suggest expense fields'],
+                ],
+                '/api/v1/petty-cash/expenses/{expense}/ai-apply' => [
+                    'post' => ['summary' => 'Apply AI suggestion to expense'],
+                ],
+                '/api/v1/petty-cash/expenses/{expense}/ai-reject' => [
+                    'post' => ['summary' => 'Reject AI suggestion for expense'],
+                ],
                 '/api/v1/petty-cash/replenishments' => [
                     'get' => ['summary' => 'List replenishments'],
                     'post' => ['summary' => 'Create replenishment'],
@@ -90,6 +99,12 @@ class PettyCashOpenApi
                 ],
                 '/api/v1/petty-cash/settlements/{settlement}/post' => [
                     'post' => ['summary' => 'Post settlement'],
+                ],
+                '/api/v1/petty-cash/ai/audit' => [
+                    'post' => ['summary' => 'Run AI continuous audit'],
+                ],
+                '/api/v1/petty-cash/ai/report' => [
+                    'get' => ['summary' => 'Get AI management report'],
                 ],
                 '/api/v1/petty-cash/openapi' => [
                     'get' => ['summary' => 'OpenAPI spec'],

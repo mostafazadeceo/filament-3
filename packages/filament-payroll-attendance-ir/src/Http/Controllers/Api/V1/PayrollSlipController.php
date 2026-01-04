@@ -22,6 +22,8 @@ class PayrollSlipController extends ApiController
 
     public function show(PayrollSlip $payroll_slip): PayrollSlipResource
     {
+        $this->logSensitiveAccess($payroll_slip);
+
         return new PayrollSlipResource($payroll_slip);
     }
 }

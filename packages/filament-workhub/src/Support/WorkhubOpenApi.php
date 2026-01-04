@@ -37,6 +37,30 @@ class WorkhubOpenApi
                 '/work-items/{workItem}/transition' => [
                     'post' => ['summary' => 'Transition work item', 'responses' => ['200' => ['description' => 'OK']]],
                 ],
+                '/work-items/{workItem}/ai/personal-summary' => [
+                    'post' => ['summary' => 'Generate personal summary', 'responses' => ['200' => ['description' => 'OK']]],
+                ],
+                '/work-items/{workItem}/ai/shared-summary' => [
+                    'post' => ['summary' => 'Generate shared summary', 'responses' => ['200' => ['description' => 'OK']]],
+                ],
+                '/work-items/{workItem}/ai/thread-summary' => [
+                    'post' => ['summary' => 'Summarize comment thread', 'responses' => ['200' => ['description' => 'OK']]],
+                ],
+                '/work-items/{workItem}/ai/generate-subtasks' => [
+                    'post' => ['summary' => 'Generate subtasks', 'responses' => ['200' => ['description' => 'OK']]],
+                ],
+                '/work-items/{workItem}/ai/progress-update' => [
+                    'post' => ['summary' => 'Generate progress update', 'responses' => ['200' => ['description' => 'OK']]],
+                ],
+                '/work-items/{workItem}/ai/find-similar' => [
+                    'post' => ['summary' => 'Find similar work items', 'responses' => ['200' => ['description' => 'OK']]],
+                ],
+                '/projects/{project}/ai/executive-summary' => [
+                    'post' => ['summary' => 'Generate executive summary', 'responses' => ['200' => ['description' => 'OK']]],
+                ],
+                '/projects/{project}/ai/stuck-tasks' => [
+                    'get' => ['summary' => 'List stuck tasks', 'responses' => ['200' => ['description' => 'OK']]],
+                ],
                 '/work-types' => [
                     'get' => ['summary' => 'List work types', 'responses' => ['200' => ['description' => 'OK']]],
                     'post' => ['summary' => 'Create work type', 'responses' => ['201' => ['description' => 'Created']]],

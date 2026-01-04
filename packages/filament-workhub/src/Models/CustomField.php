@@ -37,4 +37,9 @@ class CustomField extends Model
     {
         return $this->hasMany(CustomFieldValue::class, 'field_id');
     }
+
+    public function aiRuns(): HasMany
+    {
+        return $this->hasMany(AiFieldRun::class, 'field_id');
+    }
 }

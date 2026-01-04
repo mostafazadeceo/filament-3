@@ -2,10 +2,10 @@
 
 namespace Vendor\FilamentPayrollAttendanceIr\Filament\Resources\PayrollSlipResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Vendor\FilamentPayrollAttendanceIr\Filament\Resources\PayrollSlipResource;
 
-class ListPayrollSlips extends ListRecords
+class ListPayrollSlips extends ListRecordsWithCreate
 {
     protected static string $resource = PayrollSlipResource::class;
 

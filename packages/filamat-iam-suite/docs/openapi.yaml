@@ -118,6 +118,203 @@ paths:
       summary: ایجاد کیف پول
       responses:
         '201': { description: Created }
+  /iam/invitations:
+    get:
+      summary: لیست دعوت‌نامه‌ها
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ایجاد دعوت‌نامه
+      responses:
+        '201': { description: Created }
+  /iam/invitations/{id}/accept:
+    post:
+      summary: پذیرش دعوت‌نامه
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+  /iam/invitations/{id}/revoke:
+    post:
+      summary: لغو دعوت‌نامه
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+  /iam/n8n/callback:
+    post:
+      summary: دریافت گزارش یا پیشنهاد از n8n
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                connector_id: { type: integer }
+                idempotency_key: { type: string }
+                correlation_id: { type: string }
+                title: { type: string }
+                severity: { type: string }
+                report: { type: object }
+                proposal: { type: object }
+      responses:
+        '200': { description: موفق }
+        '401': { description: احراز هویت نامعتبر }
+        '403': { description: عدم دسترسی }
+        '409': { description: تکراری }
+        '422': { description: داده نامعتبر }
+  /iam/privilege-eligibilities:
+    get:
+      summary: لیست واجدین نقش ممتاز
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ایجاد واجدین نقش ممتاز
+      responses:
+        '201': { description: Created }
+  /iam/privilege-requests:
+    get:
+      summary: لیست درخواست‌های نقش ممتاز
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ثبت درخواست نقش ممتاز
+      responses:
+        '201': { description: Created }
+  /iam/privilege-requests/{id}/approve:
+    post:
+      summary: تایید درخواست نقش ممتاز
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+  /iam/privilege-requests/{id}/deny:
+    post:
+      summary: رد درخواست نقش ممتاز
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+  /iam/privilege-activations:
+    get:
+      summary: لیست فعال‌سازی نقش ممتاز
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: فعال‌سازی نقش ممتاز
+      responses:
+        '201': { description: Created }
+  /iam/privilege-activations/{id}/revoke:
+    post:
+      summary: لغو نقش ممتاز
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+  /iam/impersonations/start:
+    post:
+      summary: شروع امپرسونیشن
+      responses:
+        '201': { description: Created }
+  /iam/impersonations/stop:
+    post:
+      summary: توقف امپرسونیشن
+      responses:
+        '200': { description: موفق }
+  /iam/sessions:
+    get:
+      summary: لیست نشست‌ها
+      responses:
+        '200': { description: موفق }
+  /iam/sessions/{id}/revoke:
+    post:
+      summary: ابطال نشست
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: موفق }
+  /iam/protected-actions/verify:
+    post:
+      summary: تایید عملیات حساس
+      responses:
+        '200': { description: موفق }
+  /iam/mfa/totp/start:
+    post:
+      summary: شروع فعال‌سازی TOTP
+      responses:
+        '200': { description: موفق }
+  /iam/mfa/totp/confirm:
+    post:
+      summary: تایید TOTP
+      responses:
+        '200': { description: موفق }
+  /iam/mfa/totp/reset:
+    post:
+      summary: ریست MFA
+      responses:
+        '200': { description: موفق }
+  /iam/scim/Users:
+    get:
+      summary: لیست کاربران SCIM
+      responses:
+        '200': { description: موفق }
+    post:
+      summary: ایجاد کاربر SCIM
+      responses:
+        '200': { description: موفق }
+  /iam/scim/Users/{id}:
+    patch:
+      summary: ویرایش کاربر SCIM
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: موفق }
+    delete:
+      summary: حذف کاربر SCIM
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: موفق }
+  /iam/scim/Groups:
+    get:
+      summary: لیست گروه‌های SCIM
+      responses:
+        '200': { description: موفق }
+  /iam/sso/providers:
+    get:
+      summary: لیست ارائه‌دهندگان SSO
+      responses:
+        '200': { description: موفق }
+  /iam/sso/oidc/callback:
+    post:
+      summary: کال‌بک OIDC
+      responses:
+        '200': { description: موفق }
   /wallets/{id}/credit:
     post:
       summary: افزایش موجودی کیف پول

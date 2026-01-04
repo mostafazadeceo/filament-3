@@ -1,0 +1,2 @@
+[console_scripts]
+kyc-defense = kyc_defense.cli:main

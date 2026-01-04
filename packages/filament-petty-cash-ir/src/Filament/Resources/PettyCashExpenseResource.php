@@ -4,15 +4,18 @@ namespace Haida\FilamentPettyCashIr\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
+use Filamat\IamSuite\Support\TenantContext;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Haida\FilamentPettyCashIr\Application\Services\PettyCashAiService;
 use Haida\FilamentPettyCashIr\Filament\Resources\Concerns\HasEagerLoads;
 use Haida\FilamentPettyCashIr\Filament\Resources\PettyCashExpenseResource\Pages\CreatePettyCashExpense;
 use Haida\FilamentPettyCashIr\Filament\Resources\PettyCashExpenseResource\Pages\EditPettyCashExpense;
@@ -23,6 +26,7 @@ use Haida\FilamentPettyCashIr\Models\PettyCashExpense;
 use Haida\FilamentPettyCashIr\Models\PettyCashFund;
 use Haida\FilamentPettyCashIr\Services\PettyCashPostingService;
 use Haida\FilamentPettyCashIr\Support\PettyCashStatuses;
+use Illuminate\Database\Eloquent\Builder;
 use Vendor\FilamentAccountingIr\Models\AccountingBranch;
 use Vendor\FilamentAccountingIr\Models\AccountingCompany;
 use Vendor\FilamentAccountingIr\Models\Party;
@@ -55,22 +59,50 @@ class PettyCashExpenseResource extends IamResource
                 static::tenantSelect(),
                 Select::make('company_id')
                     ->label('شرکت')
-                    ->options(fn () => AccountingCompany::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return AccountingCompany::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->required(),
                 Select::make('branch_id')
                     ->label('شعبه')
-                    ->options(fn () => AccountingBranch::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return AccountingBranch::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->nullable(),
                 Select::make('fund_id')
                     ->label('تنخواه')
-                    ->options(fn () => PettyCashFund::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return PettyCashFund::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->required(),
                 Select::make('category_id')
                     ->label('دسته هزینه')
-                    ->options(fn () => PettyCashCategory::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return PettyCashCategory::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->nullable(),
                 DatePicker::make('expense_date')
@@ -96,7 +128,14 @@ class PettyCashExpenseResource extends IamResource
                     ->maxLength(255),
                 Select::make('accounting_party_id')
                     ->label('طرف حساب')
-                    ->options(fn () => Party::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return Party::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->nullable(),
                 Toggle::make('receipt_required')
@@ -104,6 +143,17 @@ class PettyCashExpenseResource extends IamResource
                     ->default(true),
                 Textarea::make('description')
                     ->label('توضیحات')
+                    ->columnSpanFull(),
+                Section::make('پیشنهاد هوشمند')
+                    ->description('پیشنهادهای هوشمند فقط در صورت فعال بودن هوش مصنوعی نمایش داده می‌شوند.')
+                    ->schema([
+                        Textarea::make('ai_suggestion_summary')
+                            ->label('خلاصه پیشنهاد')
+                            ->rows(2)
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->default(fn (?PettyCashExpense $record) => app(PettyCashAiService::class)->summaryForExpense($record)),
+                    ])
                     ->columnSpanFull(),
             ])
             ->columns(2);
@@ -166,5 +216,10 @@ class PettyCashExpenseResource extends IamResource
             'create' => CreatePettyCashExpense::route('/create'),
             'edit' => EditPettyCashExpense::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return static::scopeByTenant(parent::getEloquentQuery()->with(static::$eagerLoad));
     }
 }

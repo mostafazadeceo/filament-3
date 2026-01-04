@@ -1,0 +1,19 @@
+{
+  "name": "Haida Hub",
+  "short_name": "Hub",
+  "description": "هاب عملیاتی چندماژوله برای کسب‌وکارهای چنداجاره‌ای",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f7fb",
+  "theme_color": "#0ea5a4",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

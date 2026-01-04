@@ -23,6 +23,8 @@ class PayrollEmployee extends Model
         'tenant_id',
         'company_id',
         'branch_id',
+        'department_id',
+        'position_id',
         'user_id',
         'employee_no',
         'first_name',
@@ -46,6 +48,8 @@ class PayrollEmployee extends Model
         'birth_date' => 'date',
         'employment_date' => 'date',
         'children_count' => 'integer',
+        'department_id' => 'integer',
+        'position_id' => 'integer',
         'metadata' => 'array',
     ];
 
@@ -62,6 +66,16 @@ class PayrollEmployee extends Model
     public function branch(): BelongsTo
     {
         return $this->belongsTo(AccountingBranch::class, 'branch_id');
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(\Vendor\FilamentPayrollAttendanceIr\Domain\Models\Department::class, 'department_id');
+    }
+
+    public function position(): BelongsTo
+    {
+        return $this->belongsTo(\Vendor\FilamentPayrollAttendanceIr\Domain\Models\Position::class, 'position_id');
     }
 
     public function attendanceRecords(): HasMany

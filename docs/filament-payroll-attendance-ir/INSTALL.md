@@ -1,0 +1,31 @@
+# INSTALL — filament-payroll-attendance-ir
+
+## پیش‌نیازها
+- PHP 8.2+
+- Laravel 11.28+ / Filament v4 (طبق استاندارد پروژه)
+- فعال بودن IAM Suite و tenant resolution
+
+## نصب
+1) پکیج در monorepo حاضر است (path repository در composer).
+2) Composer autoload را به‌روزرسانی کنید:
+   - `composer dump-autoload`
+3) مهاجرت‌ها:
+   - `php artisan migrate --force`
+
+## فعال‌سازی در Filament
+- اگر پکیج Plugin دارد، ثبت در پنل‌ها:
+  - Admin: ثبت شده با FilamentPayrollAttendanceIrPlugin::make() در AdminPanelProvider
+  - Tenant: ثبت شده با FilamentPayrollAttendanceIrPlugin::make() در TenantPanelProvider
+
+## IAM و مجوزها
+- همگام‌سازی capabilityها:
+  - `php artisan filamat-iam:sync --guard=web`
+- اطمینان از scopeهای API طبق `filamat-iam.scope:<scope>`
+
+## تنظیمات
+- فایل‌های کانفیگ:
+- packages/filament-payroll-attendance-ir/config/filament-payroll-attendance-ir.php
+- انتشار تنظیمات (در صورت نیاز):
+  - `php artisan vendor:publish --tag=filament-payroll-attendance-ir-config`
+## تست/اعتبارسنجی
+- سناریوی عمیق: `php scripts/deep_scenario_runner.php`

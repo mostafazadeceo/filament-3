@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --app-bg: #f3f7fb;
+  --app-card: #ffffff;
+  --app-ink: #0f172a;
+  --app-muted: #64748b;
+  --app-accent: #fb923c;
+  --app-teal: #14b8a6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Vazirmatn', ui-sans-serif, system-ui;
+  direction: rtl;
+  background: var(--app-bg);
+  color: var(--app-ink);
+}
+
+body {
+  min-height: 100vh;
+  background: radial-gradient(1200px 600px at 85% -10%, rgba(14, 165, 164, 0.16), transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, rgba(251, 146, 60, 0.15), transparent 55%),
+    var(--app-bg);
+}
+
+::selection {
+  background: rgba(251, 146, 60, 0.25);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

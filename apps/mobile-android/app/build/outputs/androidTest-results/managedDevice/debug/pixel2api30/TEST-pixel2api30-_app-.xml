@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.haida.hubapp.ExampleInstrumentedTest" tests="1" failures="0" errors="0" skipped="0" time="6.302" timestamp="2026-01-03T18:49:18" hostname="localhost">
+  <properties>
+    <property name="device" value="pixel2api30" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="appContext" classname="com.haida.hubapp.ExampleInstrumentedTest" time="0.029" />
+</testsuite>

@@ -29,6 +29,7 @@ class CalendarFormatter
 
     public function formatDayDate(CarbonInterface $date, string $calendar): string
     {
+        $date = $this->toDisplayTimezone($date);
         $calendar = $this->normalizeCalendar($calendar);
 
         $formatted = match ($calendar) {
@@ -42,6 +43,7 @@ class CalendarFormatter
 
     public function formatDate(CarbonInterface $date, string $calendar): string
     {
+        $date = $this->toDisplayTimezone($date);
         $calendar = $this->normalizeCalendar($calendar);
 
         $formatted = match ($calendar) {
@@ -55,6 +57,7 @@ class CalendarFormatter
 
     public function formatDateTime(CarbonInterface $date, string $calendar): string
     {
+        $date = $this->toDisplayTimezone($date);
         $calendar = $this->normalizeCalendar($calendar);
 
         $formatted = match ($calendar) {
@@ -137,6 +140,29 @@ class CalendarFormatter
         return Carbon::instance($date)
             ->locale(config('app.locale'))
             ->translatedFormat($format);
+    }
+
+    private function toDisplayTimezone(CarbonInterface $date): CarbonInterface
+    {
+        $timezone = $this->resolveDisplayTimezone();
+        $date = Carbon::instance($date);
+
+        if (! $timezone) {
+            return $date;
+        }
+
+        return $date->setTimezone($timezone);
+    }
+
+    private function resolveDisplayTimezone(): ?string
+    {
+        $timezone = config('app.display_timezone');
+
+        if (! is_string($timezone) || $timezone === '') {
+            return null;
+        }
+
+        return $timezone;
     }
 
     private function normalizeCalendar(string $calendar): string

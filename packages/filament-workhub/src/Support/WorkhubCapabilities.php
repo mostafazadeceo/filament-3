@@ -16,9 +16,9 @@ use Haida\FilamentWorkhub\Policies\StatusPolicy;
 use Haida\FilamentWorkhub\Policies\TimeEntryPolicy;
 use Haida\FilamentWorkhub\Policies\TransitionPolicy;
 use Haida\FilamentWorkhub\Policies\WatcherPolicy;
+use Haida\FilamentWorkhub\Policies\WorkflowPolicy;
 use Haida\FilamentWorkhub\Policies\WorkItemPolicy;
 use Haida\FilamentWorkhub\Policies\WorkTypePolicy;
-use Haida\FilamentWorkhub\Policies\WorkflowPolicy;
 
 final class WorkhubCapabilities
 {
@@ -65,6 +65,7 @@ final class WorkhubCapabilities
                 'workhub_work_types' => 'نوع‌های کار',
                 'workhub_custom_fields' => 'فیلدهای سفارشی',
                 'workhub_automation' => 'اتوماسیون',
+                'workhub_ai' => 'هوش مصنوعی',
             ]
         );
 
@@ -108,6 +109,10 @@ final class WorkhubCapabilities
             'workhub.custom_field.manage',
             'workhub.link.view',
             'workhub.link.manage',
+            'workhub.ai.use',
+            'workhub.ai.share',
+            'workhub.ai.fields.manage',
+            'workhub.ai.project_reports.manage',
         ];
     }
 }

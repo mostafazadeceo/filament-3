@@ -4,18 +4,24 @@ namespace Haida\FilamentWorkhub\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
-use Haida\FilamentWorkhub\Filament\Resources\CustomFieldResource\Pages\CreateCustomField;
-use Haida\FilamentWorkhub\Filament\Resources\CustomFieldResource\Pages\EditCustomField;
-use Haida\FilamentWorkhub\Filament\Resources\CustomFieldResource\Pages\ListCustomFields;
-use Haida\FilamentWorkhub\Models\CustomField;
+use Filamat\IamSuite\Support\IamAuthorization;
+use Filament\Actions\Action;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Get;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Haida\FilamentWorkhub\Filament\Resources\CustomFieldResource\Pages\CreateCustomField;
+use Haida\FilamentWorkhub\Filament\Resources\CustomFieldResource\Pages\EditCustomField;
+use Haida\FilamentWorkhub\Filament\Resources\CustomFieldResource\Pages\ListCustomFields;
+use Haida\FilamentWorkhub\Jobs\GenerateAiFieldBulkJob;
+use Haida\FilamentWorkhub\Models\CustomField;
 
 class CustomFieldResource extends IamResource
 {
@@ -66,13 +72,26 @@ class CustomFieldResource extends IamResource
                         'boolean' => 'بله/خیر',
                         'select' => 'انتخابی',
                         'multi_select' => 'چند انتخابی',
+                        'ai_field' => 'هوش مصنوعی',
                     ])
                     ->required(),
+                Textarea::make('settings.prompt_template')
+                    ->label('پرامپت هوش مصنوعی')
+                    ->rows(4)
+                    ->visible(fn (Get $get) => $get('type') === 'ai_field')
+                    ->required(fn (Get $get) => $get('type') === 'ai_field')
+                    ->helperText('الگوی پرامپت برای تولید خروجی توسط هوش مصنوعی.'),
+                Textarea::make('settings.output_schema')
+                    ->label('ساختار خروجی (JSON)')
+                    ->rows(4)
+                    ->visible(fn (Get $get) => $get('type') === 'ai_field')
+                    ->helperText('نمونه JSON یا JSON Schema برای خروجی مورد انتظار.'),
                 KeyValue::make('settings')
                     ->label('تنظیمات')
                     ->keyLabel('کلید')
                     ->valueLabel('مقدار')
-                    ->nullable(),
+                    ->nullable()
+                    ->visible(fn (Get $get) => $get('type') !== 'ai_field'),
                 TextInput::make('sort_order')
                     ->label('ترتیب')
                     ->numeric()
@@ -98,6 +117,27 @@ class CustomFieldResource extends IamResource
                 IconColumn::make('is_required')->label('الزامی')->boolean(),
                 IconColumn::make('is_active')->label('فعال')->boolean(),
                 TextColumn::make('updated_at')->label('به‌روزرسانی'),
+            ])
+            ->actions([
+                Action::make('bulk_generate')
+                    ->label('تولید گروهی')
+                    ->icon('heroicon-o-sparkles')
+                    ->visible(fn (CustomField $record) => $record->type === 'ai_field'
+                        && IamAuthorization::allows('workhub.ai.fields.manage', IamAuthorization::resolveTenantFromRecord($record)))
+                    ->requiresConfirmation()
+                    ->modalHeading('تولید گروهی فیلد هوش مصنوعی')
+                    ->modalDescription('برای همه آیتم‌های کاری فعال اجرا می‌شود.')
+                    ->modalSubmitActionLabel('شروع')
+                    ->modalCancelActionLabel('انصراف')
+                    ->action(function (CustomField $record): void {
+                        $limit = (int) config('filament-workhub.ai.field.bulk_limit', 100);
+                        GenerateAiFieldBulkJob::dispatch($record->tenant_id, $record->getKey(), auth()->id(), $limit);
+
+                        Notification::make()
+                            ->title('تولید گروهی در صف قرار گرفت.')
+                            ->success()
+                            ->send();
+                    }),
             ]);
     }
 

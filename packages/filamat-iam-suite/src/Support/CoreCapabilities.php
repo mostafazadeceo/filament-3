@@ -24,9 +24,16 @@ final class CoreCapabilities
                 'subscriptions' => true,
                 'notifications' => true,
                 'api_docs' => true,
+                'automation' => true,
                 'access_requests' => true,
                 'permission_snapshots' => true,
                 'delegated_admin' => true,
+                'pam' => true,
+                'mfa' => true,
+                'impersonation' => true,
+                'sessions' => true,
+                'sso' => false,
+                'scim' => false,
             ],
             [
                 'wallet.daily_limit' => null,
@@ -43,6 +50,7 @@ final class CoreCapabilities
                 'wallet' => 'کیف پول',
                 'subscription' => 'اشتراک',
                 'notifications' => 'اعلان‌ها',
+                'automation' => 'اتوماسیون',
             ]
         );
 

@@ -1,0 +1,159 @@
+<?php
+
+namespace Haida\FilamentStorefrontBuilder\Filament\Resources;
+
+use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
+use Filamat\IamSuite\Filament\Resources\IamResource;
+use Filamat\IamSuite\Support\IamAuthorization;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Haida\FilamentStorefrontBuilder\Filament\Resources\StoreBlockResource\Pages\CreateStoreBlock;
+use Haida\FilamentStorefrontBuilder\Filament\Resources\StoreBlockResource\Pages\EditStoreBlock;
+use Haida\FilamentStorefrontBuilder\Filament\Resources\StoreBlockResource\Pages\ListStoreBlocks;
+use Haida\FilamentStorefrontBuilder\Models\StoreBlock;
+use Illuminate\Database\Eloquent\Model;
+
+class StoreBlockResource extends IamResource
+{
+    use InteractsWithTenant;
+
+    protected static ?string $model = StoreBlock::class;
+
+    protected static ?string $modelLabel = 'بلاک';
+
+    protected static ?string $pluralModelLabel = 'بلاک‌ها';
+
+    protected static bool $hasTitleCaseModelLabel = false;
+
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-view-columns';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'سازنده فروشگاه';
+
+    public static function canViewAny(): bool
+    {
+        return IamAuthorization::allowsAny(['storebuilder.view', 'storebuilder.manage']);
+    }
+
+    public static function canView(Model $record): bool
+    {
+        return IamAuthorization::allowsAny(['storebuilder.view', 'storebuilder.manage'], IamAuthorization::resolveTenantFromRecord($record));
+    }
+
+    public static function canCreate(): bool
+    {
+        return IamAuthorization::allows('storebuilder.manage');
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return IamAuthorization::allows('storebuilder.manage', IamAuthorization::resolveTenantFromRecord($record));
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return IamAuthorization::allows('storebuilder.manage', IamAuthorization::resolveTenantFromRecord($record));
+    }
+
+    public static function form(Schema $schema): Schema
+    {
+        return $schema
+            ->schema([
+                static::tenantSelect(),
+                TextInput::make('key')
+                    ->label('کلید')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('name')
+                    ->label('نام')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('type')
+                    ->label('نوع')
+                    ->required()
+                    ->maxLength(255),
+                Select::make('status')
+                    ->label('وضعیت')
+                    ->options([
+                        'active' => 'فعال',
+                        'inactive' => 'غیرفعال',
+                    ])
+                    ->default('active')
+                    ->required(),
+                Textarea::make('schema')
+                    ->label('اسکیما (JSON)')
+                    ->rows(3)
+                    ->nullable()
+                    ->rules(['nullable', 'json'])
+                    ->formatStateUsing(function ($state) {
+                        if (is_array($state)) {
+                            return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                        }
+
+                        return $state;
+                    })
+                    ->dehydrateStateUsing(function ($state) {
+                        if (! is_string($state) || trim($state) === '') {
+                            return null;
+                        }
+
+                        $decoded = json_decode($state, true);
+
+                        return is_array($decoded) ? $decoded : null;
+                    }),
+                Textarea::make('content')
+                    ->label('محتوا (JSON)')
+                    ->rows(4)
+                    ->nullable()
+                    ->rules(['nullable', 'json'])
+                    ->formatStateUsing(function ($state) {
+                        if (is_array($state)) {
+                            return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                        }
+
+                        return $state;
+                    })
+                    ->dehydrateStateUsing(function ($state) {
+                        if (! is_string($state) || trim($state) === '') {
+                            return null;
+                        }
+
+                        $decoded = json_decode($state, true);
+
+                        return is_array($decoded) ? $decoded : null;
+                    }),
+            ])
+            ->columns(2);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('key')
+                    ->label('کلید')
+                    ->searchable(),
+                TextColumn::make('name')
+                    ->label('نام')
+                    ->searchable(),
+                TextColumn::make('type')
+                    ->label('نوع'),
+                TextColumn::make('status')
+                    ->label('وضعیت')
+                    ->badge(),
+            ])
+            ->defaultSort('id', 'desc');
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListStoreBlocks::route('/'),
+            'create' => CreateStoreBlock::route('/create'),
+            'edit' => EditStoreBlock::route('/{record}/edit'),
+        ];
+    }
+}

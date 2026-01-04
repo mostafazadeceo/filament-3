@@ -1,0 +1,33 @@
+{
+    "name": "haida/providers-esim-go-webhooks",
+    "version": "1.0.0",
+    "description": "Webhook receiver for eSIM Go provider.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "filamat/filamat-iam-suite": "dev-main",
+        "haida/providers-esim-go-core": "^1.0",
+        "haida/providers-core": "^1.0",
+        "haida/filament-notify-core": "^1.0",
+        "illuminate/contracts": "^11.0|^12.0",
+        "illuminate/http": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "illuminate/queue": "^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haida\\ProvidersEsimGoWebhooks\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Haida\\ProvidersEsimGoWebhooks\\ProvidersEsimGoWebhooksServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

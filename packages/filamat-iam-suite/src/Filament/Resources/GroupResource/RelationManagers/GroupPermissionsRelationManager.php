@@ -12,6 +12,7 @@ use Filamat\IamSuite\Support\PermissionLabels;
 use Filament\Actions\AttachAction;
 use Filament\Actions\DetachAction;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -76,6 +77,7 @@ class GroupPermissionsRelationManager extends RelationManager
                             ])
                             ->default('allow')
                             ->required(),
+                        Textarea::make('reason')->label('دلیل')->required(),
                     ])
                     ->after(function (AttachAction $action) {
                         $owner = $this->getOwnerRecord();
@@ -85,6 +87,7 @@ class GroupPermissionsRelationManager extends RelationManager
                         app(AuditService::class)->log('group.permission.attached', $owner, [
                             'permission_id' => $record?->getKey(),
                             'effect' => $data['effect'] ?? 'allow',
+                            'reason' => $data['reason'] ?? null,
                         ]);
                     }),
             ])
@@ -92,12 +95,17 @@ class GroupPermissionsRelationManager extends RelationManager
                 DetachAction::make()
                     ->label('حذف')
                     ->visible(fn () => IamAuthorization::allows('iam.manage'))
+                    ->form([
+                        Textarea::make('reason')->label('دلیل')->required(),
+                    ])
                     ->after(function (DetachAction $action) {
                         $owner = $this->getOwnerRecord();
                         $record = $action->getRecord();
+                        $data = $action->getData();
 
                         app(AuditService::class)->log('group.permission.detached', $owner, [
                             'permission_id' => $record?->getKey(),
+                            'reason' => $data['reason'] ?? null,
                         ]);
                     }),
             ]);

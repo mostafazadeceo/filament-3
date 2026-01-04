@@ -3,6 +3,7 @@
 use Filamat\IamSuite\Http\Middleware\ApiAuth;
 use Filamat\IamSuite\Http\Middleware\ApiKeyAuth;
 use Filamat\IamSuite\Http\Middleware\ResolveTenant;
+use Haida\FilamentPettyCashIr\Http\Controllers\Api\V1\AiController;
 use Haida\FilamentPettyCashIr\Http\Controllers\Api\V1\CategoryController;
 use Haida\FilamentPettyCashIr\Http\Controllers\Api\V1\ExpenseController;
 use Haida\FilamentPettyCashIr\Http\Controllers\Api\V1\FundController;
@@ -48,6 +49,12 @@ Route::prefix('api/v1/petty-cash')
             ->middleware('filamat-iam.scope:petty_cash.expense.reject');
         Route::post('expenses/{expense}/post', [ExpenseController::class, 'post'])
             ->middleware('filamat-iam.scope:petty_cash.expense.post');
+        Route::post('expenses/{expense}/ai-suggest', [AiController::class, 'suggestExpense'])
+            ->middleware('filamat-iam.scope:petty_cash.ai.use');
+        Route::post('expenses/{expense}/ai-apply', [AiController::class, 'applyExpenseSuggestion'])
+            ->middleware('filamat-iam.scope:petty_cash.ai.use');
+        Route::post('expenses/{expense}/ai-reject', [AiController::class, 'rejectExpenseSuggestion'])
+            ->middleware('filamat-iam.scope:petty_cash.ai.use');
 
         Route::apiResource('replenishments', ReplenishmentController::class)
             ->only(['index', 'show'])
@@ -81,5 +88,11 @@ Route::prefix('api/v1/petty-cash')
         Route::post('settlements/{settlement}/post', [SettlementController::class, 'post'])
             ->middleware('filamat-iam.scope:petty_cash.settlement.post');
 
-        Route::get('openapi', [OpenApiController::class, 'show']);
+        Route::post('ai/audit', [AiController::class, 'audit'])
+            ->middleware('filamat-iam.scope:petty_cash.ai.use');
+        Route::get('ai/report', [AiController::class, 'report'])
+            ->middleware('filamat-iam.scope:petty_cash.ai.view_reports');
+
+        Route::get('openapi', [OpenApiController::class, 'show'])
+            ->middleware('filamat-iam.scope:petty_cash.view');
     });

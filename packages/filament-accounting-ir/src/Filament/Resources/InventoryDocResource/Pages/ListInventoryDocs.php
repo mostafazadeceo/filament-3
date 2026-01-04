@@ -2,10 +2,10 @@
 
 namespace Vendor\FilamentAccountingIr\Filament\Resources\InventoryDocResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Vendor\FilamentAccountingIr\Filament\Resources\InventoryDocResource;
 
-class ListInventoryDocs extends ListRecords
+class ListInventoryDocs extends ListRecordsWithCreate
 {
     protected static string $resource = InventoryDocResource::class;
 }

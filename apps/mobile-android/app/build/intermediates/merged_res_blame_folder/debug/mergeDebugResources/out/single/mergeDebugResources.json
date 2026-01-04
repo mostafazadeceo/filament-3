@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "com.haida.hubapp-debug-80:/drawable_ic_pos.xml.flat",
+        "source": "com.haida.hubapp-main-82:/drawable/ic_pos.xml"
+    },
+    {
+        "merged": "com.haida.hubapp-debug-80:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.haida.hubapp-main-82:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.haida.hubapp-debug-80:/drawable_ic_home.xml.flat",
+        "source": "com.haida.hubapp-main-82:/drawable/ic_home.xml"
+    },
+    {
+        "merged": "com.haida.hubapp-debug-80:/drawable_ic_tasks.xml.flat",
+        "source": "com.haida.hubapp-main-82:/drawable/ic_tasks.xml"
+    },
+    {
+        "merged": "com.haida.hubapp-debug-80:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.haida.hubapp-main-82:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.haida.hubapp-debug-80:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.haida.hubapp-main-82:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.haida.hubapp-debug-80:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.haida.hubapp-main-82:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.haida.hubapp-debug-80:/drawable_ic_support.xml.flat",
+        "source": "com.haida.hubapp-main-82:/drawable/ic_support.xml"
+    }
+]

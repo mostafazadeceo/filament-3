@@ -136,14 +136,21 @@
                 throw new Error('مسیر ثبت وب‌پوش مشخص نیست.');
             }
 
-            await fetch(config.subscribeEndpoint, {
+            const response = await fetch(config.subscribeEndpoint, {
                 method: 'POST',
+                credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
                 },
                 body: JSON.stringify({ subscription: subscription.toJSON() }),
             });
+
+            if (!response.ok) {
+                const payload = await response.json().catch(() => null);
+                const message = payload?.message || payload?.error || response.statusText || 'ارسال اطلاعات وب‌پوش ناموفق بود.';
+                throw new Error(message);
+            }
         };
 
         const ensureSubscription = async (statusTarget) => {
@@ -187,7 +194,8 @@
                 }
                 return ok;
             } catch (error) {
-                setStatus(statusTarget, 'خطا در فعال‌سازی وب‌پوش.');
+                const message = error?.message || 'خطا در فعال‌سازی وب‌پوش.';
+                setStatus(statusTarget, message);
                 return false;
             }
         };

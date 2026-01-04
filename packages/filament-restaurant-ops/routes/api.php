@@ -129,5 +129,6 @@ Route::prefix('api/v1/restaurant-ops')
         Route::post('menu-sales/{menu_sale}/post', [MenuSaleController::class, 'post'])
             ->middleware('filamat-iam.scope:restaurant.menu_sale.post');
 
-        Route::get('openapi', [OpenApiController::class, 'show']);
+        Route::get('openapi', [OpenApiController::class, 'show'])
+            ->middleware('filamat-iam.scope:restaurant.view');
     });

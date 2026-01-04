@@ -24,4 +24,21 @@ return [
             'urgent' => 'فوری',
         ],
     ],
+
+    'ai' => [
+        'summary_ttl_minutes' => 60,
+        'personal_summary_ttl_minutes' => 30,
+        'thread_summary_ttl_minutes' => 60,
+        'progress_ttl_minutes' => 30,
+        'stuck_days' => 7,
+        'similarity_limit' => 5,
+        'field' => [
+            'rate_limit_per_minute' => 30,
+            'bulk_limit' => 100,
+        ],
+    ],
+
+    'notifications' => [
+        'panel' => 'tenant',
+    ],
 ];

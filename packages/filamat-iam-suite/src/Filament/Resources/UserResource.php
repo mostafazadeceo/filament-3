@@ -9,17 +9,22 @@ use Filamat\IamSuite\Filament\Resources\UserResource\Pages\EditUser;
 use Filamat\IamSuite\Filament\Resources\UserResource\Pages\ListUsers;
 use Filamat\IamSuite\Filament\Resources\UserResource\RelationManagers\UserApiKeysRelationManager;
 use Filamat\IamSuite\Filament\Resources\UserResource\RelationManagers\UserGroupsRelationManager;
+use Filamat\IamSuite\Filament\Resources\UserResource\RelationManagers\UserMfaMethodsRelationManager;
 use Filamat\IamSuite\Filament\Resources\UserResource\RelationManagers\UserPermissionOverridesRelationManager;
+use Filamat\IamSuite\Filament\Resources\UserResource\RelationManagers\UserSessionsRelationManager;
 use Filamat\IamSuite\Filament\Resources\UserResource\RelationManagers\UserTenantsRelationManager;
 use Filamat\IamSuite\Filament\Resources\UserResource\RelationManagers\UserTokensRelationManager;
 use Filamat\IamSuite\Filament\Resources\UserResource\RelationManagers\UserWalletsRelationManager;
 use Filamat\IamSuite\Models\OtpCode;
 use Filamat\IamSuite\Models\Tenant;
 use Filamat\IamSuite\Services\ImpersonationService;
+use Filamat\IamSuite\Services\ProtectedActionService;
 use Filamat\IamSuite\Services\SecurityEventService;
 use Filamat\IamSuite\Support\IamAuthorization;
 use Filamat\IamSuite\Support\TenantContext;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
@@ -117,9 +122,9 @@ class UserResource extends IamResource
                 Action::make('impersonate')
                     ->label('ورود به حساب')
                     ->icon('heroicon-o-identification')
-                    ->visible(fn () => (auth()->user()?->hasIamSuiteSuperAdmin() ?? false) && TenantContext::shouldBypass())
+                    ->visible(fn () => IamAuthorization::allows('iam.impersonate'))
                     ->form([
-                        \Filament\Forms\Components\Select::make('tenant_id')
+                        Select::make('tenant_id')
                             ->label('فضای کاری')
                             ->options(fn ($record) => $record->tenants()
                                 ->get([
@@ -130,6 +135,13 @@ class UserResource extends IamResource
                                 ->toArray())
                             ->searchable()
                             ->required(),
+                        Textarea::make('reason')->label('دلیل')->required(),
+                        TextInput::make('ticket_id')->label('شناسه تیکت')->required(),
+                        TextInput::make('ttl_minutes')->label('مدت (دقیقه)')->numeric()->default(30)->minValue(5),
+                        Toggle::make('restricted')->label('حالت مشاهده')->default(true),
+                        TextInput::make('password')->label('رمز عبور')->password()->dehydrated(fn ($state) => filled($state)),
+                        TextInput::make('totp')->label('کد MFA')->dehydrated(fn ($state) => filled($state)),
+                        TextInput::make('backup_code')->label('کد پشتیبان')->dehydrated(fn ($state) => filled($state)),
                     ])
                     ->action(function ($record, array $data) {
                         $tenant = Tenant::query()->find($data['tenant_id']);
@@ -137,7 +149,37 @@ class UserResource extends IamResource
                             return;
                         }
 
-                        app(ImpersonationService::class)->start(auth()->user(), $record, $tenant);
+                        $actor = auth()->user();
+                        if (! $actor) {
+                            return;
+                        }
+
+                        $protectedAction = app(ProtectedActionService::class);
+                        $requiresStepUp = in_array('iam.impersonate', (array) config('filamat-iam.protected_actions.require_mfa_actions', []), true);
+                        if ($requiresStepUp) {
+                            if (! empty($data['totp'])) {
+                                $token = $protectedAction->issueWithTotp($actor, 'iam.impersonate', $data['totp'], $tenant);
+                                $protectedAction->requireToken($actor, 'iam.impersonate', $tenant, $token);
+                            } elseif (! empty($data['backup_code'])) {
+                                $token = $protectedAction->issueWithBackupCode($actor, 'iam.impersonate', $data['backup_code'], $tenant);
+                                $protectedAction->requireToken($actor, 'iam.impersonate', $tenant, $token);
+                            } elseif (! empty($data['password'])) {
+                                $token = $protectedAction->issueWithPassword($actor, 'iam.impersonate', $data['password'], $tenant);
+                                $protectedAction->requireToken($actor, 'iam.impersonate', $tenant, $token);
+                            } else {
+                                throw new \RuntimeException('تایید هویت مجدد لازم است.');
+                            }
+                        }
+
+                        app(ImpersonationService::class)->start(
+                            $actor,
+                            $record,
+                            $tenant,
+                            $data['reason'] ?? null,
+                            $data['ticket_id'] ?? null,
+                            isset($data['ttl_minutes']) ? (int) $data['ttl_minutes'] : null,
+                            (bool) ($data['restricted'] ?? true)
+                        );
 
                         return redirect()->to('/');
                     }),
@@ -152,6 +194,8 @@ class UserResource extends IamResource
             UserPermissionOverridesRelationManager::class,
             UserWalletsRelationManager::class,
             UserApiKeysRelationManager::class,
+            UserSessionsRelationManager::class,
+            UserMfaMethodsRelationManager::class,
         ];
 
         $model = static::getModel();

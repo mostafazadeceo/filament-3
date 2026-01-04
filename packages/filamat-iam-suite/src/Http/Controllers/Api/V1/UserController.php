@@ -26,7 +26,7 @@ class UserController extends BaseController
         ];
     }
 
-    public function store(Request $request): Response
+    public function store(Request $request, ?int $parentId = null): Response
     {
         $model = $this->modelClass();
         $data = $request->validate($this->validationRules('store'));

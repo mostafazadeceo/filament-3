@@ -1,0 +1,247 @@
+{
+  "date": "2026-01-03T22:30:21+03:30",
+  "summary": {
+    "total": 11,
+    "critical": 0,
+    "high": 2,
+    "medium": 5,
+    "low": 4
+  },
+  "issues": [
+    {
+      "id": "DBG-002",
+      "severity": "low",
+      "area": "web",
+      "repro": [
+        "Force websocket disconnects until fallback triggers."
+      ],
+      "root_cause": "Fallback handler was missing.",
+      "fix": "Trigger push/pull sync on fallback.",
+      "files": [
+        "apps/web-pwa/src/lib/realtime/use-realtime.ts"
+      ],
+      "tests": [
+        "npm run test"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "DBG-003",
+      "severity": "medium",
+      "area": "android",
+      "repro": [
+        "Install app and rotate FCM token."
+      ],
+      "root_cause": "Token registration not implemented.",
+      "fix": "Register device and upload FCM token via App API.",
+      "files": [
+        "apps/mobile-android/app/src/main/java/com/haida/hubapp/data/repository/DeviceRepository.kt",
+        "apps/mobile-android/app/src/main/java/com/haida/hubapp/notifications/HubMessagingService.kt"
+      ],
+      "tests": [
+        "./gradlew assembleDebug"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "DBG-004",
+      "severity": "medium",
+      "area": "android",
+      "repro": [
+        "Request integrity token with feature flag enabled."
+      ],
+      "root_cause": "Play Integrity stub only.",
+      "fix": "Implement Play Integrity token request behind feature flag.",
+      "files": [
+        "apps/mobile-android/app/src/main/java/com/haida/hubapp/security/PlayIntegrityManager.kt"
+      ],
+      "tests": [
+        "./gradlew assembleDebug"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "DBG-005",
+      "severity": "high",
+      "area": "backend",
+      "repro": [
+        "Process same webhook external_id for two tenants."
+      ],
+      "root_cause": "Unique index lacked tenant_id and handler relied on ambient tenant context.",
+      "fix": "Add tenant-scoped unique index and set TenantContext inside handler.",
+      "files": [
+        "packages/filament-payments/database/migrations/2026_01_03_000003_update_payment_webhook_unique_index.php",
+        "packages/filament-payments/src/Services/WebhookHandler.php",
+        "packages/filament-payments/src/FilamentPaymentsServiceProvider.php",
+        "tests/Feature/Payments/PaymentWebhookSecurityTest.php"
+      ],
+      "tests": [
+        "php artisan test"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "DBG-006",
+      "severity": "medium",
+      "area": "web",
+      "repro": [
+        "Trigger pushOutbox() while API is offline; items remain syncing."
+      ],
+      "root_cause": "Error path did not reset outbox status.",
+      "fix": "Mark items failed on error + handle missing results.",
+      "files": [
+        "apps/web-pwa/src/lib/sync/sync-engine.ts",
+        "apps/web-pwa/src/lib/sync/sync-engine.test.ts"
+      ],
+      "tests": [
+        "npm run test"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "DBG-007",
+      "severity": "high",
+      "area": "backend",
+      "repro": [
+        "Call /currency-rates without token."
+      ],
+      "root_cause": "tokenValid allowed blank token.",
+      "fix": "Require token and add API rate limiting.",
+      "files": [
+        "packages/filament-currency-rates/src/Http/Controllers/CurrencyRateApiController.php",
+        "packages/filament-currency-rates/routes/api.php",
+        "packages/filament-currency-rates/config/currency-rates.php"
+      ],
+      "tests": [
+        "php artisan test"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "DBG-008",
+      "severity": "low",
+      "area": "infra",
+      "repro": [
+        "Run pint --test on touched packages."
+      ],
+      "root_cause": "Existing style issues in filament-petty-cash-ir.",
+      "fix": "Run pint on filament-petty-cash-ir and re-check.",
+      "files": [
+        "packages/filament-petty-cash-ir"
+      ],
+      "tests": [
+        "./vendor/bin/pint --test packages/filament-restaurant-ops packages/filament-petty-cash-ir packages/filament-payroll-attendance-ir"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "DBG-009",
+      "severity": "medium",
+      "area": "android",
+      "repro": [
+        "Run managed device tests with pixel2api30."
+      ],
+      "root_cause": "ANDROID_SDK_ROOT missing in prior run.",
+      "fix": "Run managed device tests with ANDROID_SDK_ROOT set.",
+      "files": [],
+      "tests": [
+        "ANDROID_SDK_ROOT=/opt/android-sdk ./gradlew pixel2api30DebugAndroidTest"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "DBG-010",
+      "severity": "medium",
+      "area": "android",
+      "repro": [
+        "Call sync pull and check local cache."
+      ],
+      "root_cause": "Pull only advanced cursor.",
+      "fix": "Persist changes in local sync table.",
+      "files": [
+        "apps/mobile-android/app/src/main/java/com/haida/hubapp/data/repository/SyncRepository.kt",
+        "apps/mobile-android/app/src/main/java/com/haida/hubapp/data/local/SyncChangeEntity.kt",
+        "apps/mobile-android/app/src/main/java/com/haida/hubapp/data/local/SyncChangeDao.kt",
+        "apps/mobile-android/app/src/main/java/com/haida/hubapp/data/local/Migrations.kt"
+      ],
+      "tests": [
+        "./gradlew assembleDebug"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "DBG-011",
+      "severity": "low",
+      "area": "api",
+      "repro": [
+        "Request openapi without view scope in restaurant-ops/petty-cash/payroll."
+      ],
+      "root_cause": "OpenAPI routes missing scope middleware in three modules.",
+      "fix": "Add scope middleware and coverage test.",
+      "files": [
+        "packages/filament-restaurant-ops/routes/api.php",
+        "packages/filament-petty-cash-ir/routes/api.php",
+        "packages/filament-payroll-attendance-ir/routes/api.php",
+        "tests/Feature/OpenApiScopeCoverageTest.php"
+      ],
+      "tests": [
+        "php artisan test"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "DBG-012",
+      "severity": "low",
+      "area": "web",
+      "repro": [
+        "Run npm run build in apps/web-pwa."
+      ],
+      "root_cause": "Next.js workspace root warning due to multiple lockfiles.",
+      "fix": "Set outputFileTracingRoot explicitly.",
+      "files": [
+        "apps/web-pwa/next.config.mjs"
+      ],
+      "tests": [
+        "npm run build"
+      ],
+      "status": "fixed"
+    }
+  ],
+  "commands_run": [
+    "php artisan test",
+    "php scripts/deep_scenario_runner.php",
+    "./vendor/bin/pint packages/filament-payments packages/filament-currency-rates",
+    "./vendor/bin/pint --test packages/filament-payments packages/filament-currency-rates",
+    "npm run build (apps/web-pwa)",
+    "npm run test (apps/web-pwa)",
+    "npm run test:e2e (apps/web-pwa)",
+    "./gradlew assembleDebug (apps/mobile-android)",
+    "./gradlew testDebugUnitTest (apps/mobile-android)",
+    "ANDROID_SDK_ROOT=/opt/android-sdk ./gradlew pixel2api30DebugAndroidTest (apps/mobile-android)",
+    "./vendor/bin/pint --test packages/filament-restaurant-ops packages/filament-petty-cash-ir packages/filament-payroll-attendance-ir",
+    "./vendor/bin/pint packages/filament-petty-cash-ir"
+  ],
+  "tenancy": {
+    "checked": true,
+    "leaks_found": 0,
+    "notes": [
+      "Payment webhook idempotency is tenant-scoped and Android now sends X-Tenant-ID."
+    ]
+  },
+  "performance": {
+    "n_plus_one_fixed": 0,
+    "slow_queries": []
+  },
+  "security": {
+    "asvs_checked": true,
+    "masvs_checked": true,
+    "notes": [
+      "Currency rates API now requires token and rate limiting.",
+      "Play Integrity token integration added behind feature flag.",
+      "FCM token registration implemented for Android.",
+      "OpenAPI endpoints now gated by module view scopes with coverage test."
+    ]
+  },
+  "remaining_risks": [],
+  "next_backlog": []
+}

@@ -3,13 +3,11 @@
 namespace Haida\FilamentWorkhub;
 
 use Filamat\IamSuite\Contracts\CapabilityRegistryInterface;
-use Haida\FilamentWorkhub\Support\WorkhubCapabilities;
-use Haida\FilamentWorkhub\Support\EntityReferenceRegistry;
-use Haida\FilamentWorkhub\Support\AutomationRegistry;
-use Haida\FilamentWorkhub\Support\WorkhubAutomationDefaults;
-use Haida\FilamentWorkhub\Services\WorkhubAutomationEngine;
+use Haida\FilamentWorkhub\Console\Commands\RunWorkhubAiAudit;
+use Haida\FilamentWorkhub\Console\Commands\RunWorkhubAutomation;
 use Haida\FilamentWorkhub\Filament\Resources\ProjectResource;
 use Haida\FilamentWorkhub\Filament\Resources\WorkItemResource;
+use Haida\FilamentWorkhub\Listeners\WorkhubEventSubscriber;
 use Haida\FilamentWorkhub\Models\Attachment;
 use Haida\FilamentWorkhub\Models\AuditEvent;
 use Haida\FilamentWorkhub\Models\AutomationRule;
@@ -23,9 +21,9 @@ use Haida\FilamentWorkhub\Models\Status;
 use Haida\FilamentWorkhub\Models\TimeEntry;
 use Haida\FilamentWorkhub\Models\Transition;
 use Haida\FilamentWorkhub\Models\Watcher;
+use Haida\FilamentWorkhub\Models\Workflow;
 use Haida\FilamentWorkhub\Models\WorkItem;
 use Haida\FilamentWorkhub\Models\WorkType;
-use Haida\FilamentWorkhub\Models\Workflow;
 use Haida\FilamentWorkhub\Observers\AttachmentObserver;
 use Haida\FilamentWorkhub\Observers\CommentObserver;
 use Haida\FilamentWorkhub\Observers\DecisionObserver;
@@ -46,13 +44,16 @@ use Haida\FilamentWorkhub\Policies\StatusPolicy;
 use Haida\FilamentWorkhub\Policies\TimeEntryPolicy;
 use Haida\FilamentWorkhub\Policies\TransitionPolicy;
 use Haida\FilamentWorkhub\Policies\WatcherPolicy;
+use Haida\FilamentWorkhub\Policies\WorkflowPolicy;
 use Haida\FilamentWorkhub\Policies\WorkItemPolicy;
 use Haida\FilamentWorkhub\Policies\WorkTypePolicy;
-use Haida\FilamentWorkhub\Policies\WorkflowPolicy;
-use Illuminate\Support\Facades\Gate;
+use Haida\FilamentWorkhub\Services\WorkhubAutomationEngine;
+use Haida\FilamentWorkhub\Support\AutomationRegistry;
+use Haida\FilamentWorkhub\Support\EntityReferenceRegistry;
+use Haida\FilamentWorkhub\Support\WorkhubAutomationDefaults;
+use Haida\FilamentWorkhub\Support\WorkhubCapabilities;
 use Illuminate\Support\Facades\Event;
-use Haida\FilamentWorkhub\Listeners\WorkhubEventSubscriber;
-use Haida\FilamentWorkhub\Console\Commands\RunWorkhubAutomation;
+use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -86,9 +87,13 @@ class FilamentWorkhubServiceProvider extends PackageServiceProvider
                 '2025_12_27_010017_create_workhub_custom_field_values_table',
                 '2025_12_27_010018_add_last_ran_at_to_workhub_automation_rules_table',
                 '2025_12_27_010019_add_allowed_link_types_to_workhub_projects_table',
+                '2026_02_02_000001_create_workhub_ai_summaries_table',
+                '2026_02_02_000002_create_workhub_project_ai_updates_table',
+                '2026_02_02_000003_create_workhub_ai_field_runs_table',
             ])
             ->hasCommands([
                 RunWorkhubAutomation::class,
+                RunWorkhubAiAudit::class,
             ])
             ->runsMigrations();
     }

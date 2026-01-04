@@ -58,4 +58,9 @@ class PettyCashReplenishmentPolicy
     {
         return $this->allow('petty_cash.replenishment.reject', $replenishment);
     }
+
+    public function reverse(PettyCashReplenishment $replenishment): bool
+    {
+        return $this->allow('petty_cash.replenishment.reverse', $replenishment);
+    }
 }

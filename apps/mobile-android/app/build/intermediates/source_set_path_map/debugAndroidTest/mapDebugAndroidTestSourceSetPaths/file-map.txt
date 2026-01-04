@@ -1,0 +1,5 @@
+com.haida.hubapp.test.app-core-1.6.1-0 /home/ubuntu/.gradle/caches/transforms-4/a3a4fcddeecc7d2698081fbe4df92be8/transformed/core-1.6.1/res
+com.haida.hubapp.test.app-androidTest-1 /var/www/hub.haida.co/apps/mobile-android/app/build/generated/res/resValues/androidTest/debug
+com.haida.hubapp.test.app-mergeDebugAndroidTestResources-2 /var/www/hub.haida.co/apps/mobile-android/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+com.haida.hubapp.test.app-mergeDebugAndroidTestResources-3 /var/www/hub.haida.co/apps/mobile-android/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+com.haida.hubapp.test.app-debugAndroidTest-4 /var/www/hub.haida.co/apps/mobile-android/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources

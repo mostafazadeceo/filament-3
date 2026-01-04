@@ -1,0 +1,29 @@
+{
+    "name": "haida/filament-notify-mailtrap",
+    "version": "1.0.0",
+    "description": "Mailtrap channel for Filament Notify.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^4.0",
+        "haida/filament-notify-core": "^1.0",
+        "haida/mailtrap-core": "^1.0",
+        "illuminate/support": "^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haida\\FilamentNotify\\Mailtrap\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Haida\\FilamentNotify\\Mailtrap\\FilamentNotifyMailtrapServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

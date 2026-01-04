@@ -4,8 +4,8 @@ namespace Haida\FilamentWorkhub\Database\Factories;
 
 use Haida\FilamentWorkhub\Models\Project;
 use Haida\FilamentWorkhub\Models\Status;
-use Haida\FilamentWorkhub\Models\WorkItem;
 use Haida\FilamentWorkhub\Models\Workflow;
+use Haida\FilamentWorkhub\Models\WorkItem;
 use Haida\FilamentWorkhub\Models\WorkType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

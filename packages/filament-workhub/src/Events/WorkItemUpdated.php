@@ -12,9 +12,7 @@ class WorkItemUpdated implements WorkhubEvent
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public WorkItemDto $workItem, public array $changes = [])
-    {
-    }
+    public function __construct(public WorkItemDto $workItem, public array $changes = []) {}
 
     public function eventName(): string
     {

@@ -40,6 +40,12 @@ return [
         'wallet_risk_controls' => false,
         'gdpr_tools' => false,
         'user_profiles' => false,
+        'pam' => true,
+        'sessions' => true,
+        'protected_actions' => true,
+        'mfa' => true,
+        'sso' => false,
+        'scim' => false,
     ],
 
     'access_requests' => [
@@ -86,6 +92,49 @@ return [
             'payment' => env('FILAMAT_IAM_PAYMENT_WEBHOOK_SECRET'),
         ],
     ],
+    'automation' => [
+        'enabled' => true,
+        'webhook_type' => 'automation',
+        'default_auth_mode' => 'hmac+nonce',
+        'event_catalog' => 'n8n_event_catalog',
+        'rate_limit' => [
+            'max_attempts' => 60,
+            'decay_seconds' => 60,
+        ],
+        'retention_days' => [
+            'deliveries' => 30,
+            'reports' => 90,
+        ],
+        'redaction_defaults' => [
+            'actor' => [
+                'email' => 'mask',
+                'ip' => 'remove',
+                'ua' => 'remove',
+            ],
+        ],
+        'action_proposals' => [
+            'enabled' => true,
+        ],
+        'audit' => [
+            'window_days' => 7,
+        ],
+        'schedule' => [
+            'enabled' => true,
+            'audit_time' => '02:00',
+            'prune_time' => '03:00',
+        ],
+        'inbound' => [
+            'auth_mode' => 'header',
+            'token_header' => 'X-N8N-Token',
+            'token' => env('FILAMAT_IAM_N8N_INBOUND_TOKEN', ''),
+        ],
+        'n8n_api' => [
+            'enabled' => false,
+            'base_url' => env('FILAMAT_IAM_N8N_API_BASE_URL', ''),
+            'api_key' => env('FILAMAT_IAM_N8N_API_KEY', ''),
+            'health_endpoint' => '/healthz',
+        ],
+    ],
 
     'otp' => [
         'length' => 6,
@@ -120,9 +169,73 @@ return [
         'exempt_permissions' => ['iam.view', 'iam.manage', 'subscription.view', 'subscription.manage'],
     ],
 
+    'governance' => [
+        'require_reason' => true,
+        'reason_header' => 'X-Change-Reason',
+    ],
+
     'impersonation' => [
         'enabled' => true,
         'max_minutes' => 120,
+        'require_reason' => true,
+        'require_ticket' => true,
+        'restricted_default' => true,
+    ],
+
+    'pam' => [
+        'enabled' => true,
+        'approval_required' => true,
+        'max_minutes' => 240,
+        'auto_expire_on_boot' => true,
+        'auto_expire_cooldown_seconds' => 300,
+        'require_mfa_roles' => [],
+        'digest' => [
+            'enabled' => true,
+            'days_ahead' => 7,
+            'notify_roles' => ['owner', 'admin'],
+        ],
+    ],
+
+    'sessions' => [
+        'record' => true,
+        'retention_days' => 30,
+    ],
+
+    'protected_actions' => [
+        'enabled' => true,
+        'ttl_minutes' => 10,
+        'require_mfa_actions' => [
+            'iam.impersonate',
+            'iam.pam.activate',
+            'iam.mfa.reset',
+        ],
+    ],
+
+    'mfa' => [
+        'totp' => [
+            'enabled' => true,
+            'issuer' => env('APP_NAME', 'Haida Hub'),
+            'digits' => 6,
+            'period' => 30,
+        ],
+        'backup_codes' => [
+            'count' => 8,
+        ],
+        'webauthn' => [
+            'enabled' => false,
+        ],
+    ],
+
+    'sso' => [
+        'enabled' => false,
+        'providers' => [
+            'oidc' => true,
+            'saml' => false,
+        ],
+    ],
+
+    'scim' => [
+        'enabled' => false,
     ],
 
     'audit' => [

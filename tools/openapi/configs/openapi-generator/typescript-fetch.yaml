@@ -1,0 +1,5 @@
+packageName: haida-app-api
+npmName: "@haida/app-api"
+useSingleRequestParameter: true
+supportsES6: true
+modelPropertyNaming: original

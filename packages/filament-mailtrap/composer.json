@@ -1,0 +1,31 @@
+{
+    "name": "haida/filament-mailtrap",
+    "version": "1.0.0",
+    "description": "Filament UI for Mailtrap integration.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^4.0",
+        "filamat/filamat-iam-suite": "dev-main",
+        "haida/mailtrap-core": "^1.0",
+        "haida/commerce-catalog": "^1.0",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haida\\FilamentMailtrap\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Haida\\FilamentMailtrap\\FilamentMailtrapServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

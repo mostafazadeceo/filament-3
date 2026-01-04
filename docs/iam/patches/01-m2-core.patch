@@ -1,0 +1,384 @@
+--- a/packages/filamat-iam-suite/src/FilamatIamSuiteServiceProvider.php
++++ b/packages/filamat-iam-suite/src/FilamatIamSuiteServiceProvider.php
+@@ -26,6 +26,13 @@
+ use Filamat\IamSuite\Services\CapabilityRegistry;
+ use Filamat\IamSuite\Services\CapabilitySyncService;
+ use Filamat\IamSuite\Services\ImpersonationService;
++use Filamat\IamSuite\Services\InviteUserService;
++use Filamat\IamSuite\Services\MfaService;
++use Filamat\IamSuite\Services\PrivilegeEligibilityService;
++use Filamat\IamSuite\Services\PrivilegeElevationService;
++use Filamat\IamSuite\Services\ProtectedActionService;
++use Filamat\IamSuite\Services\SessionService;
++use Filamat\IamSuite\Services\UserLifecycleService;
+ use Filamat\IamSuite\Services\NotificationAdapterManager;
+ use Filamat\IamSuite\Services\NotificationService;
+ use Filamat\IamSuite\Services\PaymentProviderManager;
+@@ -104,6 +111,16 @@
+                 '2025_01_01_000044_create_iam_user_sessions_table',
+                 '2025_01_01_000045_create_iam_protected_action_tokens_table',
+                 '2025_01_01_000046_create_iam_mfa_methods_table',
++                '2025_01_01_000037_create_iam_user_invitations_table',
++                '2025_01_01_000038_add_lifecycle_columns_to_tenant_user_table',
++                '2025_01_01_000039_create_iam_privilege_eligibilities_table',
++                '2025_01_01_000040_create_iam_privilege_requests_table',
++                '2025_01_01_000041_create_iam_privilege_request_approvals_table',
++                '2025_01_01_000042_create_iam_privilege_activations_table',
++                '2025_01_01_000043_create_iam_impersonation_sessions_table',
++                '2025_01_01_000044_create_iam_user_sessions_table',
++                '2025_01_01_000045_create_iam_protected_action_tokens_table',
++                '2025_01_01_000046_create_iam_mfa_methods_table',
+             ])
+             ->runsMigrations();
+     }
+@@ -119,6 +136,13 @@
+         $this->app->singleton(AuditService::class);
+         $this->app->singleton(WebhookService::class);
+         $this->app->singleton(ImpersonationService::class);
++        $this->app->singleton(InviteUserService::class);
++        $this->app->singleton(UserLifecycleService::class);
++        $this->app->singleton(PrivilegeEligibilityService::class);
++        $this->app->singleton(PrivilegeElevationService::class);
++        $this->app->singleton(SessionService::class);
++        $this->app->singleton(ProtectedActionService::class);
++        $this->app->singleton(MfaService::class);
+ 
+         $this->registerCapabilitySyncListeners();
+ 
+--- a/packages/filamat-iam-suite/config/filamat-iam.php
++++ b/packages/filamat-iam-suite/config/filamat-iam.php
+@@ -185,6 +185,57 @@
+         'enabled' => false,
+     ],
+ 
++    'pam' => [
++        'enabled' => true,
++        'approval_required' => true,
++        'max_minutes' => 240,
++        'auto_expire_on_boot' => true,
++        'auto_expire_cooldown_seconds' => 300,
++        'require_mfa_roles' => [],
++    ],
++
++    'sessions' => [
++        'record' => true,
++        'retention_days' => 30,
++    ],
++
++    'protected_actions' => [
++        'enabled' => true,
++        'ttl_minutes' => 10,
++        'require_mfa_actions' => [
++            'iam.impersonate',
++            'iam.pam.activate',
++            'iam.mfa.reset',
++        ],
++    ],
++
++    'mfa' => [
++        'totp' => [
++            'enabled' => true,
++            'issuer' => env('APP_NAME', 'Haida Hub'),
++            'digits' => 6,
++            'period' => 30,
++        ],
++        'backup_codes' => [
++            'count' => 8,
++        ],
++        'webauthn' => [
++            'enabled' => false,
++        ],
++    ],
++
++    'sso' => [
++        'enabled' => false,
++        'providers' => [
++            'oidc' => true,
++            'saml' => false,
++        ],
++    ],
++
++    'scim' => [
++        'enabled' => false,
++    ],
++
+     'audit' => [
+         'enabled' => true,
+         'hash_chain' => true,
+--- a/config/filamat-iam.php
++++ b/config/filamat-iam.php
+@@ -28,6 +28,12 @@
+         'wallet_risk_controls' => false,
+         'gdpr_tools' => false,
+         'user_profiles' => false,
++        'pam' => true,
++        'sessions' => true,
++        'protected_actions' => true,
++        'mfa' => true,
++        'sso' => false,
++        'scim' => false,
+     ],
+ 
+     'access_requests' => [
+@@ -111,6 +117,60 @@
+     'impersonation' => [
+         'enabled' => true,
+         'max_minutes' => 120,
++        'require_reason' => true,
++        'require_ticket' => true,
++        'restricted_default' => true,
++    ],
++
++    'pam' => [
++        'enabled' => true,
++        'approval_required' => true,
++        'max_minutes' => 240,
++        'auto_expire_on_boot' => true,
++        'auto_expire_cooldown_seconds' => 300,
++        'require_mfa_roles' => [],
++    ],
++
++    'sessions' => [
++        'record' => true,
++        'retention_days' => 30,
++    ],
++
++    'protected_actions' => [
++        'enabled' => true,
++        'ttl_minutes' => 10,
++        'require_mfa_actions' => [
++            'iam.impersonate',
++            'iam.pam.activate',
++            'iam.mfa.reset',
++        ],
++    ],
++
++    'mfa' => [
++        'totp' => [
++            'enabled' => true,
++            'issuer' => env('APP_NAME', 'Haida Hub'),
++            'digits' => 6,
++            'period' => 30,
++        ],
++        'backup_codes' => [
++            'count' => 8,
++        ],
++        'webauthn' => [
++            'enabled' => false,
++        ],
++    ],
++
++    'sso' => [
++        'enabled' => false,
++        'providers' => [
++            'oidc' => true,
++            'saml' => false,
++        ],
++    ],
++
++    'scim' => [
++        'enabled' => false,
+     ],
+ 
+     'audit' => [
+--- a/packages/filamat-iam-suite/src/Support/CorePermissions.php
++++ b/packages/filamat-iam-suite/src/Support/CorePermissions.php
+@@ -27,6 +27,9 @@
+             'iam.impersonate',
+             'iam.impersonate.cross_tenant',
+             'iam.impersonate.write',
++            'iam.impersonate',
++            'iam.impersonate.cross_tenant',
++            'iam.impersonate.write',
+             'user.reset_otp',
+             'role.view',
+             'role.manage',
+@@ -96,6 +99,22 @@
+             'sso.manage',
+             'scim.view',
+             'scim.manage',
++            'pam.view',
++            'pam.manage',
++            'pam.request',
++            'pam.approve',
++            'pam.activate',
++            'pam.revoke',
++            'session.view',
++            'session.manage',
++            'session.revoke',
++            'mfa.view',
++            'mfa.manage',
++            'mfa.reset',
++            'sso.view',
++            'sso.manage',
++            'scim.view',
++            'scim.manage',
+         ];
+     }
+ 
+@@ -141,6 +160,22 @@
+                 'security.view',
+                 'audit.view',
+                 'settings.manage',
++            'pam.view',
++            'pam.manage',
++            'pam.request',
++            'pam.approve',
++            'pam.activate',
++            'pam.revoke',
++            'session.view',
++            'session.manage',
++            'session.revoke',
++            'mfa.view',
++            'mfa.manage',
++            'mfa.reset',
++            'sso.view',
++            'sso.manage',
++            'scim.view',
++            'scim.manage',
+             ],
+             'tenant_admin' => [
+                 'iam.view',
+--- a/packages/filamat-iam-suite/src/Support/PermissionLabels.php
++++ b/packages/filamat-iam-suite/src/Support/PermissionLabels.php
+@@ -27,6 +27,9 @@
+             'iam.impersonate' => 'شروع امپرسونیشن',
+             'iam.impersonate.cross_tenant' => 'امپرسونیشن بین فضای کاری',
+             'iam.impersonate.write' => 'امپرسونیشن با دسترسی نوشتن',
++            'iam.impersonate' => 'شروع امپرسونیشن',
++            'iam.impersonate.cross_tenant' => 'امپرسونیشن بین فضای کاری',
++            'iam.impersonate.write' => 'امپرسونیشن با دسترسی نوشتن',
+             'user.reset_otp' => 'ریست OTP کاربر',
+             'role.view' => 'مشاهده نقش‌ها',
+             'role.manage' => 'مدیریت نقش‌ها',
+@@ -83,6 +86,22 @@
+             'pam.view' => 'مشاهده دسترسی ممتاز',
+             'pam.manage' => 'مدیریت دسترسی ممتاز',
+             'pam.request' => 'درخواست دسترسی ممتاز',
++            'pam.approve' => 'تایید/رد دسترسی ممتاز',
++            'pam.activate' => 'فعال‌سازی دسترسی ممتاز',
++            'pam.revoke' => 'لغو دسترسی ممتاز',
++            'session.view' => 'مشاهده نشست‌ها',
++            'session.manage' => 'مدیریت نشست‌ها',
++            'session.revoke' => 'ابطال نشست‌ها',
++            'mfa.view' => 'مشاهده احراز هویت دومرحله‌ای',
++            'mfa.manage' => 'مدیریت احراز هویت دومرحله‌ای',
++            'mfa.reset' => 'ریست احراز هویت دومرحله‌ای',
++            'sso.view' => 'مشاهده ورود یکپارچه',
++            'sso.manage' => 'مدیریت ورود یکپارچه',
++            'scim.view' => 'مشاهده SCIM',
++            'scim.manage' => 'مدیریت SCIM',
++            'pam.view' => 'مشاهده دسترسی ممتاز',
++            'pam.manage' => 'مدیریت دسترسی ممتاز',
++            'pam.request' => 'درخواست دسترسی ممتاز',
+             'pam.approve' => 'تایید/رد دسترسی ممتاز',
+             'pam.activate' => 'فعال‌سازی دسترسی ممتاز',
+             'pam.revoke' => 'لغو دسترسی ممتاز',
+--- a/packages/filamat-iam-suite/src/Support/CoreCapabilities.php
++++ b/packages/filamat-iam-suite/src/Support/CoreCapabilities.php
+@@ -33,6 +33,12 @@
+                 'sessions' => true,
+                 'sso' => false,
+                 'scim' => false,
++                'pam' => true,
++                'mfa' => true,
++                'impersonation' => true,
++                'sessions' => true,
++                'sso' => false,
++                'scim' => false,
+             ],
+             [
+                 'wallet.daily_limit' => null,
+--- a/packages/filamat-iam-suite/src/Support/HasIamSuite.php
++++ b/packages/filamat-iam-suite/src/Support/HasIamSuite.php
+@@ -8,13 +8,19 @@
+ use Filamat\IamSuite\Models\Group;
+ use Filamat\IamSuite\Models\ImpersonationSession;
+ use Filamat\IamSuite\Models\MfaMethod;
++use Filamat\IamSuite\Models\ImpersonationSession;
++use Filamat\IamSuite\Models\MfaMethod;
+ use Filamat\IamSuite\Models\Notification;
+ use Filamat\IamSuite\Models\PermissionOverride;
+ use Filamat\IamSuite\Models\PrivilegeActivation;
+ use Filamat\IamSuite\Models\PrivilegeEligibility;
++use Filamat\IamSuite\Models\PrivilegeActivation;
++use Filamat\IamSuite\Models\PrivilegeEligibility;
+ use Filamat\IamSuite\Models\Tenant;
+ use Filamat\IamSuite\Models\UserInvitation;
+ use Filamat\IamSuite\Models\UserSession;
++use Filamat\IamSuite\Models\UserInvitation;
++use Filamat\IamSuite\Models\UserSession;
+ use Filamat\IamSuite\Models\Wallet;
+ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+ use Illuminate\Database\Eloquent\Relations\HasMany;
+@@ -60,6 +66,36 @@
+     }
+ 
+     public function iamInvitations(): HasMany
++    {
++        return $this->hasMany(UserInvitation::class, 'user_id');
++    }
++
++    public function privilegeEligibilities(): HasMany
++    {
++        return $this->hasMany(PrivilegeEligibility::class, 'user_id');
++    }
++
++    public function privilegeActivations(): HasMany
++    {
++        return $this->hasMany(PrivilegeActivation::class, 'user_id');
++    }
++
++    public function iamSessions(): HasMany
++    {
++        return $this->hasMany(UserSession::class, 'user_id');
++    }
++
++    public function mfaMethods(): HasMany
++    {
++        return $this->hasMany(MfaMethod::class, 'user_id');
++    }
++
++    public function impersonationSessions(): HasMany
++    {
++        return $this->hasMany(ImpersonationSession::class, 'impersonator_id');
++    }
++
++    public function iamInvitations(): HasMany
+     {
+         return $this->hasMany(UserInvitation::class, 'user_id');
+     }
+--- a/packages/filamat-iam-suite/src/Models/TenantUser.php
++++ b/packages/filamat-iam-suite/src/Models/TenantUser.php
+@@ -20,6 +20,9 @@
+         'invited_at' => 'datetime',
+         'activated_at' => 'datetime',
+         'suspended_at' => 'datetime',
++        'invited_at' => 'datetime',
++        'activated_at' => 'datetime',
++        'suspended_at' => 'datetime',
+         'security_flags' => 'array',
+     ];
+ 
+@@ -34,6 +37,21 @@
+     }
+ 
+     public function invitedBy(): BelongsTo
++    {
++        return $this->belongsTo(config('auth.providers.users.model'), 'invited_by_id');
++    }
++
++    public function activatedBy(): BelongsTo
++    {
++        return $this->belongsTo(config('auth.providers.users.model'), 'activated_by_id');
++    }
++
++    public function suspendedBy(): BelongsTo
++    {
++        return $this->belongsTo(config('auth.providers.users.model'), 'suspended_by_id');
++    }
++
++    public function invitedBy(): BelongsTo
+     {
+         return $this->belongsTo(config('auth.providers.users.model'), 'invited_by_id');
+     }

@@ -9,6 +9,7 @@ use Filamat\IamSuite\Filament\Resources\PermissionResource\Pages\CreatePermissio
 use Filamat\IamSuite\Filament\Resources\PermissionResource\Pages\EditPermission;
 use Filamat\IamSuite\Filament\Resources\PermissionResource\Pages\ListPermissions;
 use Filamat\IamSuite\Support\PermissionLabels;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
@@ -46,6 +47,7 @@ class PermissionResource extends IamResource
                 TextInput::make('name')->label('کلید مجوز')->required(),
                 TextInput::make('guard_name')->label('گارد')->default('web')->required(),
                 static::tenantSelect(required: false),
+                Textarea::make('reason')->label('دلیل تغییر')->required()->dehydrated(false),
             ]);
     }
 

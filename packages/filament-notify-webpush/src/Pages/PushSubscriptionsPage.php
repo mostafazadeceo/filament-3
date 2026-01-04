@@ -5,6 +5,7 @@ namespace Haida\FilamentNotify\WebPush\Pages;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Haida\FilamentNotify\Core\Models\ChannelSetting;
+use Haida\FilamentNotify\WebPush\Support\VapidKeyManager;
 
 class PushSubscriptionsPage extends Page
 {
@@ -24,12 +25,7 @@ class PushSubscriptionsPage extends Page
         $channelSettings = null;
 
         if ($panelId) {
-            $settings = ChannelSetting::query()
-                ->where('panel_id', $panelId)
-                ->where('channel', 'webpush')
-                ->first();
-
-            $channelSettings = $settings?->settings ?? null;
+            $channelSettings = app(VapidKeyManager::class)->ensure($panelId);
         }
 
         return [

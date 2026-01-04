@@ -1,0 +1,52 @@
+flowchart TD
+    A[Feature Gate Check] --> B[Resolve Tenant Override]
+    B -->|Override Active & Allow| C[Allow]
+    B -->|Override Active & Deny| D[Deny]
+    B -->|No Active Override| E[Resolve Active Subscription]
+    E -->|No Subscription| D
+    E -->|Plan Found| F{Plan Feature Record?}
+    F -->|Record Enabled & Window OK| C
+    F -->|Record Disabled| D
+    F -->|No Record| G{Plan JSON Feature?}
+    G -->|Explicit Allow| C
+    G -->|Explicit Deny| D
+    G -->|No Explicit Rule| C
+
+    %% Checkout flow
+    subgraph Checkout
+        CC1[سبد خرید فعال] --> CC2[اعتبارسنجی اقلام]
+        CC2 --> CC3[ایجاد سفارش]
+        CC3 --> CC3a[ثبت سند انبار Issue]
+        CC3a --> CC4[پرداخت کیف پول]
+        CC4 --> CC5[ثبت پرداخت + بروزرسانی وضعیت]
+    end
+
+    %% Gateway webhook flow
+    subgraph PaymentWebhook
+        PW1[دریافت وبهوک] --> PW2[اعتبارسنجی امضا]
+        PW2 --> PW3[بررسی idempotency]
+        PW3 --> PW4[ثبت PaymentIntent/OrderPayment]
+    end
+
+    %% Provider sync flow
+    subgraph ProviderSync
+        PS1[درخواست همگام‌سازی] --> PS2[ثبت ProviderJobLog]
+        PS2 --> PS3[اجرای Adapter]
+        PS3 --> PS4[ثبت نتیجه/خطا]
+    end
+
+    %% Domain verification flow
+    subgraph DomainVerification
+        DV1[ثبت دامنه] --> DV2[تولید DNS Token]
+        DV2 --> DV3[افزودن TXT/CNAME در DNS]
+        DV3 --> DV4[بررسی از UI/API]
+        DV4 -->|Success| DV5[وضعیت: تایید شده]
+        DV4 -->|Fail| DV6[وضعیت: ناموفق]
+    end
+
+    %% TLS issuance flow
+    subgraph TLSIssuance
+        TL1[درخواست TLS] --> TL2[اجرای Job صدور گواهی]
+        TL2 -->|Success| TL3[وضعیت: صادر شده]
+        TL2 -->|Fail| TL4[وضعیت: ناموفق]
+    end

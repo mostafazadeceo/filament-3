@@ -2,10 +2,10 @@
 
 namespace Vendor\FilamentAccountingIr\Filament\Resources\ChequeResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Vendor\FilamentAccountingIr\Filament\Resources\ChequeResource;
 
-class ListCheques extends ListRecords
+class ListCheques extends ListRecordsWithCreate
 {
     protected static string $resource = ChequeResource::class;
 }

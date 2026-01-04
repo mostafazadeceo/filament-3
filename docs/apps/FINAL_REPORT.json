@@ -1,0 +1,222 @@
+{
+  "date": "2026-01-03T00:08:19.111336+00:00",
+  "apps": {
+    "web_pwa": {
+      "path": "apps/web-pwa",
+      "pwa": {
+        "serviceWorker": true,
+        "offlineCache": true,
+        "backgroundSync": "native_or_workbox_fallback"
+      },
+      "offline": {
+        "indexeddb": true,
+        "outbox": true
+      },
+      "realtime": {
+        "websocket": true,
+        "fallback": "polling"
+      },
+      "push": {
+        "enabled": "inapp_fallback",
+        "provider": "inapp"
+      },
+      "tests": {
+        "unit": true,
+        "e2e": true
+      }
+    },
+    "android": {
+      "path": "apps/mobile-android",
+      "offline": {
+        "room": true,
+        "outbox": true,
+        "migrations": true
+      },
+      "background": {
+        "workManager": true,
+        "backoff": "exponential"
+      },
+      "push": {
+        "fcm": true
+      },
+      "security": {
+        "keystore": true,
+        "biometric": true,
+        "playIntegrity": "stub"
+      },
+      "tests": {
+        "unit": true,
+        "instrumentation": true
+      }
+    }
+  },
+  "sync": {
+    "strategy": "local_first_server_authoritative",
+    "conflicts": [
+      "pos_immutable_after_finalize",
+      "chat_append_only",
+      "attendance_immutable_with_corrections",
+      "tasks_lww_with_audit"
+    ],
+    "idempotency": true
+  },
+  "modules": [
+    "pos",
+    "support",
+    "hr_attendance",
+    "tasks",
+    "meetings",
+    "crypto",
+    "loyalty",
+    "ai_auditor"
+  ],
+  "milestones": [
+    {
+      "id": "M1",
+      "status": "passed",
+      "fallbackUsed": false,
+      "tests": []
+    },
+    {
+      "id": "M2",
+      "status": "passed",
+      "fallbackUsed": false,
+      "tests": [
+        "apps/web-pwa: npm run build",
+        "apps/mobile-android: ./gradlew assembleDebug"
+      ]
+    },
+    {
+      "id": "M3",
+      "status": "passed",
+      "fallbackUsed": false,
+      "tests": []
+    },
+    {
+      "id": "M4",
+      "status": "passed",
+      "fallbackUsed": false,
+      "tests": []
+    },
+    {
+      "id": "M5",
+      "status": "passed",
+      "fallbackUsed": false,
+      "tests": [
+        "apps/web-pwa: npm run test",
+        "apps/mobile-android: ./gradlew testDebugUnitTest"
+      ]
+    },
+    {
+      "id": "M6",
+      "status": "passed",
+      "fallbackUsed": true,
+      "tests": [
+        "apps/web-pwa: playwright offline-pos"
+      ]
+    },
+    {
+      "id": "M7",
+      "status": "passed",
+      "fallbackUsed": true,
+      "tests": []
+    },
+    {
+      "id": "M8",
+      "status": "passed",
+      "fallbackUsed": true,
+      "tests": []
+    },
+    {
+      "id": "M9",
+      "status": "passed",
+      "fallbackUsed": true,
+      "tests": []
+    },
+    {
+      "id": "M10",
+      "status": "passed",
+      "fallbackUsed": true,
+      "tests": [
+        "apps/mobile-android: connectedDebugAndroidTest"
+      ]
+    },
+    {
+      "id": "M11",
+      "status": "passed",
+      "fallbackUsed": true,
+      "tests": []
+    },
+    {
+      "id": "M12",
+      "status": "passed",
+      "fallbackUsed": true,
+      "tests": []
+    },
+    {
+      "id": "M13",
+      "status": "passed",
+      "fallbackUsed": false,
+      "tests": []
+    },
+    {
+      "id": "M14",
+      "status": "passed",
+      "fallbackUsed": true,
+      "tests": []
+    },
+    {
+      "id": "M15",
+      "status": "passed",
+      "fallbackUsed": true,
+      "tests": []
+    },
+    {
+      "id": "M16",
+      "status": "passed",
+      "fallbackUsed": false,
+      "tests": []
+    },
+    {
+      "id": "M17",
+      "status": "passed",
+      "fallbackUsed": true,
+      "tests": []
+    },
+    {
+      "id": "M18",
+      "status": "passed",
+      "fallbackUsed": false,
+      "tests": [
+        "tools/scenario-runner/run.sh"
+      ]
+    },
+    {
+      "id": "M19",
+      "status": "passed",
+      "fallbackUsed": false,
+      "tests": []
+    },
+    {
+      "id": "M20",
+      "status": "passed",
+      "fallbackUsed": false,
+      "tests": [
+        "php artisan test",
+        "tools/scenario-runner/run.sh"
+      ]
+    }
+  ],
+  "known_risks": [
+    "Web push is in-app fallback until FCM Web/WebPush credentials are configured.",
+    "Play Integrity is stubbed behind a feature flag; token flow not yet wired.",
+    "Realtime WebRTC UI is stubbed; signaling endpoints exist but client UX is minimal.",
+    "App sync changes are recorded in app_sync_changes; deep module adapters are backlog."
+  ],
+  "next_backlog": [
+    "Wire OpenAPI generator outputs into CI for both apps.",
+    "Implement full POS payment reconciliation rules for offline orders.",
+    "Add WebRTC call UI + TURN/STUN validation and telemetry.",
+    "Complete push providers (FCM Web/WebPush) with tenant-scoped topics."
+  ]
+}

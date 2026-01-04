@@ -28,6 +28,10 @@ class PettyCashExpense extends Model
         'branch_id',
         'fund_id',
         'category_id',
+        'workflow_rule_id',
+        'approval_steps_required',
+        'approval_steps_completed',
+        'approval_history',
         'requested_by',
         'approved_by',
         'paid_by',
@@ -44,6 +48,10 @@ class PettyCashExpense extends Model
         'has_receipt',
         'approved_at',
         'paid_at',
+        'reversed_at',
+        'reversed_by',
+        'reversal_journal_entry_id',
+        'reversal_reason',
         'metadata',
     ];
 
@@ -54,6 +62,10 @@ class PettyCashExpense extends Model
         'has_receipt' => 'bool',
         'approved_at' => 'datetime',
         'paid_at' => 'datetime',
+        'reversed_at' => 'datetime',
+        'approval_steps_required' => 'int',
+        'approval_steps_completed' => 'int',
+        'approval_history' => 'array',
         'metadata' => 'array',
     ];
 
@@ -77,6 +89,11 @@ class PettyCashExpense extends Model
         return $this->belongsTo(PettyCashCategory::class, 'category_id');
     }
 
+    public function workflowRule(): BelongsTo
+    {
+        return $this->belongsTo(PettyCashWorkflowRule::class, 'workflow_rule_id');
+    }
+
     public function party(): BelongsTo
     {
         return $this->belongsTo(Party::class, 'accounting_party_id');
@@ -85,6 +102,11 @@ class PettyCashExpense extends Model
     public function journalEntry(): BelongsTo
     {
         return $this->belongsTo(JournalEntry::class, 'accounting_journal_entry_id');
+    }
+
+    public function reversalJournalEntry(): BelongsTo
+    {
+        return $this->belongsTo(JournalEntry::class, 'reversal_journal_entry_id');
     }
 
     public function attachments(): HasMany
@@ -110,5 +132,10 @@ class PettyCashExpense extends Model
     public function paidByUser(): BelongsTo
     {
         return $this->belongsTo(\App\Models\User::class, 'paid_by');
+    }
+
+    public function reversedByUser(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\User::class, 'reversed_by');
     }
 }

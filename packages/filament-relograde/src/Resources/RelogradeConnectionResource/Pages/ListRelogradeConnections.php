@@ -3,11 +3,11 @@
 namespace Haida\FilamentRelograde\Resources\RelogradeConnectionResource\Pages;
 
 use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Haida\FilamentRelograde\Resources\RelogradeConnectionResource;
 use Haida\FilamentRelograde\Support\RelogradeAuthorization;
 
-class ListRelogradeConnections extends ListRecords
+class ListRelogradeConnections extends ListRecordsWithCreate
 {
     protected static string $resource = RelogradeConnectionResource::class;
 

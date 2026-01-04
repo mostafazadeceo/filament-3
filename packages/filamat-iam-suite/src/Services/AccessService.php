@@ -10,6 +10,7 @@ use Filamat\IamSuite\Models\Subscription;
 use Filamat\IamSuite\Models\SubscriptionPlan;
 use Filamat\IamSuite\Models\Tenant;
 use Filamat\IamSuite\Support\AccessSettings;
+use Haida\FeatureGates\Services\FeatureGateService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -153,6 +154,20 @@ class AccessService
             ];
 
             return false;
+        }
+
+        if (class_exists(FeatureGateService::class)) {
+            $decision = app(FeatureGateService::class)->evaluate($tenant, $permissionKey, $subscription, $user);
+
+            $trace[] = [
+                'source' => 'feature_gate',
+                'effect' => $decision->allowed ? 'allow' : 'deny',
+                'detail' => $decision->detail ?? 'Feature gate check.',
+            ];
+
+            if (! $decision->allowed) {
+                return false;
+            }
         }
 
         $trace[] = [

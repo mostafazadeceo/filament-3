@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.2",
         "filament/filament": "^3.0|^4.0",
+        "haida/providers-core": "^1.0",
         "illuminate/bus": "^10.0|^11.0|^12.0",
         "illuminate/cache": "^10.0|^11.0|^12.0",
         "illuminate/console": "^10.0|^11.0|^12.0",

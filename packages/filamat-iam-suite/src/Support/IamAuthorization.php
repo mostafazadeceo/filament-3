@@ -18,7 +18,7 @@ final class IamAuthorization
             return false;
         }
 
-        if (method_exists($user, 'hasIamSuiteSuperAdmin') && $user->hasIamSuiteSuperAdmin() && TenantContext::shouldBypass()) {
+        if (method_exists($user, 'hasIamSuiteSuperAdmin') && $user->hasIamSuiteSuperAdmin()) {
             return true;
         }
 

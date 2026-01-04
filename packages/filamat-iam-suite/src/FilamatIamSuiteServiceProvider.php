@@ -8,33 +8,58 @@ use Filamat\IamSuite\Contracts\CapabilityRegistryInterface;
 use Filamat\IamSuite\Contracts\NotificationAdapter;
 use Filamat\IamSuite\Contracts\PaymentProviderInterface;
 use Filamat\IamSuite\Events\CapabilityRegistered;
+use Filamat\IamSuite\Events\SubscriptionChanged;
 use Filamat\IamSuite\Models\AccessRequest;
 use Filamat\IamSuite\Models\AccessRequestApproval;
 use Filamat\IamSuite\Models\ApiKey;
 use Filamat\IamSuite\Models\DelegatedAdminScope;
 use Filamat\IamSuite\Models\Group;
+use Filamat\IamSuite\Models\ImpersonationSession;
 use Filamat\IamSuite\Models\PermissionOverride;
 use Filamat\IamSuite\Models\PermissionSnapshot;
 use Filamat\IamSuite\Models\PermissionTemplate;
+use Filamat\IamSuite\Models\PrivilegeActivation;
+use Filamat\IamSuite\Models\PrivilegeEligibility;
+use Filamat\IamSuite\Models\PrivilegeRequest;
+use Filamat\IamSuite\Models\PrivilegeRequestApproval;
 use Filamat\IamSuite\Models\Subscription;
+use Filamat\IamSuite\Models\UserInvitation;
 use Filamat\IamSuite\Models\UserProfile;
+use Filamat\IamSuite\Models\UserSession;
 use Filamat\IamSuite\Models\WalletHold;
 use Filamat\IamSuite\Models\WalletTransaction;
 use Filamat\IamSuite\Models\Webhook;
 use Filamat\IamSuite\Observers\AuditableObserver;
+use Filamat\IamSuite\Observers\IamUserObserver;
 use Filamat\IamSuite\Services\AuditService;
+use Filamat\IamSuite\Services\Automation\AutomationRateLimiter;
+use Filamat\IamSuite\Services\Automation\IamEventEnvelopeFactory;
+use Filamat\IamSuite\Services\Automation\IamEventFactory;
+use Filamat\IamSuite\Services\Automation\IamEventPublisher;
+use Filamat\IamSuite\Services\Automation\IamWebhookDispatcher;
 use Filamat\IamSuite\Services\CapabilityRegistry;
 use Filamat\IamSuite\Services\CapabilitySyncService;
 use Filamat\IamSuite\Services\ImpersonationService;
+use Filamat\IamSuite\Services\InviteUserService;
+use Filamat\IamSuite\Services\MfaService;
 use Filamat\IamSuite\Services\NotificationAdapterManager;
 use Filamat\IamSuite\Services\NotificationService;
 use Filamat\IamSuite\Services\PaymentProviderManager;
+use Filamat\IamSuite\Services\PrivilegeElevationService;
+use Filamat\IamSuite\Services\PrivilegeEligibilityService;
+use Filamat\IamSuite\Services\ProtectedActionService;
 use Filamat\IamSuite\Services\SecurityEventService;
+use Filamat\IamSuite\Services\SessionService;
+use Filamat\IamSuite\Services\UserLifecycleService;
 use Filamat\IamSuite\Services\WebhookService;
 use Filamat\IamSuite\Support\CoreCapabilities;
+use Filament\Facades\Filament;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Gate;
@@ -50,11 +75,15 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
         $package
             ->name('filamat-iam-suite')
             ->hasConfigFile('filamat-iam')
+            ->hasConfigFile('n8n_event_catalog')
             ->hasTranslations()
             ->hasViews('filamat-iam')
             ->hasCommands([
                 \Filamat\IamSuite\Console\Commands\InstallCommand::class,
                 \Filamat\IamSuite\Console\Commands\SyncCapabilitiesCommand::class,
+                \Filamat\IamSuite\Console\Commands\IamAiAuditRunCommand::class,
+                \Filamat\IamSuite\Console\Commands\IamAutomationPruneCommand::class,
+                \Filamat\IamSuite\Console\Commands\IamPamDigestCommand::class,
             ])
             ->hasRoutes(['api', 'web'])
             ->hasMigrations([
@@ -94,6 +123,20 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
                 '2025_01_01_000034_create_webhook_nonces_table',
                 '2025_01_01_000035_create_user_profiles_table',
                 '2025_01_01_000036_add_tenant_id_columns_to_spatie_tables',
+                '2025_01_01_000037_create_iam_user_invitations_table',
+                '2025_01_01_000038_add_lifecycle_columns_to_tenant_user_table',
+                '2025_01_01_000039_create_iam_privilege_eligibilities_table',
+                '2025_01_01_000040_create_iam_privilege_requests_table',
+                '2025_01_01_000041_create_iam_privilege_request_approvals_table',
+                '2025_01_01_000042_create_iam_privilege_activations_table',
+                '2025_01_01_000043_create_iam_impersonation_sessions_table',
+                '2025_01_01_000044_create_iam_user_sessions_table',
+                '2025_01_01_000045_create_iam_protected_action_tokens_table',
+                '2025_01_01_000046_create_iam_mfa_methods_table',
+                '2025_01_01_000047_add_automation_columns_to_webhooks_table',
+                '2025_01_01_000048_create_iam_ai_reports_table',
+                '2025_01_01_000049_create_iam_ai_action_proposals_table',
+                '2025_01_01_000050_expand_webhook_secret_column',
             ])
             ->runsMigrations();
     }
@@ -109,11 +152,27 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
         $this->app->singleton(AuditService::class);
         $this->app->singleton(WebhookService::class);
         $this->app->singleton(ImpersonationService::class);
+        $this->app->singleton(AutomationRateLimiter::class);
+        $this->app->singleton(IamEventEnvelopeFactory::class);
+        $this->app->singleton(IamWebhookDispatcher::class);
+        $this->app->singleton(IamEventPublisher::class);
+        $this->app->singleton(IamEventFactory::class);
+        $this->app->singleton(\Filamat\IamSuite\Services\Automation\IamAiAuditRunner::class);
+        $this->app->singleton(\Filamat\IamSuite\Services\Automation\N8nApiClient::class);
+        $this->app->singleton(InviteUserService::class);
+        $this->app->singleton(UserLifecycleService::class);
+        $this->app->singleton(PrivilegeEligibilityService::class);
+        $this->app->singleton(PrivilegeElevationService::class);
+        $this->app->singleton(SessionService::class);
+        $this->app->singleton(ProtectedActionService::class);
+        $this->app->singleton(MfaService::class);
 
         $this->registerCapabilitySyncListeners();
 
         CoreCapabilities::register($this->app->make(CapabilityRegistryInterface::class));
-        $this->app->make(CapabilitySyncService::class)->markDirty();
+        if (! $this->app->runningInConsole()) {
+            $this->app->make(CapabilitySyncService::class)->markDirty();
+        }
 
         $this->app->bind(NotificationAdapter::class, function () {
             return $this->app->make(NotificationAdapterManager::class)->driver();
@@ -127,6 +186,8 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
     public function bootingPackage(): void
     {
         $this->app->make(Router::class)->aliasMiddleware('filamat-iam.scope', \Filamat\IamSuite\Http\Middleware\ApiScope::class);
+        $this->app->make(Router::class)->aliasMiddleware('filamat-iam.impersonation', \Filamat\IamSuite\Http\Middleware\ImpersonationGuard::class);
+        $this->app->make(Router::class)->aliasMiddleware('filamat-iam.session', \Filamat\IamSuite\Http\Middleware\TrackUserSession::class);
 
         Gate::before(function ($user, string $ability) {
             if (method_exists($user, 'hasIamSuiteSuperAdmin') && $user->hasIamSuiteSuperAdmin()) {
@@ -151,13 +212,33 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
             AccessRequest::observe(AuditableObserver::class);
             AccessRequestApproval::observe(AuditableObserver::class);
             DelegatedAdminScope::observe(AuditableObserver::class);
+            UserInvitation::observe(AuditableObserver::class);
+            PrivilegeEligibility::observe(AuditableObserver::class);
+            PrivilegeRequest::observe(AuditableObserver::class);
+            PrivilegeRequestApproval::observe(AuditableObserver::class);
+            PrivilegeActivation::observe(AuditableObserver::class);
+            ImpersonationSession::observe(AuditableObserver::class);
+            UserSession::observe(AuditableObserver::class);
             UserProfile::observe(AuditableObserver::class);
+        }
+
+        $userModel = config('auth.providers.users.model');
+        if ($userModel && class_exists($userModel)) {
+            $userModel::observe(IamUserObserver::class);
         }
     }
 
     public function packageBooted(): void
     {
         $this->registerAuthEventListeners();
+        if (method_exists($this, 'registerAutomationEventListeners')) {
+            $this->registerAutomationEventListeners();
+        }
+        $this->registerImpersonationBanner();
+        if (! $this->app->runningInConsole()) {
+            $this->app->make(PrivilegeElevationService::class)->autoExpireIfNeeded();
+        }
+        $this->registerAutomationSchedules();
     }
 
     protected function registerAuthEventListeners(): void
@@ -171,6 +252,7 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
             }
 
             $this->app->make(NotificationService::class)->notifyLogin($event->user);
+            $this->app->make(SessionService::class)->recordLogin($event->user);
         });
 
         $this->app->make(Dispatcher::class)->listen(Logout::class, function (Logout $event) {
@@ -181,6 +263,7 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
             }
 
             $this->app->make(NotificationService::class)->notifyLogout($event->user);
+            $this->app->make(SessionService::class)->recordLogout($event->user);
         });
 
         $this->app->make(Dispatcher::class)->listen(Failed::class, function (Failed $event) {
@@ -201,11 +284,72 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
     protected function registerCapabilitySyncListeners(): void
     {
         $this->app->make(Dispatcher::class)->listen(CapabilityRegistered::class, function () {
+            if ($this->app->runningInConsole()) {
+                return;
+            }
             $this->app->make(CapabilitySyncService::class)->markDirty();
         });
 
         $this->app->booted(function () {
+            if ($this->app->runningInConsole()) {
+                return;
+            }
             $this->app->make(CapabilitySyncService::class)->autoSyncIfNeeded();
+        });
+    }
+
+    protected function registerAutomationEventListeners(): void
+    {
+        $this->app->make(Dispatcher::class)->listen(SubscriptionChanged::class, function (SubscriptionChanged $event) {
+            $factory = $this->app->make(IamEventFactory::class);
+            $publisher = $this->app->make(IamEventPublisher::class);
+
+            $automationEvent = $factory->fromSubscription($event->subscription);
+            if ($automationEvent) {
+                $publisher->publish($automationEvent);
+            }
+        });
+    }
+
+    protected function registerAutomationSchedules(): void
+    {
+        if (! (bool) config('filamat-iam.automation.schedule.enabled', true)) {
+            return;
+        }
+
+        $this->app->booted(function () {
+            if (! (bool) config('filamat-iam.automation.enabled', true)) {
+                return;
+            }
+
+            $schedule = app(Schedule::class);
+            $auditTime = (string) config('filamat-iam.automation.schedule.audit_time', '02:00');
+            $pruneTime = (string) config('filamat-iam.automation.schedule.prune_time', '03:00');
+
+            $schedule->command('iam:ai-audit:run')->dailyAt($auditTime);
+            $schedule->command('iam:automation:prune')->dailyAt($pruneTime);
+        });
+    }
+
+    protected function registerImpersonationBanner(): void
+    {
+        if (! class_exists(FilamentView::class)) {
+            return;
+        }
+
+        FilamentView::registerRenderHook(PanelsRenderHook::BODY_START, function () {
+            $auth = Filament::auth();
+            if (! $auth || ! $auth->check()) {
+                return '';
+            }
+
+            if (! app(ImpersonationService::class)->isImpersonating()) {
+                return '';
+            }
+
+            return view('filamat-iam::partials.impersonation-banner', [
+                'session' => app(ImpersonationService::class)->currentSession(),
+            ]);
         });
     }
 }

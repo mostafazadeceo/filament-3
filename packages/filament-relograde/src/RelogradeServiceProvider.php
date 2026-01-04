@@ -4,10 +4,12 @@ namespace Haida\FilamentRelograde;
 
 use Haida\FilamentRelograde\Clients\RelogradeClientFactory;
 use Haida\FilamentRelograde\Commands\RelogradeInstallCommand;
+use Haida\FilamentRelograde\Adapters\RelogradeProviderAdapter;
 use Haida\FilamentRelograde\Services\RelogradeAlertService;
 use Haida\FilamentRelograde\Services\RelogradeApiLogger;
 use Haida\FilamentRelograde\Services\RelogradeAuditLogger;
 use Haida\FilamentRelograde\Support\RelogradeRateLimiter;
+use Haida\ProvidersCore\Services\ProviderRegistry;
 use Illuminate\Console\Scheduling\Schedule;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -49,6 +51,11 @@ class RelogradeServiceProvider extends PackageServiceProvider
         $this->app->singleton(RelogradeAuditLogger::class);
         $this->app->singleton(RelogradeAlertService::class);
         $this->app->singleton(RelogradeClientFactory::class);
+
+        if (class_exists(ProviderRegistry::class)) {
+            $registry = $this->app->make(ProviderRegistry::class);
+            $registry->register('relograde', RelogradeProviderAdapter::class);
+        }
     }
 
     public function packageBooted(): void

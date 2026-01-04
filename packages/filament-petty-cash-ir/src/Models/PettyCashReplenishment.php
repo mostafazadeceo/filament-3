@@ -24,6 +24,10 @@ class PettyCashReplenishment extends Model
         'company_id',
         'branch_id',
         'fund_id',
+        'workflow_rule_id',
+        'approval_steps_required',
+        'approval_steps_completed',
+        'approval_history',
         'requested_by',
         'approved_by',
         'paid_by',
@@ -36,6 +40,10 @@ class PettyCashReplenishment extends Model
         'status',
         'approved_at',
         'paid_at',
+        'reversed_at',
+        'reversed_by',
+        'reversal_journal_entry_id',
+        'reversal_reason',
         'description',
         'metadata',
     ];
@@ -45,6 +53,10 @@ class PettyCashReplenishment extends Model
         'amount' => 'decimal:2',
         'approved_at' => 'datetime',
         'paid_at' => 'datetime',
+        'reversed_at' => 'datetime',
+        'approval_steps_required' => 'int',
+        'approval_steps_completed' => 'int',
+        'approval_history' => 'array',
         'metadata' => 'array',
     ];
 
@@ -63,6 +75,11 @@ class PettyCashReplenishment extends Model
         return $this->belongsTo(PettyCashFund::class, 'fund_id');
     }
 
+    public function workflowRule(): BelongsTo
+    {
+        return $this->belongsTo(PettyCashWorkflowRule::class, 'workflow_rule_id');
+    }
+
     public function treasuryAccount(): BelongsTo
     {
         return $this->belongsTo(TreasuryAccount::class, 'source_treasury_account_id');
@@ -71,6 +88,11 @@ class PettyCashReplenishment extends Model
     public function journalEntry(): BelongsTo
     {
         return $this->belongsTo(JournalEntry::class, 'accounting_journal_entry_id');
+    }
+
+    public function reversalJournalEntry(): BelongsTo
+    {
+        return $this->belongsTo(JournalEntry::class, 'reversal_journal_entry_id');
     }
 
     public function treasuryTransaction(): BelongsTo
@@ -91,5 +113,10 @@ class PettyCashReplenishment extends Model
     public function paidByUser(): BelongsTo
     {
         return $this->belongsTo(\App\Models\User::class, 'paid_by');
+    }
+
+    public function reversedByUser(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\User::class, 'reversed_by');
     }
 }

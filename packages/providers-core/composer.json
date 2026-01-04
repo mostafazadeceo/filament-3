@@ -1,0 +1,28 @@
+{
+    "name": "haida/providers-core",
+    "version": "1.0.0",
+    "description": "Provider adapter contracts and job pipeline for external providers.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "filamat/filamat-iam-suite": "dev-main",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haida\\ProvidersCore\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Haida\\ProvidersCore\\ProvidersCoreServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

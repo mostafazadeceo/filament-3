@@ -2,8 +2,8 @@
 
 namespace Haida\FilamentWorkhub\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Filamat\IamSuite\Support\TenantContext;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class LabelRequest extends FormRequest

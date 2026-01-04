@@ -17,6 +17,11 @@ class ResolveTenant
         $tenantHeader = (string) config('filamat-iam.api.tenant_header', 'X-Tenant-ID');
         $tenantId = $request->header($tenantHeader) ?? $request->query('tenant_id');
 
+        $apiKey = $request->attributes->get('api_key');
+        if (! $tenantId && $apiKey && $apiKey->tenant_id) {
+            $tenantId = $apiKey->tenant_id;
+        }
+
         if (! $tenantId && $request->user() && $request->user()->currentAccessToken()) {
             $abilities = $request->user()->currentAccessToken()->abilities ?? [];
             foreach ($abilities as $ability) {
@@ -27,12 +32,14 @@ class ResolveTenant
             }
         }
 
-        if ($tenantId) {
-            $tenant = Tenant::query()->find($tenantId);
-            if ($tenant) {
-                TenantContext::setTenant($tenant);
-            }
+        if (! $tenantId) {
+            TenantContext::setTenant(null);
+
+            return $next($request);
         }
+
+        $tenant = Tenant::query()->find($tenantId);
+        TenantContext::setTenant($tenant);
 
         return $next($request);
     }

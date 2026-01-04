@@ -133,7 +133,7 @@ class CurrencyRateApiController
     {
         $token = $settings->api_token ?: config('currency-rates.api.token');
         if (blank($token)) {
-            return true;
+            return false;
         }
 
         $headerName = (string) config('currency-rates.api.token_header', 'X-Rate-Token');

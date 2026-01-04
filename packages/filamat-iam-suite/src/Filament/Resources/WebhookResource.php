@@ -12,7 +12,9 @@ use Filamat\IamSuite\Filament\Resources\WebhookResource\RelationManagers\Webhook
 use Filamat\IamSuite\Models\Webhook;
 use Filamat\IamSuite\Services\WebhookService;
 use Filamat\IamSuite\Support\IamAuthorization;
+use Filamat\IamSuite\Support\N8nEventCatalog;
 use Filament\Actions\Action;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -46,7 +48,8 @@ class WebhookResource extends IamResource
     {
         return $schema
             ->schema([
-                static::tenantSelect(required: false),
+                static::tenantSelect(required: false)
+                    ->required(fn (Get $get): bool => $get('type') === 'automation'),
                 Select::make('type')
                     ->label('نوع')
                     ->options([
@@ -56,10 +59,19 @@ class WebhookResource extends IamResource
                         'security' => 'امنیت',
                         'workhub' => 'رهگیری کارها',
                         'accounting' => 'حسابداری',
+                        'automation' => 'اتوماسیون (n8n)',
                     ])
                     ->helperText('انتخاب نوع، فهرست رویدادهای قابل فیلتر را مشخص می‌کند.')
                     ->reactive()
-                    ->afterStateUpdated(fn (Set $set) => $set('events', []))
+                    ->afterStateUpdated(function (Set $set, ?string $state) {
+                        if ($state === 'automation') {
+                            $set('events', N8nEventCatalog::defaultSubscriptions());
+
+                            return;
+                        }
+
+                        $set('events', []);
+                    })
                     ->required(),
                 Select::make('events')
                     ->label('رویدادها')
@@ -69,11 +81,44 @@ class WebhookResource extends IamResource
                     ->disabled(fn (Get $get): bool => empty(self::eventOptions($get('type')))),
                 TextInput::make('url')->label('نشانی وب')->url()->required(),
                 TextInput::make('secret')
-                    ->label('کلید امضا')
+                    ->label('کلید امضا/توکن')
                     ->password()
                     ->revealable()
                     ->default(fn () => Str::random(32))
                     ->required(),
+                Select::make('auth_mode')
+                    ->label('روش احراز')
+                    ->options([
+                        'hmac+nonce' => 'HMAC + Nonce',
+                        'header' => 'هدر ثابت',
+                        'basic' => 'Basic Auth',
+                        'jwt' => 'Bearer Token',
+                        'none' => 'بدون احراز',
+                    ])
+                    ->default(fn () => config('filamat-iam.automation.default_auth_mode', 'hmac+nonce'))
+                    ->visible(fn (Get $get): bool => $get('type') === 'automation'),
+                KeyValue::make('headers_static')
+                    ->label('هدرهای ثابت')
+                    ->helperText('برای auth_mode=header می‌توانید کلید auth_header را تعیین کنید.')
+                    ->visible(fn (Get $get): bool => $get('type') === 'automation'),
+                KeyValue::make('redaction_policy')
+                    ->label('سیاست پالایش داده')
+                    ->helperText('مثال: actor.ip=remove یا actor.email=mask')
+                    ->visible(fn (Get $get): bool => $get('type') === 'automation'),
+                TextInput::make('rate_limit.max_attempts')
+                    ->label('حداکثر ارسال در بازه')
+                    ->numeric()
+                    ->default(fn () => (int) config('filamat-iam.automation.rate_limit.max_attempts', 60))
+                    ->visible(fn (Get $get): bool => $get('type') === 'automation'),
+                TextInput::make('rate_limit.decay_seconds')
+                    ->label('بازه زمانی (ثانیه)')
+                    ->numeric()
+                    ->default(fn () => (int) config('filamat-iam.automation.rate_limit.decay_seconds', 60))
+                    ->visible(fn (Get $get): bool => $get('type') === 'automation'),
+                Toggle::make('is_ai_auditor')
+                    ->label('کانال حسابرسی هوشمند')
+                    ->helperText('در اجرای زمان‌بندی حسابرسی، فقط این وبهوک‌ها انتخاب می‌شوند.')
+                    ->visible(fn (Get $get): bool => $get('type') === 'automation'),
                 Toggle::make('enabled')->label('فعال')->default(true),
             ]);
     }
@@ -92,10 +137,15 @@ class WebhookResource extends IamResource
                         'security' => 'امنیت',
                         'workhub' => 'رهگیری کارها',
                         'accounting' => 'حسابداری',
+                        'automation' => 'اتوماسیون (n8n)',
                         default => $state,
                     }),
                 TextColumn::make('url')->label('نشانی وب')->limit(40),
                 IconColumn::make('enabled')->label('فعال')->boolean(),
+                IconColumn::make('is_ai_auditor')
+                    ->label('حسابرسی هوشمند')
+                    ->boolean()
+                    ->visible(fn (Webhook $record) => $record->type === 'automation'),
                 TextColumn::make('created_at')->label('ایجاد'),
             ])
             ->actions([
@@ -153,6 +203,7 @@ class WebhookResource extends IamResource
                 'comment.created' => 'ایجاد دیدگاه',
                 'attachment.created' => 'ایجاد پیوست',
             ],
+            'automation' => N8nEventCatalog::options(),
             default => [],
         };
     }

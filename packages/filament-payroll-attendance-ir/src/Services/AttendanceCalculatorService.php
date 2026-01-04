@@ -3,6 +3,7 @@
 namespace Vendor\FilamentPayrollAttendanceIr\Services;
 
 use Carbon\Carbon;
+use Vendor\FilamentPayrollAttendanceIr\Application\Services\AttendancePolicyResolver;
 use Vendor\FilamentPayrollAttendanceIr\Models\PayrollAttendanceRecord;
 use Vendor\FilamentPayrollAttendanceIr\Models\PayrollAttendanceSchedule;
 use Vendor\FilamentPayrollAttendanceIr\Models\PayrollHoliday;
@@ -10,6 +11,8 @@ use Vendor\FilamentPayrollAttendanceIr\Models\PayrollTimePunch;
 
 class AttendanceCalculatorService
 {
+    public function __construct(private readonly AttendancePolicyResolver $policyResolver) {}
+
     public function recalculateForSchedule(PayrollAttendanceSchedule $schedule): PayrollAttendanceRecord
     {
         $workDate = Carbon::parse($schedule->work_date);
@@ -26,7 +29,16 @@ class AttendanceCalculatorService
             ->get();
 
         $actualIn = $punches->firstWhere('type', 'in')?->punch_at;
-        $actualOut = $punches->lastWhere('type', 'out')?->punch_at;
+        $actualOut = $punches->where('type', 'out')->last()?->punch_at;
+
+        $policy = $this->policyResolver->resolve($schedule->company_id, $schedule->branch_id);
+        $rules = array_merge(
+            (array) config('filament-payroll-attendance-ir.policy.default_rules', []),
+            $policy?->rules ?? []
+        );
+        $lateGraceMinutes = $rules['late_grace_minutes'] ?? config('filament-payroll-attendance-ir.attendance.late_grace_minutes', 0);
+        $shiftEndGraceMinutes = $rules['shift_end_grace_minutes'] ?? 0;
+        $breakOverrideMinutes = $rules['break_deduction_minutes'] ?? null;
 
         $workedMinutes = 0;
         $lateMinutes = 0;
@@ -44,15 +56,17 @@ class AttendanceCalculatorService
             }
 
             $workedMinutes = $actualInCarbon->diffInMinutes($actualOutCarbon);
-            $breakMinutes = (int) ($shift?->break_minutes ?? 0);
+            $breakMinutes = $breakOverrideMinutes !== null
+                ? (int) $breakOverrideMinutes
+                : (int) ($shift?->break_minutes ?? 0);
             $workedMinutes = max(0, $workedMinutes - $breakMinutes);
 
             if ($scheduledIn) {
-                $lateMinutes = max(0, $scheduledIn->diffInMinutes($actualInCarbon, false));
+                $lateMinutes = max(0, $scheduledIn->diffInMinutes($actualInCarbon, false) - (int) $lateGraceMinutes);
             }
 
             if ($scheduledOut) {
-                $earlyLeaveMinutes = max(0, $actualOutCarbon->diffInMinutes($scheduledOut, false));
+                $earlyLeaveMinutes = max(0, $actualOutCarbon->diffInMinutes($scheduledOut, false) - (int) $shiftEndGraceMinutes);
             }
 
             if ($scheduledOut) {
@@ -70,30 +84,39 @@ class AttendanceCalculatorService
             }
         }
 
-        return PayrollAttendanceRecord::query()->updateOrCreate(
-            [
-                'employee_id' => $employeeId,
-                'work_date' => $workDate->toDateString(),
-            ],
-            [
-                'tenant_id' => $schedule->tenant_id,
-                'company_id' => $schedule->company_id,
-                'branch_id' => $schedule->branch_id,
-                'shift_id' => $schedule->shift_id,
-                'scheduled_in' => $scheduledIn,
-                'scheduled_out' => $scheduledOut,
-                'actual_in' => $actualIn,
-                'actual_out' => $actualOut,
-                'worked_minutes' => $workedMinutes,
-                'late_minutes' => $lateMinutes,
-                'early_leave_minutes' => $earlyLeaveMinutes,
-                'overtime_minutes' => $overtimeMinutes,
-                'night_minutes' => $nightMinutes,
-                'friday_minutes' => $fridayMinutes,
-                'holiday_minutes' => $holidayMinutes,
-                'status' => 'draft',
-            ]
-        );
+        $record = PayrollAttendanceRecord::query()
+            ->where('employee_id', $employeeId)
+            ->whereDate('work_date', $workDate->toDateString())
+            ->first();
+
+        $payload = [
+            'tenant_id' => $schedule->tenant_id,
+            'company_id' => $schedule->company_id,
+            'branch_id' => $schedule->branch_id,
+            'employee_id' => $employeeId,
+            'shift_id' => $schedule->shift_id,
+            'work_date' => $workDate->toDateString(),
+            'scheduled_in' => $scheduledIn,
+            'scheduled_out' => $scheduledOut,
+            'actual_in' => $actualIn,
+            'actual_out' => $actualOut,
+            'worked_minutes' => $workedMinutes,
+            'late_minutes' => $lateMinutes,
+            'early_leave_minutes' => $earlyLeaveMinutes,
+            'overtime_minutes' => $overtimeMinutes,
+            'night_minutes' => $nightMinutes,
+            'friday_minutes' => $fridayMinutes,
+            'holiday_minutes' => $holidayMinutes,
+            'status' => 'draft',
+        ];
+
+        if ($record) {
+            $record->update($payload);
+
+            return $record->refresh();
+        }
+
+        return PayrollAttendanceRecord::query()->create($payload);
     }
 
     protected function calculateNightMinutes(Carbon $start, Carbon $end): int

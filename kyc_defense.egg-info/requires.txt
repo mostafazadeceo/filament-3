@@ -1,0 +1,17 @@
+numpy>=1.24
+Pillow>=10.0
+
+[jsonschema]
+jsonschema>=4.22
+
+[metrics]
+scikit-learn>=1.4
+
+[opencv]
+opencv-python>=4.8
+
+[virtualcam]
+pyvirtualcam>=0.10
+
+[yaml]
+PyYAML>=6.0

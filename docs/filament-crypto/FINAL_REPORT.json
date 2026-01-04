@@ -1,0 +1,198 @@
+{
+  "module": "filament-crypto",
+  "version": "0.1.0",
+  "date": "2026-01-03T00:03:54Z",
+  "milestones": [
+    {
+      "id": "M1",
+      "status": "passed",
+      "notes": ["Deep scan complete; SPEC and status mappings documented."],
+      "tests": [],
+      "fallbackUsed": false
+    },
+    {
+      "id": "M2",
+      "status": "passed",
+      "notes": ["Package skeletons and Filament plugins registered with IAM capabilities."],
+      "tests": [],
+      "fallbackUsed": false
+    },
+    {
+      "id": "M3",
+      "status": "passed",
+      "notes": ["Double-entry ledger, wallets, addresses, fees, and audit trail implemented."],
+      "tests": [],
+      "fallbackUsed": false
+    },
+    {
+      "id": "M4",
+      "status": "passed",
+      "notes": ["Webhook ingestion with idempotency, async processing, replay, and DLQ."],
+      "tests": [],
+      "fallbackUsed": false
+    },
+    {
+      "id": "M5",
+      "status": "passed",
+      "notes": ["Cryptomus adapter for invoices/payouts/webhooks shipped."],
+      "tests": [],
+      "fallbackUsed": false
+    },
+    {
+      "id": "M6",
+      "status": "passed",
+      "notes": ["Coinbase Commerce adapter with signature verify and async processing."],
+      "tests": [],
+      "fallbackUsed": false
+    },
+    {
+      "id": "M7",
+      "status": "passed",
+      "notes": ["CoinPayments adapter plus reconcile strategy for delayed webhooks."],
+      "tests": [],
+      "fallbackUsed": false
+    },
+    {
+      "id": "M8",
+      "status": "passed",
+      "notes": ["BTCPay fallback adapter with paidLate/partial/over mapping."],
+      "tests": [],
+      "fallbackUsed": false
+    },
+    {
+      "id": "M9",
+      "status": "passed",
+      "notes": ["Node health checks and RPC services for BTC/EVM connectors."],
+      "tests": [],
+      "fallbackUsed": false
+    },
+    {
+      "id": "M10",
+      "status": "passed",
+      "notes": ["Filament resources for providers, invoices, payouts, webhooks, reconcile, and payout whitelist."],
+      "tests": [],
+      "fallbackUsed": false
+    },
+    {
+      "id": "M11",
+      "status": "passed",
+      "notes": ["AI auditor with n8n/stub provider and notifications."],
+      "tests": [],
+      "fallbackUsed": false
+    },
+    {
+      "id": "M12",
+      "status": "passed",
+      "notes": ["Hardening, docs, scenario runner, and tests completed."],
+      "tests": [
+        "DB_CONNECTION=sqlite DB_DATABASE=:memory: php artisan test",
+        "DB_CONNECTION=sqlite DB_DATABASE=:memory: php scripts/deep_scenario_runner.php"
+      ],
+      "fallbackUsed": false
+    }
+  ],
+  "providers": {
+    "cryptomus": {
+      "features": ["invoice", "payout", "webhook", "signature", "ipAllowlist", "recurring"],
+      "statusMapping": {
+        "confirm_check": "confirm_check",
+        "paid": "paid",
+        "paid_over": "paid_over",
+        "wrong_amount": "wrong_amount",
+        "cancel": "cancelled",
+        "cancelled": "cancelled",
+        "system_fail": "failed",
+        "fail": "failed",
+        "refund_process": "refund_process",
+        "refund_fail": "refund_failed",
+        "refund_paid": "refund_paid"
+      }
+    },
+    "coinbase": {
+      "features": ["charge", "webhook", "signature", "retrySafe"],
+      "statusMapping": {
+        "charge:created": "unpaid",
+        "charge:pending": "pending",
+        "charge:confirmed": "paid",
+        "charge:failed": "failed"
+      }
+    },
+    "coinpayments": {
+      "features": ["invoice", "webhook", "signature", "ipAllowlist", "reconcile", "payout_optional"],
+      "statusMapping": {
+        "0": "pending",
+        "1": "pending",
+        "2": "paid",
+        "100": "paid",
+        "3": "paid_over",
+        "-1": "cancelled",
+        "-2": "failed"
+      }
+    },
+    "btcpay": {
+      "features": ["invoice", "webhook", "paidLate/partial/over"],
+      "statusMapping": {
+        "New": "unpaid",
+        "Processing": "pending",
+        "Expired": "expired",
+        "Settled": "completed",
+        "Complete": "completed",
+        "PaidOver": "paid_over",
+        "PaidPartial": "wrong_amount",
+        "PaidLate": "paid"
+      }
+    }
+  },
+  "api": {
+    "base": "/api/v1/crypto",
+    "endpoints": [
+      "POST /invoices",
+      "GET /invoices/{id}",
+      "GET /invoices/{id}/status",
+      "POST /invoices/{id}/refresh",
+      "POST /payouts",
+      "GET /payouts/{id}",
+      "POST /payouts/{id}/approve",
+      "POST /payouts/{id}/reject",
+      "GET /payout-destinations",
+      "POST /payout-destinations",
+      "GET /payout-destinations/{id}",
+      "PUT /payout-destinations/{id}",
+      "DELETE /payout-destinations/{id}",
+      "POST /webhooks/{provider}",
+      "GET /rates",
+      "GET /policy",
+      "GET /health/providers",
+      "GET /health/nodes",
+      "POST /reconcile/run",
+      "GET /openapi"
+    ],
+    "openapiPublished": true
+  },
+  "security": {
+    "secretsEncrypted": true,
+    "webhookIdempotent": true,
+    "dlq": true,
+    "notes": [
+      "IP allowlist enforced for Cryptomus/CoinPayments",
+      "HMAC/MD5 signature verification for all webhooks",
+      "Payout whitelist + approval enforced"
+    ]
+  },
+  "tenancy": {
+    "scopedEverywhere": true,
+    "iamPermissionsRegistered": true
+  },
+  "aiAuditor": {
+    "enabled": true,
+    "provider": "n8n-or-stub",
+    "reports": ["daily", "weekly"]
+  },
+  "knownRisks": [
+    "Cryptomus recurring is not implemented (supports.recurring=false).",
+    "RPC services are available but not yet wired into invoice monitoring workflows."
+  ],
+  "nextBacklog": [
+    "Full BTC/EVM RPC connector coverage for on-chain monitoring"
+  ]
+}

@@ -2,10 +2,10 @@
 
 namespace Haida\FilamentRelograde\Resources\RelogradeAlertResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Haida\FilamentRelograde\Resources\RelogradeAlertResource;
 
-class ListRelogradeAlerts extends ListRecords
+class ListRelogradeAlerts extends ListRecordsWithCreate
 {
     protected static string $resource = RelogradeAlertResource::class;
 }

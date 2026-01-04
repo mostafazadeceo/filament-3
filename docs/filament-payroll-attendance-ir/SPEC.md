@@ -1,0 +1,197 @@
+# SPEC — filament-payroll-attendance-ir
+
+## معرفی
+- پکیج: vendor/filament-payroll-attendance-ir
+- توضیح: سیستم جامع حقوق و دستمزد و حضور و غیاب ایران برای Filament v4.
+- Service Provider: Vendor\FilamentPayrollAttendanceIr\FilamentPayrollAttendanceIrServiceProvider
+- Filament Plugin: Vendor\FilamentPayrollAttendanceIr\FilamentPayrollAttendanceIrPlugin (id: payroll-attendance)
+
+## دامنه و قابلیت‌ها
+- مدل‌ها:
+- PayrollAdvance.php
+- PayrollAiLog.php
+- PayrollAllowanceTable.php
+- PayrollAttendanceRecord.php
+- PayrollAttendanceSchedule.php
+- PayrollAttendanceShift.php
+- PayrollAuditEvent.php
+- PayrollContract.php
+- PayrollEmployee.php
+- PayrollEmployeeDocument.php
+- PayrollHoliday.php
+- PayrollInsuranceTable.php
+- PayrollItem.php
+- PayrollLeaveRequest.php
+- PayrollLeaveType.php
+- PayrollLoan.php
+- PayrollLoanInstallment.php
+- PayrollMinimumWageTable.php
+- PayrollMission.php
+- PayrollRun.php
+- PayrollSettlement.php
+- PayrollSlip.php
+- PayrollTaxBracket.php
+- PayrollTaxTable.php
+- PayrollTimePunch.php
+- PayrollWebhookDelivery.php
+- PayrollWebhookSubscription.php
+- منابع Filament:
+- src/Filament/Resources/AttendancePolicyResource.php
+- src/Filament/Resources/EmployeeConsentResource.php
+- src/Filament/Resources/MissionRequestResource.php
+- src/Filament/Resources/OvertimeRequestResource.php
+- src/Filament/Resources/PayrollAdvanceResource.php
+- src/Filament/Resources/PayrollAiLogResource.php
+- src/Filament/Resources/PayrollAllowanceTableResource.php
+- src/Filament/Resources/PayrollAttendanceExceptionResource.php
+- src/Filament/Resources/PayrollAttendanceRecordResource.php
+- src/Filament/Resources/PayrollAttendanceScheduleResource.php
+- src/Filament/Resources/PayrollAttendanceShiftResource.php
+- src/Filament/Resources/PayrollContractResource.php
+- src/Filament/Resources/PayrollEmployeeResource.php
+- src/Filament/Resources/PayrollInsuranceTableResource.php
+- src/Filament/Resources/PayrollLeaveRequestResource.php
+- src/Filament/Resources/PayrollLeaveTypeResource.php
+- src/Filament/Resources/PayrollLoanResource.php
+- src/Filament/Resources/PayrollMinimumWageTableResource.php
+- src/Filament/Resources/PayrollRunResource.php
+- src/Filament/Resources/PayrollSlipResource.php
+- src/Filament/Resources/PayrollTaxTableResource.php
+- src/Filament/Resources/PayrollTimePunchResource.php
+- src/Filament/Resources/SensitiveAccessLogResource.php
+- src/Filament/Resources/TimeEventResource.php
+- src/Filament/Resources/TimesheetResource.php
+- src/Filament/Resources/WorkCalendarResource.php
+- کنترلرها/API:
+- Api/V1/AdvanceController.php
+- Api/V1/ApiController.php
+- Api/V1/AttendanceExceptionController.php
+- Api/V1/AttendancePolicyController.php
+- Api/V1/AttendanceRecordController.php
+- Api/V1/ContractController.php
+- Api/V1/EmployeeConsentController.php
+- Api/V1/EmployeeController.php
+- Api/V1/HolidayRuleController.php
+- Api/V1/LeaveRequestController.php
+- Api/V1/LeaveTypeController.php
+- Api/V1/LoanController.php
+- Api/V1/MissionRequestController.php
+- Api/V1/OpenApiController.php
+- Api/V1/OvertimeRequestController.php
+- Api/V1/PayrollAiLogController.php
+- Api/V1/PayrollRunController.php
+- Api/V1/PayrollSlipController.php
+- Api/V1/PunchController.php
+- Api/V1/ReportController.php
+- Api/V1/ScheduleController.php
+- Api/V1/SensitiveAccessLogController.php
+- Api/V1/ShiftController.php
+- Api/V1/TimeEventController.php
+- Api/V1/TimesheetController.php
+- Api/V1/WorkCalendarController.php
+- Jobs/Queue:
+- SendPayrollWebhookJob.php
+- Policyها:
+- EmployeeConsentPolicy.php
+- HolidayRulePolicy.php
+- MissionRequestPolicy.php
+- OvertimeRequestPolicy.php
+- PayrollAdvancePolicy.php
+- PayrollAiLogPolicy.php
+- PayrollAllowanceTablePolicy.php
+- PayrollAttendanceExceptionPolicy.php
+- PayrollAttendancePolicyPolicy.php
+- PayrollAttendanceRecordPolicy.php
+- PayrollAttendanceSchedulePolicy.php
+- PayrollAttendanceShiftPolicy.php
+- PayrollContractPolicy.php
+- PayrollEmployeePolicy.php
+- PayrollInsuranceTablePolicy.php
+- PayrollLeaveRequestPolicy.php
+- PayrollLeaveTypePolicy.php
+- PayrollLoanPolicy.php
+- PayrollMinimumWageTablePolicy.php
+- PayrollRunPolicy.php
+- PayrollSlipPolicy.php
+- PayrollTaxTablePolicy.php
+- PayrollTimeEventPolicy.php
+- PayrollTimePunchPolicy.php
+- SensitiveAccessLogPolicy.php
+- TimesheetPolicy.php
+- WorkCalendarPolicy.php
+
+## Tenancy و IAM
+- BelongsToTenant در کد: بله
+- TenantContext در کد: بله
+- IamAuthorization::allows در کد: بله
+- Capability Registry: بله
+- Scopeها (API): payroll.ai.use, payroll.attendance.approve, payroll.exception.resolve, payroll.leave.approve, payroll.mission.approve, payroll.overtime.approve, payroll.report.export, payroll.report.view, payroll.run.approve, payroll.run.lock, payroll.run.manage, payroll.run.post, payroll.timesheet.approve, payroll.timesheet.manage
+
+## مدل داده
+- Migrations:
+- 2025_12_30_010001_create_payroll_employee_tables.php
+- 2025_12_30_010002_create_payroll_attendance_tables.php
+- 2025_12_30_010003_create_payroll_run_tables.php
+- 2025_12_30_010004_create_payroll_compliance_tables.php
+- 2025_12_30_010005_create_payroll_audit_webhook_tables.php
+- 2025_12_30_010006_create_payroll_org_tables.php
+- 2025_12_30_010007_create_payroll_policy_calendar_tables.php
+- 2025_12_30_010008_create_payroll_time_tracking_tables.php
+- 2025_12_30_010009_create_payroll_privacy_tables.php
+- 2025_12_30_010010_create_payroll_ai_logs_table.php
+- جدول‌ها:
+- payroll_advances
+- payroll_ai_logs
+- payroll_allowance_tables
+- payroll_attendance_exceptions
+- payroll_attendance_policies
+- payroll_attendance_records
+- payroll_attendance_schedules
+- payroll_attendance_shifts
+- payroll_audit_events
+- payroll_contracts
+- payroll_departments
+- payroll_employee_consents
+- payroll_employee_documents
+- payroll_employees
+- payroll_holiday_rules
+- payroll_holidays
+- payroll_insurance_tables
+- payroll_items
+- payroll_leave_requests
+- payroll_leave_types
+- payroll_loan_installments
+- payroll_loans
+- payroll_minimum_wage_tables
+- payroll_missions
+- payroll_overtime_requests
+- payroll_positions
+- payroll_runs
+- payroll_sensitive_access_logs
+- payroll_settlements
+- payroll_slips
+- payroll_tax_brackets
+- payroll_tax_tables
+- payroll_time_breaks
+- payroll_time_events
+- payroll_time_punches
+- payroll_timesheets
+- payroll_webhook_deliveries
+- payroll_webhook_subscriptions
+- payroll_work_calendars
+- ایندکس‌ها: دارای ایندکس در مهاجرت‌ها
+
+## API
+- مسیر پایه: v1
+- OpenAPI: دارای مسیر /openapi
+- جزئیات: `docs/filament-payroll-attendance-ir/API.md`
+
+## تنظیمات
+- فایل‌های کانفیگ:
+- packages/filament-payroll-attendance-ir/config/filament-payroll-attendance-ir.php
+- کلیدهای env مرتبط:
+- ندارد
+
+## استقرار در پنل‌ها
+- Admin Panel: ثبت شده در AdminPanelProvider
+- Tenant Panel: ثبت شده در TenantPanelProvider

@@ -53,4 +53,9 @@ class PettyCashSettlementPolicy
     {
         return $this->allow('petty_cash.settlement.post', $settlement);
     }
+
+    public function reverse(PettyCashSettlement $settlement): bool
+    {
+        return $this->allow('petty_cash.settlement.reverse', $settlement);
+    }
 }

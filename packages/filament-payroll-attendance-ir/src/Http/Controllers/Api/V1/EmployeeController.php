@@ -24,6 +24,8 @@ class EmployeeController extends ApiController
 
     public function show(PayrollEmployee $employee): EmployeeResource
     {
+        $this->logSensitiveAccess($employee);
+
         return new EmployeeResource($employee);
     }
 

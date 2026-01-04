@@ -2,10 +2,10 @@
 
 namespace Vendor\FilamentAccountingIr\Filament\Resources\UomResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Vendor\FilamentAccountingIr\Filament\Resources\UomResource;
 
-class ListUoms extends ListRecords
+class ListUoms extends ListRecordsWithCreate
 {
     protected static string $resource = UomResource::class;
 }

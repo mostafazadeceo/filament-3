@@ -2,6 +2,7 @@
 
 namespace Haida\FilamentPettyCashIr\Filament\Resources\PettyCashSettlementResource\RelationManagers;
 
+use Filamat\IamSuite\Support\TenantContext;
 use Filament\Forms\Components\Select;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
@@ -22,8 +23,10 @@ class SettlementItemsRelationManager extends RelationManager
                     ->label('هزینه')
                     ->options(function (): array {
                         $settlement = $this->getOwnerRecord();
+                        $tenantId = $settlement->tenant_id ?? TenantContext::getTenantId();
 
                         return PettyCashExpense::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
                             ->where('fund_id', $settlement->fund_id)
                             ->where('status', PettyCashStatuses::EXPENSE_PAID)
                             ->whereDoesntHave('settlementItem')

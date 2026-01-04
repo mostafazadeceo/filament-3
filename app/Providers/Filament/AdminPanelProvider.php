@@ -6,12 +6,35 @@ use App\Settings\GeneralSettings;
 use App\Support\Calendar\CalendarFormatter;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filamat\IamSuite\FilamatIamSuitePlugin;
+use Haida\FilamentAiCore\FilamentAiCorePlugin;
 use Haida\FilamentNotify\Core\FilamentNotifyPlugin;
 use Haida\FilamentCurrencyRates\CurrencyRatesPlugin;
 use Haida\FilamentPettyCashIr\FilamentPettyCashIrPlugin;
 use Haida\FilamentRelograde\RelogradePlugin;
+use Haida\FilamentProvidersEsimGo\ProvidersEsimGoPlugin;
+use Haida\FilamentMailtrap\MailtrapPlugin;
 use Haida\FilamentRestaurantOps\FilamentRestaurantOpsPlugin;
+use Haida\FilamentThreeCx\Filament\FilamentThreeCxPlugin;
 use Haida\FilamentWorkhub\FilamentWorkhubPlugin;
+use Haida\FilamentLoyaltyClub\FilamentLoyaltyClubPlugin;
+use Haida\ContentCms\ContentCmsPlugin;
+use Haida\Blog\BlogPlugin;
+use Haida\CommerceCatalog\CommerceCatalogPlugin;
+use Haida\CommerceOrders\CommerceOrdersPlugin;
+use Haida\FilamentCommerceCore\FilamentCommerceCorePlugin;
+use Haida\FilamentCommerceExperience\FilamentCommerceExperiencePlugin;
+use Haida\FilamentCryptoCore\FilamentCryptoCorePlugin;
+use Haida\FilamentCryptoGateway\FilamentCryptoGatewayPlugin;
+use Haida\FilamentCryptoNodes\FilamentCryptoNodesPlugin;
+use Haida\FilamentMarketplaceConnectors\FilamentMarketplaceConnectorsPlugin;
+use Haida\FilamentPayments\FilamentPaymentsPlugin;
+use Haida\FilamentPos\FilamentPosPlugin;
+use Haida\FilamentStorefrontBuilder\FilamentStorefrontBuilderPlugin;
+use Haida\ProvidersCore\ProvidersCorePlugin;
+use Haida\PlatformCore\PlatformCorePlugin;
+use Haida\PageBuilder\PageBuilderPlugin;
+use Haida\SiteBuilderCore\SiteBuilderCorePlugin;
+use Haida\TenancyDomains\TenancyDomainsPlugin;
 use Vendor\FilamentAccountingIr\FilamentAccountingIrPlugin;
 use Vendor\FilamentPayrollAttendanceIr\FilamentPayrollAttendanceIrPlugin;
 use Filament\FontProviders\LocalFontProvider;
@@ -93,12 +116,59 @@ class AdminPanelProvider extends PanelProvider
         }
 
         $plugins[] = FilamentNotifyPlugin::make();
+        $plugins[] = FilamentAiCorePlugin::make();
         $plugins[] = CurrencyRatesPlugin::make();
         $plugins[] = RelogradePlugin::make();
         $plugins[] = FilamentWorkhubPlugin::make();
+        if (class_exists(FilamentLoyaltyClubPlugin::class)) {
+            $plugins[] = FilamentLoyaltyClubPlugin::make();
+        }
+        $plugins[] = PlatformCorePlugin::make();
+        $plugins[] = SiteBuilderCorePlugin::make();
+        $plugins[] = TenancyDomainsPlugin::make();
+        $plugins[] = PageBuilderPlugin::make();
+        $plugins[] = ContentCmsPlugin::make();
+        $plugins[] = BlogPlugin::make();
+        $plugins[] = CommerceCatalogPlugin::make();
+        $plugins[] = CommerceOrdersPlugin::make();
+        if (class_exists(FilamentCommerceCorePlugin::class)) {
+            $plugins[] = FilamentCommerceCorePlugin::make();
+        }
+        if (class_exists(FilamentStorefrontBuilderPlugin::class)) {
+            $plugins[] = FilamentStorefrontBuilderPlugin::make();
+        }
+        if (class_exists(FilamentCommerceExperiencePlugin::class)) {
+            $plugins[] = FilamentCommerceExperiencePlugin::make();
+        }
+        if (class_exists(FilamentCryptoCorePlugin::class)) {
+            $plugins[] = FilamentCryptoCorePlugin::make();
+        }
+        if (class_exists(FilamentCryptoGatewayPlugin::class)) {
+            $plugins[] = FilamentCryptoGatewayPlugin::make();
+        }
+        if (class_exists(FilamentCryptoNodesPlugin::class)) {
+            $plugins[] = FilamentCryptoNodesPlugin::make();
+        }
+        if (class_exists(FilamentPaymentsPlugin::class)) {
+            $plugins[] = FilamentPaymentsPlugin::make();
+        }
+        if (class_exists(FilamentPosPlugin::class)) {
+            $plugins[] = FilamentPosPlugin::make();
+        }
+        if (class_exists(FilamentMarketplaceConnectorsPlugin::class)) {
+            $plugins[] = FilamentMarketplaceConnectorsPlugin::make();
+        }
+        $plugins[] = ProvidersCorePlugin::make();
+        $plugins[] = ProvidersEsimGoPlugin::make();
+        if (class_exists(MailtrapPlugin::class)) {
+            $plugins[] = MailtrapPlugin::make();
+        }
         $plugins[] = FilamentAccountingIrPlugin::make();
         $plugins[] = FilamentPayrollAttendanceIrPlugin::make();
         $plugins[] = FilamentRestaurantOpsPlugin::make();
+        if (class_exists(FilamentThreeCxPlugin::class)) {
+            $plugins[] = FilamentThreeCxPlugin::make();
+        }
         $plugins[] = FilamentPettyCashIrPlugin::make();
         $plugins[] = FilamatIamSuitePlugin::make()
             ->superAdminPanels(['admin'])

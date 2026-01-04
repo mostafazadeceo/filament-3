@@ -6,6 +6,10 @@ use Haida\FilamentWorkhub\Events\AttachmentCreated;
 use Haida\FilamentWorkhub\Events\CommentCreated;
 use Haida\FilamentWorkhub\Events\ProjectCreated;
 use Haida\FilamentWorkhub\Events\ProjectUpdated;
+use Haida\FilamentWorkhub\Events\WorkhubAiFieldGenerated;
+use Haida\FilamentWorkhub\Events\WorkhubAiProjectReportCreated;
+use Haida\FilamentWorkhub\Events\WorkhubAiSubtasksCreated;
+use Haida\FilamentWorkhub\Events\WorkhubAiSummaryCreated;
 use Haida\FilamentWorkhub\Events\WorkItemCreated;
 use Haida\FilamentWorkhub\Events\WorkItemTransitioned;
 use Haida\FilamentWorkhub\Events\WorkItemUpdated;
@@ -18,9 +22,7 @@ class WorkhubEventSubscriber
     public function __construct(
         protected WorkhubWebhookDispatcher $dispatcher,
         protected WorkhubAutomationEngine $automationEngine,
-    )
-    {
-    }
+    ) {}
 
     public function handleProjectCreated(ProjectCreated $event): void
     {
@@ -64,6 +66,30 @@ class WorkhubEventSubscriber
         $this->automationEngine->handle($event->eventName(), $event->payload());
     }
 
+    public function handleAiSummaryCreated(WorkhubAiSummaryCreated $event): void
+    {
+        $this->dispatcher->dispatch($event);
+        $this->automationEngine->handle($event->eventName(), $event->payload());
+    }
+
+    public function handleAiSubtasksCreated(WorkhubAiSubtasksCreated $event): void
+    {
+        $this->dispatcher->dispatch($event);
+        $this->automationEngine->handle($event->eventName(), $event->payload());
+    }
+
+    public function handleAiFieldGenerated(WorkhubAiFieldGenerated $event): void
+    {
+        $this->dispatcher->dispatch($event);
+        $this->automationEngine->handle($event->eventName(), $event->payload());
+    }
+
+    public function handleAiProjectReportCreated(WorkhubAiProjectReportCreated $event): void
+    {
+        $this->dispatcher->dispatch($event);
+        $this->automationEngine->handle($event->eventName(), $event->payload());
+    }
+
     public function subscribe(Dispatcher $events): void
     {
         $events->listen(ProjectCreated::class, [self::class, 'handleProjectCreated']);
@@ -73,5 +99,9 @@ class WorkhubEventSubscriber
         $events->listen(WorkItemTransitioned::class, [self::class, 'handleWorkItemTransitioned']);
         $events->listen(CommentCreated::class, [self::class, 'handleCommentCreated']);
         $events->listen(AttachmentCreated::class, [self::class, 'handleAttachmentCreated']);
+        $events->listen(WorkhubAiSummaryCreated::class, [self::class, 'handleAiSummaryCreated']);
+        $events->listen(WorkhubAiSubtasksCreated::class, [self::class, 'handleAiSubtasksCreated']);
+        $events->listen(WorkhubAiFieldGenerated::class, [self::class, 'handleAiFieldGenerated']);
+        $events->listen(WorkhubAiProjectReportCreated::class, [self::class, 'handleAiProjectReportCreated']);
     }
 }

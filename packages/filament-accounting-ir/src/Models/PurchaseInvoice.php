@@ -50,6 +50,11 @@ class PurchaseInvoice extends Model
         return $this->belongsTo(Party::class, 'party_id');
     }
 
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(AccountingCompany::class, 'company_id');
+    }
+
     public function branch(): BelongsTo
     {
         return $this->belongsTo(AccountingBranch::class, 'branch_id');

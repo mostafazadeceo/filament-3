@@ -12,21 +12,31 @@ use Filamat\IamSuite\Filament\Pages\TenantSettings;
 use Filamat\IamSuite\Filament\Resources\ApiKeyResource;
 use Filamat\IamSuite\Filament\Resources\AuditLogResource;
 use Filamat\IamSuite\Filament\Resources\GroupResource;
+use Filamat\IamSuite\Filament\Resources\IamAiActionProposalResource;
+use Filamat\IamSuite\Filament\Resources\IamAiReportResource;
+use Filamat\IamSuite\Filament\Resources\ImpersonationSessionResource;
+use Filamat\IamSuite\Filament\Resources\MfaMethodResource;
 use Filamat\IamSuite\Filament\Resources\NotificationResource;
 use Filamat\IamSuite\Filament\Resources\OrganizationResource;
 use Filamat\IamSuite\Filament\Resources\PermissionOverrideResource;
 use Filamat\IamSuite\Filament\Resources\PermissionResource;
 use Filamat\IamSuite\Filament\Resources\PermissionTemplateResource;
+use Filamat\IamSuite\Filament\Resources\PrivilegeActivationResource;
+use Filamat\IamSuite\Filament\Resources\PrivilegeEligibilityResource;
+use Filamat\IamSuite\Filament\Resources\PrivilegeRequestResource;
 use Filamat\IamSuite\Filament\Resources\RoleResource;
 use Filamat\IamSuite\Filament\Resources\SecurityEventResource;
 use Filamat\IamSuite\Filament\Resources\SubscriptionPlanResource;
 use Filamat\IamSuite\Filament\Resources\SubscriptionResource;
 use Filamat\IamSuite\Filament\Resources\TenantResource;
+use Filamat\IamSuite\Filament\Resources\UserInvitationResource;
 use Filamat\IamSuite\Filament\Resources\UserResource;
+use Filamat\IamSuite\Filament\Resources\UserSessionResource;
 use Filamat\IamSuite\Filament\Resources\WalletHoldResource;
 use Filamat\IamSuite\Filament\Resources\WalletResource;
 use Filamat\IamSuite\Filament\Resources\WalletTransactionResource;
 use Filamat\IamSuite\Filament\Resources\WebhookResource;
+use Filamat\IamSuite\Filament\Widgets\AutomationInsightStatsWidget;
 use Filamat\IamSuite\Filament\Widgets\NotificationDeliveryChartWidget;
 use Filamat\IamSuite\Filament\Widgets\NotificationStatsWidget;
 use Filamat\IamSuite\Filament\Widgets\QuickActionsWidget;
@@ -76,6 +86,10 @@ class FilamatIamSuitePlugin implements Plugin
 
         if ($this->isSuperAdminPanel($panelId)) {
             $panel
+                ->middleware([
+                    'filamat-iam.impersonation',
+                    'filamat-iam.session',
+                ])
                 ->pages([
                     SuperAdminDashboard::class,
                     NotificationDashboard::class,
@@ -88,6 +102,7 @@ class FilamatIamSuitePlugin implements Plugin
                     WalletVolumeChartWidget::class,
                     NotificationDeliveryChartWidget::class,
                     WebhookHealthChartWidget::class,
+                    AutomationInsightStatsWidget::class,
                     RecentSecurityEventsWidget::class,
                     RecentAuditLogsWidget::class,
                     RecentNotificationsWidget::class,
@@ -101,6 +116,13 @@ class FilamatIamSuitePlugin implements Plugin
                     GroupResource::class,
                     PermissionTemplateResource::class,
                     PermissionOverrideResource::class,
+                    UserInvitationResource::class,
+                    PrivilegeEligibilityResource::class,
+                    PrivilegeRequestResource::class,
+                    PrivilegeActivationResource::class,
+                    ImpersonationSessionResource::class,
+                    UserSessionResource::class,
+                    MfaMethodResource::class,
                     WalletResource::class,
                     WalletTransactionResource::class,
                     WalletHoldResource::class,
@@ -111,6 +133,8 @@ class FilamatIamSuitePlugin implements Plugin
                     NotificationResource::class,
                     SecurityEventResource::class,
                     AuditLogResource::class,
+                    IamAiReportResource::class,
+                    IamAiActionProposalResource::class,
                 ]);
 
             return;
@@ -118,6 +142,10 @@ class FilamatIamSuitePlugin implements Plugin
 
         if ($this->isTenantPanel($panelId)) {
             $panel
+                ->middleware([
+                    'filamat-iam.impersonation',
+                    'filamat-iam.session',
+                ])
                 ->pages([
                     TenantDashboard::class,
                     NotificationDashboard::class,
@@ -131,6 +159,7 @@ class FilamatIamSuitePlugin implements Plugin
                     WalletVolumeChartWidget::class,
                     NotificationDeliveryChartWidget::class,
                     WebhookHealthChartWidget::class,
+                    AutomationInsightStatsWidget::class,
                     RecentSecurityEventsWidget::class,
                     RecentAuditLogsWidget::class,
                     RecentNotificationsWidget::class,
@@ -142,6 +171,13 @@ class FilamatIamSuitePlugin implements Plugin
                     GroupResource::class,
                     PermissionTemplateResource::class,
                     PermissionOverrideResource::class,
+                    UserInvitationResource::class,
+                    PrivilegeEligibilityResource::class,
+                    PrivilegeRequestResource::class,
+                    PrivilegeActivationResource::class,
+                    ImpersonationSessionResource::class,
+                    UserSessionResource::class,
+                    MfaMethodResource::class,
                     WalletResource::class,
                     WalletTransactionResource::class,
                     WalletHoldResource::class,
@@ -152,6 +188,8 @@ class FilamatIamSuitePlugin implements Plugin
                     NotificationResource::class,
                     SecurityEventResource::class,
                     AuditLogResource::class,
+                    IamAiReportResource::class,
+                    IamAiActionProposalResource::class,
                 ]);
         }
     }

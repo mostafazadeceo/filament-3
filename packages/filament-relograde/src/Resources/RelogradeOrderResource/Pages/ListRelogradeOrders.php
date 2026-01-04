@@ -3,11 +3,11 @@
 namespace Haida\FilamentRelograde\Resources\RelogradeOrderResource\Pages;
 
 use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Haida\FilamentRelograde\Resources\RelogradeOrderResource;
 use Haida\FilamentRelograde\Support\RelogradeAuthorization;
 
-class ListRelogradeOrders extends ListRecords
+class ListRelogradeOrders extends ListRecordsWithCreate
 {
     protected static string $resource = RelogradeOrderResource::class;
 

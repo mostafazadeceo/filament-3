@@ -11,6 +11,7 @@ use Filamat\IamSuite\Support\IamAuthorization;
 use Filamat\IamSuite\Support\PermissionLabels;
 use Filament\Actions\AttachAction;
 use Filament\Actions\DetachAction;
+use Filament\Forms\Components\Textarea;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -60,12 +61,17 @@ class RolePermissionsRelationManager extends RelationManager
 
                         return $query;
                     })
+                    ->form([
+                        Textarea::make('reason')->label('دلیل')->required(),
+                    ])
                     ->after(function (AttachAction $action) {
                         $owner = $this->getOwnerRecord();
                         $record = $action->getRecord();
+                        $data = $action->getData();
 
                         app(AuditService::class)->log('role.permission.attached', $owner, [
                             'permission_id' => $record?->getKey(),
+                            'reason' => $data['reason'] ?? null,
                         ]);
                     }),
             ])
@@ -73,12 +79,17 @@ class RolePermissionsRelationManager extends RelationManager
                 DetachAction::make()
                     ->label('حذف')
                     ->visible(fn () => IamAuthorization::allows('iam.manage'))
+                    ->form([
+                        Textarea::make('reason')->label('دلیل')->required(),
+                    ])
                     ->after(function (DetachAction $action) {
                         $owner = $this->getOwnerRecord();
                         $record = $action->getRecord();
+                        $data = $action->getData();
 
                         app(AuditService::class)->log('role.permission.detached', $owner, [
                             'permission_id' => $record?->getKey(),
+                            'reason' => $data['reason'] ?? null,
                         ]);
                     }),
             ]);

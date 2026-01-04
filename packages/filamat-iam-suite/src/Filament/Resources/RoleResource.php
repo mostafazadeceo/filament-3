@@ -10,6 +10,7 @@ use Filamat\IamSuite\Filament\Resources\RoleResource\Pages\EditRole;
 use Filamat\IamSuite\Filament\Resources\RoleResource\Pages\ListRoles;
 use Filamat\IamSuite\Filament\Resources\RoleResource\RelationManagers\RolePermissionsRelationManager;
 use Filamat\IamSuite\Filament\Resources\RoleResource\RelationManagers\RoleUsersRelationManager;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
@@ -47,6 +48,7 @@ class RoleResource extends IamResource
                 TextInput::make('name')->label('نام نقش')->required(),
                 TextInput::make('guard_name')->label('گارد')->default('web')->required(),
                 static::tenantSelect(required: false),
+                Textarea::make('reason')->label('دلیل تغییر')->required()->dehydrated(false),
             ]);
     }
 

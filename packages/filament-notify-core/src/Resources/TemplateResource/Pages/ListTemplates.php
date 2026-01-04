@@ -2,10 +2,10 @@
 
 namespace Haida\FilamentNotify\Core\Resources\TemplateResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Haida\FilamentNotify\Core\Resources\TemplateResource;
 
-class ListTemplates extends ListRecords
+class ListTemplates extends ListRecordsWithCreate
 {
     protected static string $resource = TemplateResource::class;
 }

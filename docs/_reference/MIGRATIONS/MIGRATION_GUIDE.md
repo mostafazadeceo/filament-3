@@ -1,0 +1,362 @@
+# MIGRATION_GUIDE
+
+## ترتیب کلی
+- ابتدا migrations هسته (database/migrations) اجرا می‌شوند.
+- سپس migrations پکیج‌ها با ترتیب timestamp اجرا می‌شوند.
+- در صورت نیاز به backfill، Jobهای اختصاصی هر ماژول اجرا می‌شود. [ASSUMPTION]
+
+## هسته (Root)
+- 0001_01_01_000000_create_users_table.php
+- 0001_01_01_000001_create_cache_table.php
+- 0001_01_01_000002_create_jobs_table.php
+- 2022_12_14_083707_create_settings_table.php
+- 2025_12_20_174456_create_notifications_table.php
+- 2025_12_26_050017_create_personal_access_tokens_table.php
+- 2025_12_26_050025_create_permission_tables.php
+- 2025_12_26_050105_create_organizations_table.php
+- 2025_12_26_050106_create_tenants_table.php
+- 2025_12_26_050107_create_tenant_user_table.php
+- 2025_12_26_050108_add_iam_columns_to_users_table.php
+- 2025_12_26_050109_create_roles_table.php
+- 2025_12_26_050110_create_permissions_table.php
+- 2025_12_26_050111_create_model_has_roles_table.php
+- 2025_12_26_050112_create_model_has_permissions_table.php
+- 2025_12_26_050113_create_role_has_permissions_table.php
+- 2025_12_26_050114_create_groups_table.php
+- 2025_12_26_050115_create_group_user_table.php
+- 2025_12_26_050116_create_group_role_table.php
+- 2025_12_26_050117_create_group_permission_table.php
+- 2025_12_26_050118_create_permission_overrides_table.php
+- 2025_12_26_050119_create_permission_templates_table.php
+- 2025_12_26_050120_create_wallets_table.php
+- 2025_12_26_050121_create_wallet_transactions_table.php
+- 2025_12_26_050122_create_wallet_holds_table.php
+- 2025_12_26_050123_create_subscription_plans_table.php
+- 2025_12_26_050124_create_subscriptions_table.php
+- 2025_12_26_050125_create_webhooks_table.php
+- 2025_12_26_050126_create_webhook_deliveries_table.php
+- 2025_12_26_050127_create_notifications_table.php
+- 2025_12_26_050128_create_otp_codes_table.php
+- 2025_12_26_050129_create_audit_logs_table.php
+- 2025_12_26_050130_create_security_events_table.php
+- 2025_12_26_050131_create_api_keys_table.php
+- 2025_12_26_050200_add_tenant_id_to_permissions_table.php
+- 2025_12_26_170844_create_api_docs_table.php
+
+## تنظیمات (Root Settings)
+- 2025_12_20_212807_create_general_settings.php
+- 2025_12_21_124142_add_calendar_settings_to_general_settings.php
+- 2025_12_21_190500_add_panel_info_settings_to_general_settings.php
+- 2025_12_24_210100_add_currency_rate_settings.php
+
+## پکیج‌ها
+### blog
+- 2025_12_30_000009_create_blog_tables.php
+
+### commerce-catalog
+- 2025_12_30_000010_create_commerce_catalog_tables.php
+
+### commerce-checkout
+- 2025_12_30_000012_create_commerce_checkout_tables.php
+
+### commerce-orders
+- 2025_12_30_000011_create_commerce_order_tables.php
+- 2026_01_02_000014_create_commerce_order_return_tables.php
+
+### content-cms
+- 2025_12_30_000008_create_content_cms_tables.php
+
+### feature-gates
+- 2025_12_30_000002_create_plan_features_table.php
+- 2025_12_30_000003_create_tenant_feature_overrides_table.php
+
+### filamat-iam-suite
+- 2025_01_01_000001_create_organizations_table.php
+- 2025_01_01_000002_create_tenants_table.php
+- 2025_01_01_000003_create_tenant_user_table.php
+- 2025_01_01_000004_add_iam_columns_to_users_table.php
+- 2025_01_01_000005_create_roles_table.php
+- 2025_01_01_000006_create_permissions_table.php
+- 2025_01_01_000007_create_model_has_roles_table.php
+- 2025_01_01_000008_create_model_has_permissions_table.php
+- 2025_01_01_000009_create_role_has_permissions_table.php
+- 2025_01_01_000010_create_groups_table.php
+- 2025_01_01_000011_create_group_user_table.php
+- 2025_01_01_000012_create_group_role_table.php
+- 2025_01_01_000013_create_group_permission_table.php
+- 2025_01_01_000014_create_permission_overrides_table.php
+- 2025_01_01_000015_create_permission_templates_table.php
+- 2025_01_01_000016_create_wallets_table.php
+- 2025_01_01_000017_create_wallet_transactions_table.php
+- 2025_01_01_000018_create_wallet_holds_table.php
+- 2025_01_01_000019_create_subscription_plans_table.php
+- 2025_01_01_000020_create_subscriptions_table.php
+- 2025_01_01_000021_create_webhooks_table.php
+- 2025_01_01_000022_create_webhook_deliveries_table.php
+- 2025_01_01_000023_create_notifications_table.php
+- 2025_01_01_000024_create_otp_codes_table.php
+- 2025_01_01_000025_create_audit_logs_table.php
+- 2025_01_01_000026_create_security_events_table.php
+- 2025_01_01_000027_create_api_keys_table.php
+- 2025_01_01_000028_create_access_requests_table.php
+- 2025_01_01_000029_create_access_request_approvals_table.php
+- 2025_01_01_000030_create_permission_snapshots_table.php
+- 2025_01_01_000031_create_delegated_admin_scopes_table.php
+- 2025_01_01_000032_add_audit_hash_chain_columns.php
+- 2025_01_01_000033_create_api_key_scopes_table.php
+- 2025_01_01_000034_create_webhook_nonces_table.php
+- 2025_01_01_000035_create_user_profiles_table.php
+- 2025_01_01_000036_add_tenant_id_columns_to_spatie_tables.php
+- 2025_01_01_000037_create_iam_user_invitations_table.php
+- 2025_01_01_000038_add_lifecycle_columns_to_tenant_user_table.php
+- 2025_01_01_000039_create_iam_privilege_eligibilities_table.php
+- 2025_01_01_000040_create_iam_privilege_requests_table.php
+- 2025_01_01_000041_create_iam_privilege_request_approvals_table.php
+- 2025_01_01_000042_create_iam_privilege_activations_table.php
+- 2025_01_01_000043_create_iam_impersonation_sessions_table.php
+- 2025_01_01_000044_create_iam_user_sessions_table.php
+- 2025_01_01_000045_create_iam_protected_action_tokens_table.php
+- 2025_01_01_000046_create_iam_mfa_methods_table.php
+- 2025_01_01_000047_add_automation_columns_to_webhooks_table.php
+- 2025_01_01_000048_create_iam_ai_reports_table.php
+- 2025_01_01_000049_create_iam_ai_action_proposals_table.php
+- 2025_01_01_000050_expand_webhook_secret_column.php
+
+### filament-accounting-ir
+- 2025_12_28_000001_create_accounting_ir_core_tables.php
+- 2025_12_28_000002_create_accounting_ir_chart_tables.php
+- 2025_12_28_000003_create_accounting_ir_journal_tables.php
+- 2025_12_28_000004_create_accounting_ir_party_tables.php
+- 2025_12_28_000005_create_accounting_ir_treasury_tables.php
+- 2025_12_28_000006_create_accounting_ir_sales_tables.php
+- 2025_12_28_000007_create_accounting_ir_purchase_tables.php
+- 2025_12_28_000008_create_accounting_ir_inventory_tables.php
+- 2025_12_28_000009_create_accounting_ir_fixed_asset_tables.php
+- 2025_12_28_000010_create_accounting_ir_payroll_tables.php
+- 2025_12_28_000011_create_accounting_ir_project_tables.php
+- 2025_12_28_000012_create_accounting_ir_tax_tables.php
+- 2025_12_28_000013_create_accounting_ir_e_invoice_tables.php
+- 2025_12_28_000014_create_accounting_ir_integration_tables.php
+- 2025_12_28_000015_create_accounting_ir_audit_tables.php
+- 2025_12_28_000016_create_accounting_ir_company_settings_table.php
+
+### filament-ai-core
+- 2026_02_01_000001_create_ai_policies_table.php
+- 2026_02_01_000002_create_ai_requests_table.php
+- 2026_02_01_000003_create_ai_feedback_table.php
+
+### filament-app-api
+- 2026_02_01_000001_create_app_devices_table.php
+- 2026_02_01_000002_create_app_device_tokens_table.php
+- 2026_02_01_000003_create_app_support_tables.php
+- 2026_02_01_000004_create_app_sync_tables.php
+- 2026_02_01_000005_create_app_refresh_tokens_table.php
+- 2026_02_01_000006_create_app_tasks_table.php
+- 2026_02_01_000007_create_app_attendance_records_table.php
+- 2026_02_01_000008_create_app_signaling_messages_table.php
+
+### filament-commerce-core
+- 2026_01_02_000001_create_commerce_core_tables.php
+- 2026_01_03_000007_create_commerce_compliance_tables.php
+- 2026_01_03_000008_create_commerce_compliance_digest_tables.php
+
+### filament-commerce-experience
+- 2026_01_02_000005_create_experience_tables.php
+
+### filament-crypto-core
+- 2026_01_02_000010_create_crypto_core_tables.php
+- 2026_01_10_000001_create_crypto_core_tables.php
+
+### filament-crypto-gateway
+- 2026_01_02_000011_create_crypto_gateway_tables.php
+- 2026_01_10_000002_create_crypto_gateway_tables.php
+- 2026_01_10_000004_add_crypto_payout_whitelist_and_approvals.php
+
+### filament-crypto-nodes
+- 2026_01_10_000003_create_crypto_node_connectors_table.php
+
+### filament-currency-rates
+- 2025_01_01_000001_create_currency_rates_table.php
+- 2025_01_01_000002_create_currency_rate_runs_table.php
+
+### filament-loyalty-club
+- 2026_01_05_000001_create_loyalty_core_tables.php
+- 2026_01_05_000002_create_loyalty_wallet_tables.php
+- 2026_01_05_000003_create_loyalty_reward_tables.php
+- 2026_01_05_000004_create_loyalty_referral_tables.php
+- 2026_01_05_000005_create_loyalty_gamification_tables.php
+- 2026_01_05_000006_create_loyalty_segment_campaign_tables.php
+- 2026_01_05_000007_create_loyalty_audit_fraud_tables.php
+- 2026_01_05_000008_create_loyalty_metrics_tables.php
+- 2026_01_05_000009_create_loyalty_donation_tables.php
+
+### filament-marketplace-connectors
+- 2026_01_02_000006_create_marketplace_connector_tables.php
+
+### filament-meetings
+- 2026_03_01_000001_create_meetings_table.php
+- 2026_03_01_000002_create_meeting_attendees_table.php
+- 2026_03_01_000003_create_meeting_templates_table.php
+- 2026_03_01_000004_create_meeting_agenda_items_table.php
+- 2026_03_01_000005_create_meeting_notes_table.php
+- 2026_03_01_000006_create_meeting_transcripts_table.php
+- 2026_03_01_000007_create_meeting_transcript_segments_table.php
+- 2026_03_01_000008_create_meeting_minutes_table.php
+- 2026_03_01_000009_create_meeting_action_items_table.php
+- 2026_03_01_000010_create_meeting_ai_runs_table.php
+- 2026_03_01_000011_add_meeting_indexes_table.php
+
+### filament-notify-core
+- 2025_12_21_200000_create_fn_triggers_table.php
+- 2025_12_21_200001_create_fn_templates_table.php
+- 2025_12_21_200002_create_fn_notification_rules_table.php
+- 2025_12_21_200003_create_fn_delivery_logs_table.php
+- 2025_12_21_200004_create_fn_channel_settings_table.php
+
+### filament-notify-webpush
+- 2025_12_21_210000_create_fn_webpush_subscriptions_table.php
+
+### filament-payments
+- 2026_01_02_000002_create_payments_tables.php
+
+### filament-payroll-attendance
+- 2025_12_30_000001_create_payroll_ir_employee_tables.php
+- 2025_12_30_000002_create_payroll_ir_contract_and_leave_tables.php
+- 2025_12_30_000003_create_payroll_ir_attendance_tables.php
+- 2025_12_30_000004_create_payroll_ir_payroll_tables.php
+- 2025_12_30_000005_create_payroll_ir_reference_tables.php
+- 2025_12_30_000006_create_payroll_ir_finance_tables.php
+- 2025_12_30_000007_create_payroll_ir_audit_tables.php
+
+### filament-payroll-attendance-ir
+- 2025_12_30_010001_create_payroll_employee_tables.php
+- 2025_12_30_010002_create_payroll_attendance_tables.php
+- 2025_12_30_010003_create_payroll_run_tables.php
+- 2025_12_30_010004_create_payroll_compliance_tables.php
+- 2025_12_30_010005_create_payroll_audit_webhook_tables.php
+- 2025_12_30_010006_create_payroll_org_tables.php
+- 2025_12_30_010007_create_payroll_policy_calendar_tables.php
+- 2025_12_30_010008_create_payroll_time_tracking_tables.php
+- 2025_12_30_010009_create_payroll_privacy_tables.php
+- 2025_12_30_010010_create_payroll_ai_logs_table.php
+
+### filament-petty-cash-ir
+- 2026_01_01_000001_create_petty_cash_core_tables.php
+- 2026_01_01_000002_create_petty_cash_expense_tables.php
+- 2026_01_01_000003_create_petty_cash_settlement_tables.php
+- 2026_01_01_000004_create_petty_cash_audit_tables.php
+- 2026_01_01_000005_create_petty_cash_action_logs.php
+- 2026_01_01_000006_add_reversal_fields_to_petty_cash_tables.php
+- 2026_01_01_000007_create_petty_cash_workflow_rules.php
+- 2026_01_01_000008_add_workflow_fields_to_petty_cash_tables.php
+- 2026_01_01_000009_create_petty_cash_control_tables.php
+- 2026_01_01_000010_add_hash_to_petty_cash_expense_attachments.php
+- 2026_01_01_000011_create_petty_cash_ai_suggestions.php
+
+### filament-pos
+- 2026_01_02_000003_create_pos_tables.php
+
+### filament-relograde
+- 2025_01_01_000001_create_relograde_connections_table.php
+- 2025_01_01_000002_create_relograde_brands_table.php
+- 2025_01_01_000003_create_relograde_brand_options_table.php
+- 2025_01_01_000004_create_relograde_products_table.php
+- 2025_01_01_000005_create_relograde_accounts_table.php
+- 2025_01_01_000006_create_relograde_orders_table.php
+- 2025_01_01_000007_create_relograde_order_items_table.php
+- 2025_01_01_000008_create_relograde_order_lines_table.php
+- 2025_01_01_000009_create_relograde_webhook_events_table.php
+- 2025_01_01_000010_create_relograde_api_logs_table.php
+- 2025_01_01_000011_create_relograde_audit_logs_table.php
+- 2025_01_01_000012_create_relograde_alerts_table.php
+- 2025_01_01_000013_alter_redeem_value_columns_to_string.php
+
+### filament-restaurant-ops
+- 2025_12_30_000001_create_restaurant_ops_core_tables.php
+- 2025_12_30_000002_create_restaurant_ops_procurement_tables.php
+- 2025_12_30_000003_create_restaurant_ops_inventory_tables.php
+- 2025_12_30_000004_create_restaurant_ops_cost_tables.php
+- 2025_12_30_000005_add_warehouse_to_menu_sales.php
+- 2025_12_30_000006_add_accounting_links_to_restaurant_ops.php
+
+### filament-storefront-builder
+- 2026_01_02_000004_create_storefront_builder_tables.php
+
+### filament-threecx
+- 2025_12_30_000020_create_threecx_tables.php
+
+### filament-workhub
+- 2025_12_27_010000_create_workhub_workflows_table.php
+- 2025_12_27_010001_create_workhub_statuses_table.php
+- 2025_12_27_010002_create_workhub_transitions_table.php
+- 2025_12_27_010003_create_workhub_work_types_table.php
+- 2025_12_27_010004_create_workhub_projects_table.php
+- 2025_12_27_010005_create_workhub_work_items_table.php
+- 2025_12_27_010006_create_workhub_labels_table.php
+- 2025_12_27_010007_create_workhub_label_work_item_table.php
+- 2025_12_27_010008_create_workhub_comments_table.php
+- 2025_12_27_010009_create_workhub_attachments_table.php
+- 2025_12_27_010010_create_workhub_watchers_table.php
+- 2025_12_27_010011_create_workhub_time_entries_table.php
+- 2025_12_27_010012_create_workhub_decisions_table.php
+- 2025_12_27_010013_create_workhub_audit_events_table.php
+- 2025_12_27_010014_create_workhub_entity_references_table.php
+- 2025_12_27_010015_create_workhub_automation_rules_table.php
+- 2025_12_27_010016_create_workhub_custom_fields_table.php
+- 2025_12_27_010017_create_workhub_custom_field_values_table.php
+- 2025_12_27_010018_add_last_ran_at_to_workhub_automation_rules_table.php
+- 2025_12_27_010019_add_allowed_link_types_to_workhub_projects_table.php
+- 2026_02_02_000001_create_workhub_ai_summaries_table.php
+- 2026_02_02_000002_create_workhub_project_ai_updates_table.php
+- 2026_02_02_000003_create_workhub_ai_field_runs_table.php
+
+### mailtrap-core
+- 2026_01_02_000001_create_mailtrap_connections_table.php
+- 2026_01_02_000002_create_mailtrap_inboxes_table.php
+- 2026_01_02_000003_create_mailtrap_messages_table.php
+- 2026_01_02_000004_create_mailtrap_sending_domains_table.php
+- 2026_01_02_000005_create_mailtrap_offers_table.php
+- 2026_01_02_000006_add_send_api_token_to_mailtrap_connections_table.php
+- 2026_01_02_000007_create_mailtrap_audiences_table.php
+- 2026_01_02_000008_create_mailtrap_audience_contacts_table.php
+- 2026_01_02_000009_create_mailtrap_campaigns_table.php
+- 2026_01_02_000010_create_mailtrap_campaign_sends_table.php
+- 2026_01_02_000011_create_mailtrap_single_sends_table.php
+
+### page-builder
+- 2025_12_30_000007_create_page_builder_tables.php
+
+### payments-orchestrator
+- 2025_12_30_000013_create_payments_orchestrator_tables.php
+
+### platform-core
+- 2025_12_30_000001_create_plugin_registry_tables.php
+- 2025_12_30_000016_add_context_to_plugin_migrations.php
+
+### providers-core
+- 2025_12_30_000014_create_providers_core_job_logs_table.php
+
+### providers-esim-go-core
+- 2025_12_31_000001_create_esim_go_connections_table.php
+- 2025_12_31_000002_create_esim_go_catalogue_snapshots_table.php
+- 2025_12_31_000003_create_esim_go_products_table.php
+- 2025_12_31_000004_create_esim_go_orders_table.php
+- 2025_12_31_000005_create_esim_go_esims_table.php
+- 2025_12_31_000006_create_esim_go_callbacks_table.php
+- 2025_12_31_000007_create_esim_go_inventory_usages_table.php
+- 2026_01_01_000007_add_countries_meta_to_esim_go_products_table.php
+
+### site-builder-core
+- 2025_12_30_000006_create_site_builder_core_tables.php
+
+### tenancy-domains
+- 2025_12_30_000004_create_site_domains_table.php
+- 2025_12_30_000021_add_tls_fields_to_site_domains_table.php
+
+## ایندکس‌ها
+- ایندکس‌های پرتکرار باید شامل `tenant_id`, `status`, `updated_at` و FKها باشند.
+- جزئیات در migrations هر ماژول درج شده است.
+
+## ریسک‌ها و Rollback
+- مهاجرت‌های مالی/ledger ممکن است rollback کامل نداشته باشند. [ASSUMPTION]
+- برای تغییرات ساختاری بزرگ، snapshot یا backup قبل از migrate ضروری است.

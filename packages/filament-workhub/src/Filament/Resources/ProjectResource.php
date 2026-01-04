@@ -4,12 +4,6 @@ namespace Haida\FilamentWorkhub\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
-use Haida\FilamentWorkhub\Filament\Resources\ProjectResource\Pages\CreateProject;
-use Haida\FilamentWorkhub\Filament\Resources\ProjectResource\Pages\EditProject;
-use Haida\FilamentWorkhub\Filament\Resources\ProjectResource\Pages\ListProjects;
-use Haida\FilamentWorkhub\Models\Project;
-use Haida\FilamentWorkhub\Models\Workflow;
-use Haida\FilamentWorkhub\Support\EntityReferenceRegistry;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -18,6 +12,13 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Haida\FilamentWorkhub\Filament\Resources\ProjectResource\Pages\CreateProject;
+use Haida\FilamentWorkhub\Filament\Resources\ProjectResource\Pages\EditProject;
+use Haida\FilamentWorkhub\Filament\Resources\ProjectResource\Pages\ListProjects;
+use Haida\FilamentWorkhub\Filament\Resources\ProjectResource\RelationManagers\AiUpdatesRelationManager;
+use Haida\FilamentWorkhub\Models\Project;
+use Haida\FilamentWorkhub\Models\Workflow;
+use Haida\FilamentWorkhub\Support\EntityReferenceRegistry;
 use Illuminate\Database\Eloquent\Builder;
 
 class ProjectResource extends IamResource
@@ -141,6 +142,13 @@ class ProjectResource extends IamResource
             'index' => ListProjects::route('/'),
             'create' => CreateProject::route('/create'),
             'edit' => EditProject::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            AiUpdatesRelationManager::class,
         ];
     }
 }

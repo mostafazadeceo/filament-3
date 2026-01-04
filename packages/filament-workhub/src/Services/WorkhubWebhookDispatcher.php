@@ -8,9 +8,7 @@ use Haida\FilamentWorkhub\Contracts\WorkhubEvent;
 
 class WorkhubWebhookDispatcher
 {
-    public function __construct(protected WebhookService $webhookService)
-    {
-    }
+    public function __construct(protected WebhookService $webhookService) {}
 
     public function dispatch(WorkhubEvent $event): void
     {

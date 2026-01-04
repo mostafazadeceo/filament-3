@@ -10,7 +10,7 @@
 - جایگزینی کامل خزانه‌داری یا بانکداری.
 - ویژگی‌های نظارتی/پایش رفتار پرسنل.
 
-## مدل دامنه (MVP)
+## مدل دامنه
 - PettyCashFund (صندوق تنخواه)
 - PettyCashCategory (دسته هزینه)
 - PettyCashExpense (هزینه تنخواه)
@@ -18,11 +18,17 @@
 - PettyCashReplenishment (تغذیه تنخواه)
 - PettyCashSettlement + PettyCashSettlementItem (تسویه دوره‌ای)
 - PettyCashAuditEvent (ردپای رویداد)
+- PettyCashWorkflowRule (قواعد گردش‌کار)
+- PettyCashControlException (استثناهای کنترلی)
+- PettyCashCashCount (شمارش نقدی)
+- PettyCashReconciliation (تطبیق)
+- PettyCashAiSuggestion (پیشنهادهای هوشمند)
 
 ## جریان‌های اصلی
-- هزینه: پیش‌نویس → ارسال → تأیید → پرداخت → تسویه
-- تغذیه: پیش‌نویس → ارسال → تأیید → پرداخت
+- هزینه: پیش‌نویس → ارسال → تأیید (چندمرحله‌ای) → پرداخت → تسویه
+- تغذیه: پیش‌نویس → ارسال → تأیید (چندمرحله‌ای) → پرداخت
 - تسویه: پیش‌نویس → ارسال → تأیید → قطعی‌سازی + علامت‌گذاری هزینه‌های تسویه‌شده
+- برگشت (Reversal): امکان بازگشت ثبت برای هزینه/تغذیه/تسویه با ثبت رویداد ممیزی.
 
 ## معماری داده و ایندکس‌ها
 - تمام جداول دارای `tenant_id`, `company_id` و در صورت نیاز `branch_id`.
@@ -39,6 +45,7 @@
 - مجوزهای ریز برای صندوق، دسته، هزینه، تغذیه، تسویه، و گزارش.
 - تفکیک وظایف: ثبت ≠ تأیید ≠ پرداخت ≠ قطعی‌سازی.
 - ثبت رویدادهای حساس در `PettyCashAuditEvent`.
+- مجوزهای AI: `petty_cash.ai.use`, `petty_cash.ai.view_reports`, `petty_cash.ai.manage_settings`.
 
 ## نقشه UI (Filament v4)
 - تنخواه‌ها
@@ -46,11 +53,20 @@
 - هزینه‌های تنخواه (با پیوست‌ها)
 - تغذیه تنخواه
 - تسویه‌ها
+- قواعد گردش‌کار
+- استثناهای کنترلی
+- شمارش نقدی
+- تطبیق
+- داشبورد و گزارش مدیریتی
+- صفحه «کنترل‌های مستمر و استثناها»
 
 ## API v1
 - `/api/v1/petty-cash/funds`
 - `/api/v1/petty-cash/categories`
 - `/api/v1/petty-cash/expenses` (+ submit/approve/reject/post)
+- `/api/v1/petty-cash/expenses/{expense}/ai-*` (پیشنهاد هوشمند)
 - `/api/v1/petty-cash/replenishments` (+ submit/approve/reject/post)
 - `/api/v1/petty-cash/settlements` (+ submit/approve/post)
+- `/api/v1/petty-cash/ai/audit`
+- `/api/v1/petty-cash/ai/report`
 - `/api/v1/petty-cash/openapi`

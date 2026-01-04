@@ -2,8 +2,8 @@
 
 namespace Haida\FilamentWorkhub\Http\Controllers\Api\V1;
 
-use Haida\FilamentWorkhub\Http\Requests\StoreLabelRequest;
 use Haida\FilamentWorkhub\Http\Requests\LabelRequest;
+use Haida\FilamentWorkhub\Http\Requests\StoreLabelRequest;
 use Haida\FilamentWorkhub\Http\Resources\LabelResource;
 use Haida\FilamentWorkhub\Models\Label;
 use Illuminate\Http\JsonResponse;

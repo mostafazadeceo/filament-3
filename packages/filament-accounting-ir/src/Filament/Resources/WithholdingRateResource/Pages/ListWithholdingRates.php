@@ -2,10 +2,10 @@
 
 namespace Vendor\FilamentAccountingIr\Filament\Resources\WithholdingRateResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Vendor\FilamentAccountingIr\Filament\Resources\WithholdingRateResource;
 
-class ListWithholdingRates extends ListRecords
+class ListWithholdingRates extends ListRecordsWithCreate
 {
     protected static string $resource = WithholdingRateResource::class;
 }

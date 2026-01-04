@@ -1,0 +1,16 @@
+EXECUTING: /opt/android-sdk/platform-tools/adb -H localhost -P 5037 -s emulator-5554 shell mkdir -p "/sdcard/Android/media/com.haida.hubapp/additional_test_output"
+CURRENT_WORKING_DIRECTORY: /var/www/hub.haida.co/apps/mobile-android
+START_TIME: 2026-01-03 18:49:03.027
+START_TIME-NANOS: 2026-01-03 18:49:03.027506635
+ENVIRONMENT:
+ANDROID_SDK_HOME=/opt/android-sdk
+ANDROID_ADB=/opt/android-sdk/platform-tools/adb
+*****************************************
+STDOUT/STDERR BELOW
+===================
+
+===================
+END_TIME: 2026-01-03 18:49:03.101
+END_TIME-NANOS: 2026-01-03 18:49:03.101622539
+DURATION: 74ms
+EXIT CODE: 0

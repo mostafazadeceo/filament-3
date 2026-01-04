@@ -12,9 +12,7 @@ class CommentCreated implements WorkhubEvent
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public CommentDto $comment, public array $meta = [])
-    {
-    }
+    public function __construct(public CommentDto $comment, public array $meta = []) {}
 
     public function eventName(): string
     {

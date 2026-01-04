@@ -4,6 +4,25 @@ namespace Haida\FilamentWorkhub\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
+use Filamat\IamSuite\Support\TenantContext;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tab;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
 use Haida\FilamentWorkhub\Filament\Resources\WorkItemResource\Pages\CreateWorkItem;
 use Haida\FilamentWorkhub\Filament\Resources\WorkItemResource\Pages\EditWorkItem;
 use Haida\FilamentWorkhub\Filament\Resources\WorkItemResource\Pages\ListWorkItems;
@@ -15,29 +34,11 @@ use Haida\FilamentWorkhub\Filament\Resources\WorkItemResource\RelationManagers\D
 use Haida\FilamentWorkhub\Filament\Resources\WorkItemResource\RelationManagers\LinksRelationManager;
 use Haida\FilamentWorkhub\Filament\Resources\WorkItemResource\RelationManagers\TimeEntriesRelationManager;
 use Haida\FilamentWorkhub\Filament\Resources\WorkItemResource\RelationManagers\WatchersRelationManager;
+use Haida\FilamentWorkhub\Models\CustomField;
 use Haida\FilamentWorkhub\Models\Project;
 use Haida\FilamentWorkhub\Models\Status;
-use Haida\FilamentWorkhub\Models\CustomField;
 use Haida\FilamentWorkhub\Models\WorkItem;
 use Haida\FilamentWorkhub\Models\WorkType;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Filamat\IamSuite\Support\TenantContext;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Tab;
-use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Schema;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
 class WorkItemResource extends IamResource
@@ -216,7 +217,33 @@ class WorkItemResource extends IamResource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with(['project', 'status', 'assignee', 'workType', 'labels', 'customFieldValues.field']);
+            ->with([
+                'project',
+                'status',
+                'assignee',
+                'workType',
+                'labels',
+                'customFieldValues.field',
+                'aiFieldRuns',
+                'aiSummaries' => function (Builder $query) {
+                    $userId = auth()->id();
+                    $query->where(function (Builder $builder) use ($userId) {
+                        $builder->where('type', 'shared');
+
+                        if ($userId) {
+                            $builder->orWhere(function (Builder $inner) use ($userId) {
+                                $inner->where('type', 'ttl')
+                                    ->where('created_by', $userId);
+                            });
+                        }
+                    })
+                        ->where(function (Builder $builder) {
+                            $builder->whereNull('ttl_expires_at')
+                                ->orWhere('ttl_expires_at', '>', now());
+                        })
+                        ->latest();
+                },
+            ]);
     }
 
     public static function infolist(Schema $schema): Schema
@@ -247,6 +274,71 @@ class WorkItemResource extends IamResource
                                 Section::make('توضیحات')
                                     ->schema([
                                         TextEntry::make('description')->label('شرح')->columnSpanFull(),
+                                    ]),
+                            ]),
+                        Tab::make('هوش مصنوعی')
+                            ->schema([
+                                Section::make('خلاصه‌های هوش مصنوعی')
+                                    ->schema([
+                                        RepeatableEntry::make('aiSummaries')
+                                            ->label('خلاصه‌ها')
+                                            ->schema([
+                                                TextEntry::make('summary_json')
+                                                    ->label('نوع خلاصه')
+                                                    ->formatStateUsing(fn ($state) => data_get($state, 'kind', 'summary')),
+                                                TextEntry::make('type')->label('نوع ذخیره'),
+                                                TextEntry::make('provider')->label('ارائه‌دهنده'),
+                                                TextEntry::make('created_at')->label('ایجاد'),
+                                                TextEntry::make('summary_json')
+                                                    ->label('متن خلاصه')
+                                                    ->columnSpanFull()
+                                                    ->markdown()
+                                                    ->formatStateUsing(function ($state) {
+                                                        $sections = (array) data_get($state, 'sections', []);
+                                                        if ($sections === []) {
+                                                            return (string) data_get($state, 'text', '');
+                                                        }
+
+                                                        $chunks = [];
+                                                        foreach ($sections as $title => $items) {
+                                                            $lines = array_map(fn ($item) => '- '.(string) $item, (array) $items);
+                                                            $chunks[] = '### '.$title."\n".implode("\n", $lines);
+                                                        }
+
+                                                        return implode("\n\n", $chunks);
+                                                    })
+                                                    ->copyable(),
+                                            ])
+                                            ->columns(4)
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->columns(1),
+                                Section::make('فیلدهای هوش مصنوعی')
+                                    ->schema([
+                                        RepeatableEntry::make('ai_fields')
+                                            ->label('فیلدها')
+                                            ->state(fn (WorkItem $record) => static::aiFieldSnapshot($record))
+                                            ->schema([
+                                                TextEntry::make('name')->label('نام فیلد'),
+                                                TextEntry::make('key')->label('کلید'),
+                                                TextEntry::make('status')->label('وضعیت'),
+                                                TextEntry::make('last_run_at')->label('آخرین اجرا'),
+                                                TextEntry::make('value')
+                                                    ->label('خروجی')
+                                                    ->columnSpanFull()
+                                                    ->markdown()
+                                                    ->copyable(),
+                                            ])
+                                            ->columns(4)
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->columns(1),
+                                Section::make('راهنما')
+                                    ->schema([
+                                        TextEntry::make('ai_help')
+                                            ->label('نکته')
+                                            ->state('برای تولید خلاصه‌ها و فیلدهای هوش مصنوعی از دکمه‌های بالای صفحه استفاده کنید.')
+                                            ->columnSpanFull(),
                                     ]),
                             ]),
                     ]),
@@ -301,12 +393,68 @@ class WorkItemResource extends IamResource
                 'boolean' => Toggle::make($name),
                 'select' => Select::make($name)->options((array) ($field->settings['options'] ?? [])),
                 'multi_select' => Select::make($name)->multiple()->options((array) ($field->settings['options'] ?? [])),
+                'ai_field' => Textarea::make($name)
+                    ->rows(3)
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->formatStateUsing(fn ($state) => is_array($state)
+                        ? json_encode($state, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+                        : (string) $state)
+                    ->helperText('این مقدار توسط هوش مصنوعی تولید می‌شود.'),
                 default => TextInput::make($name),
             };
 
             return $component
                 ->label($field->name)
-                ->required((bool) $field->is_required);
+                ->required((bool) $field->is_required && $field->type !== 'ai_field');
         })->values()->all();
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    protected static function aiFieldSnapshot(WorkItem $record): array
+    {
+        $fields = CustomField::query()
+            ->where('scope', 'work_item')
+            ->where('type', 'ai_field')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
+
+        if ($fields->isEmpty()) {
+            return [];
+        }
+
+        $values = $record->customFieldValues->keyBy('field_id');
+        $latestRuns = $record->aiFieldRuns
+            ->sortByDesc('created_at')
+            ->groupBy('field_id');
+
+        return $fields->map(function (CustomField $field) use ($values, $latestRuns) {
+            $value = $values->get($field->getKey())?->value;
+            $run = $latestRuns->get($field->getKey())?->first();
+
+            return [
+                'name' => $field->name,
+                'key' => $field->key,
+                'status' => $run ? 'تولید شده' : 'در انتظار',
+                'last_run_at' => $run?->created_at?->toDateTimeString(),
+                'value' => static::formatAiFieldValue($value),
+            ];
+        })->values()->all();
+    }
+
+    protected static function formatAiFieldValue(mixed $value): string
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        if (is_array($value)) {
+            return (string) json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+
+        return (string) $value;
     }
 }

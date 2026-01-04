@@ -1,0 +1,305 @@
+# SPEC — filament-accounting-ir
+
+## معرفی
+- پکیج: vendor/filament-accounting-ir
+- توضیح: افزونه جامع حسابداری ایران برای Filament v4 با پشتیبانی چندشرکتی و چندشعبه‌ای.
+- Service Provider: Vendor\FilamentAccountingIr\FilamentAccountingIrServiceProvider
+- Filament Plugin: Vendor\FilamentAccountingIr\FilamentAccountingIrPlugin (id: accounting-ir)
+
+## دامنه و قابلیت‌ها
+- مدل‌ها:
+- AccountPlan.php
+- AccountType.php
+- AccountingBranch.php
+- AccountingCompany.php
+- AccountingCompanySetting.php
+- ChartAccount.php
+- Cheque.php
+- ChequeEvent.php
+- Contract.php
+- DepreciationEntry.php
+- DepreciationSchedule.php
+- Dimension.php
+- DimensionValue.php
+- EInvoice.php
+- EInvoiceLine.php
+- EInvoiceProvider.php
+- EInvoiceStatusLog.php
+- EInvoiceSubmission.php
+- Employee.php
+- FiscalPeriod.php
+- FiscalYear.php
+- FixedAsset.php
+- IntegrationConnector.php
+- IntegrationLog.php
+- IntegrationMapping.php
+- IntegrationRun.php
+- InventoryDoc.php
+- InventoryDocLine.php
+- InventoryItem.php
+- InventoryLocation.php
+- InventoryWarehouse.php
+- JournalApproval.php
+- JournalAttachment.php
+- JournalEntry.php
+- JournalLine.php
+- KeyMaterial.php
+- Party.php
+- PayrollItem.php
+- PayrollRun.php
+- PayrollSlip.php
+- PayrollTable.php
+- ProductService.php
+- Project.php
+- PurchaseInvoice.php
+- PurchaseInvoiceLine.php
+- PurchasePayment.php
+- SalesAllocation.php
+- SalesInvoice.php
+- SalesInvoiceLine.php
+- SalesPayment.php
+- SeasonalReport.php
+- SeasonalReportLine.php
+- SeasonalSubmission.php
+- StockMove.php
+- TaxCategory.php
+- TaxRate.php
+- TaxRateVersion.php
+- TreasuryAccount.php
+- TreasuryTransaction.php
+- Uom.php
+- VatPeriod.php
+- VatReport.php
+- VatReportLine.php
+- WithholdingItem.php
+- WithholdingRate.php
+- منابع Filament:
+- src/Filament/Resources/AccountPlanResource.php
+- src/Filament/Resources/AccountingBranchResource.php
+- src/Filament/Resources/AccountingCompanyResource.php
+- src/Filament/Resources/AccountingCompanySettingResource.php
+- src/Filament/Resources/ChartAccountResource.php
+- src/Filament/Resources/ChequeResource.php
+- src/Filament/Resources/ContractResource.php
+- src/Filament/Resources/DimensionResource.php
+- src/Filament/Resources/EInvoiceProviderResource.php
+- src/Filament/Resources/EInvoiceResource.php
+- src/Filament/Resources/EmployeeResource.php
+- src/Filament/Resources/FiscalPeriodResource.php
+- src/Filament/Resources/FiscalYearResource.php
+- src/Filament/Resources/FixedAssetResource.php
+- src/Filament/Resources/IntegrationConnectorResource.php
+- src/Filament/Resources/InventoryDocResource.php
+- src/Filament/Resources/InventoryItemResource.php
+- src/Filament/Resources/InventoryWarehouseResource.php
+- src/Filament/Resources/JournalEntryResource.php
+- src/Filament/Resources/KeyMaterialResource.php
+- src/Filament/Resources/PartyResource.php
+- src/Filament/Resources/PayrollRunResource.php
+- src/Filament/Resources/PayrollTableResource.php
+- src/Filament/Resources/ProductServiceResource.php
+- src/Filament/Resources/ProjectResource.php
+- src/Filament/Resources/PurchaseInvoiceResource.php
+- src/Filament/Resources/SalesInvoiceResource.php
+- src/Filament/Resources/SeasonalReportResource.php
+- src/Filament/Resources/TaxCategoryResource.php
+- src/Filament/Resources/TaxRateResource.php
+- src/Filament/Resources/TreasuryAccountResource.php
+- src/Filament/Resources/TreasuryTransactionResource.php
+- src/Filament/Resources/UomResource.php
+- src/Filament/Resources/VatPeriodResource.php
+- src/Filament/Resources/WithholdingRateResource.php
+- کنترلرها/API:
+- Api/V1/AccountPlanController.php
+- Api/V1/AccountingBranchController.php
+- Api/V1/AccountingCompanyController.php
+- Api/V1/AccountingCompanySettingController.php
+- Api/V1/AccountingReportController.php
+- Api/V1/ApiController.php
+- Api/V1/ChartAccountController.php
+- Api/V1/ChequeController.php
+- Api/V1/ContractController.php
+- Api/V1/DimensionController.php
+- Api/V1/EInvoiceController.php
+- Api/V1/EInvoiceProviderController.php
+- Api/V1/EmployeeController.php
+- Api/V1/FiscalPeriodController.php
+- Api/V1/FiscalYearController.php
+- Api/V1/FixedAssetController.php
+- Api/V1/IntegrationConnectorController.php
+- Api/V1/InventoryDocController.php
+- Api/V1/InventoryItemController.php
+- Api/V1/InventoryWarehouseController.php
+- Api/V1/JournalEntryController.php
+- Api/V1/KeyMaterialController.php
+- Api/V1/OpenApiController.php
+- Api/V1/PartyController.php
+- Api/V1/PayrollRunController.php
+- Api/V1/PayrollTableController.php
+- Api/V1/ProductServiceController.php
+- Api/V1/ProjectController.php
+- Api/V1/PurchaseInvoiceController.php
+- Api/V1/SalesInvoiceController.php
+- Api/V1/SeasonalReportController.php
+- Api/V1/TaxCategoryController.php
+- Api/V1/TaxRateController.php
+- Api/V1/TreasuryAccountController.php
+- Api/V1/TreasuryTransactionController.php
+- Api/V1/UomController.php
+- Api/V1/VatPeriodController.php
+- Api/V1/VatReportController.php
+- Api/V1/WithholdingRateController.php
+- Controller.php
+- Jobs/Queue:
+- RunIntegrationJob.php
+- SendEInvoiceJob.php
+- Policyها:
+- AccountPlanPolicy.php
+- AccountingBranchPolicy.php
+- AccountingCompanyPolicy.php
+- AccountingCompanySettingPolicy.php
+- ChartAccountPolicy.php
+- ChequePolicy.php
+- ContractPolicy.php
+- DimensionPolicy.php
+- EInvoicePolicy.php
+- EInvoiceProviderPolicy.php
+- EmployeePolicy.php
+- FiscalPeriodPolicy.php
+- FiscalYearPolicy.php
+- FixedAssetPolicy.php
+- IntegrationConnectorPolicy.php
+- InventoryDocPolicy.php
+- InventoryItemPolicy.php
+- InventoryWarehousePolicy.php
+- JournalEntryPolicy.php
+- KeyMaterialPolicy.php
+- PartyPolicy.php
+- PayrollRunPolicy.php
+- PayrollTablePolicy.php
+- ProductServicePolicy.php
+- ProjectPolicy.php
+- PurchaseInvoicePolicy.php
+- SalesInvoicePolicy.php
+- SeasonalReportPolicy.php
+- TaxCategoryPolicy.php
+- TaxRatePolicy.php
+- TreasuryAccountPolicy.php
+- TreasuryTransactionPolicy.php
+- UomPolicy.php
+- VatPeriodPolicy.php
+- VatReportPolicy.php
+- WithholdingRatePolicy.php
+
+## Tenancy و IAM
+- BelongsToTenant در کد: بله
+- TenantContext در کد: بله
+- IamAuthorization::allows در کد: بله
+- Capability Registry: بله
+- Scopeها (API): accounting.einvoice.send, accounting.integration.manage, accounting.inventory.post, accounting.journal.approve, accounting.journal.post, accounting.journal.reverse, accounting.journal.submit, accounting.purchase.manage, accounting.report.view, accounting.sales.manage, accounting.vat_report.manage, accounting.view
+
+## مدل داده
+- Migrations:
+- 2025_12_28_000001_create_accounting_ir_core_tables.php
+- 2025_12_28_000002_create_accounting_ir_chart_tables.php
+- 2025_12_28_000003_create_accounting_ir_journal_tables.php
+- 2025_12_28_000004_create_accounting_ir_party_tables.php
+- 2025_12_28_000005_create_accounting_ir_treasury_tables.php
+- 2025_12_28_000006_create_accounting_ir_sales_tables.php
+- 2025_12_28_000007_create_accounting_ir_purchase_tables.php
+- 2025_12_28_000008_create_accounting_ir_inventory_tables.php
+- 2025_12_28_000009_create_accounting_ir_fixed_asset_tables.php
+- 2025_12_28_000010_create_accounting_ir_payroll_tables.php
+- 2025_12_28_000011_create_accounting_ir_project_tables.php
+- 2025_12_28_000012_create_accounting_ir_tax_tables.php
+- 2025_12_28_000013_create_accounting_ir_e_invoice_tables.php
+- 2025_12_28_000014_create_accounting_ir_integration_tables.php
+- 2025_12_28_000015_create_accounting_ir_audit_tables.php
+- 2025_12_28_000016_create_accounting_ir_company_settings_table.php
+- جدول‌ها:
+- accounting_ir_account_plans
+- accounting_ir_account_types
+- accounting_ir_audit_events
+- accounting_ir_branches
+- accounting_ir_chart_accounts
+- accounting_ir_cheque_events
+- accounting_ir_cheques
+- accounting_ir_companies
+- accounting_ir_company_settings
+- accounting_ir_contract_statements
+- accounting_ir_contracts
+- accounting_ir_depreciation_entries
+- accounting_ir_depreciation_schedules
+- accounting_ir_dimension_values
+- accounting_ir_dimensions
+- accounting_ir_e_invoice_lines
+- accounting_ir_e_invoice_providers
+- accounting_ir_e_invoice_status_logs
+- accounting_ir_e_invoice_submissions
+- accounting_ir_e_invoices
+- accounting_ir_employees
+- accounting_ir_fiscal_periods
+- accounting_ir_fiscal_years
+- accounting_ir_fixed_assets
+- accounting_ir_integration_connectors
+- accounting_ir_integration_logs
+- accounting_ir_integration_mappings
+- accounting_ir_integration_runs
+- accounting_ir_inventory_doc_lines
+- accounting_ir_inventory_docs
+- accounting_ir_inventory_items
+- accounting_ir_inventory_locations
+- accounting_ir_inventory_warehouses
+- accounting_ir_journal_approvals
+- accounting_ir_journal_attachments
+- accounting_ir_journal_entries
+- accounting_ir_journal_lines
+- accounting_ir_key_materials
+- accounting_ir_parties
+- accounting_ir_party_addresses
+- accounting_ir_party_tax_profiles
+- accounting_ir_payroll_items
+- accounting_ir_payroll_runs
+- accounting_ir_payroll_slips
+- accounting_ir_payroll_tables
+- accounting_ir_products_services
+- accounting_ir_projects
+- accounting_ir_purchase_invoice_lines
+- accounting_ir_purchase_invoices
+- accounting_ir_purchase_payments
+- accounting_ir_retentions
+- accounting_ir_sales_allocations
+- accounting_ir_sales_invoice_lines
+- accounting_ir_sales_invoices
+- accounting_ir_sales_payments
+- accounting_ir_seasonal_report_lines
+- accounting_ir_seasonal_reports
+- accounting_ir_seasonal_submissions
+- accounting_ir_stock_moves
+- accounting_ir_tax_categories
+- accounting_ir_tax_rate_versions
+- accounting_ir_tax_rates
+- accounting_ir_treasury_accounts
+- accounting_ir_treasury_transactions
+- accounting_ir_uoms
+- accounting_ir_vat_periods
+- accounting_ir_vat_report_lines
+- accounting_ir_vat_reports
+- accounting_ir_withholding_items
+- accounting_ir_withholding_rates
+- ایندکس‌ها: دارای ایندکس در مهاجرت‌ها
+
+## API
+- مسیر پایه: v1
+- OpenAPI: دارای مسیر /openapi
+- جزئیات: `docs/filament-accounting-ir/API.md`
+
+## تنظیمات
+- فایل‌های کانفیگ:
+- packages/filament-accounting-ir/config/filament-accounting-ir.php
+- کلیدهای env مرتبط:
+- ندارد
+
+## استقرار در پنل‌ها
+- Admin Panel: ثبت شده در AdminPanelProvider
+- Tenant Panel: ثبت شده در TenantPanelProvider

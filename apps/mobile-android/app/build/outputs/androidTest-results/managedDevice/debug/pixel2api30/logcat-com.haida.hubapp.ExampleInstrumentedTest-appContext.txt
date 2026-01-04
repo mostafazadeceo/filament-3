@@ -1,0 +1,2 @@
+01-03 22:19:11.687  1728  1749 I TestRunner: started: appContext(com.haida.hubapp.ExampleInstrumentedTest)
+01-03 22:19:11.726  1728  1749 I TestRunner: finished: appContext(com.haida.hubapp.ExampleInstrumentedTest)

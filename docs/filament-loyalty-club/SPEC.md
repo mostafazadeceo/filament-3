@@ -1,0 +1,176 @@
+# SPEC — filament-loyalty-club
+
+## معرفی
+- پکیج: haida/filament-loyalty-club
+- توضیح: Customer Loyalty Club module for Filament v4.
+- Service Provider: Haida\FilamentLoyaltyClub\FilamentLoyaltyClubServiceProvider
+- Filament Plugin: Haida\FilamentLoyaltyClub\FilamentLoyaltyClubPlugin (id: filament-loyalty-club)
+
+## دامنه و قابلیت‌ها
+- مدل‌ها:
+- LoyaltyAuditEvent.php
+- LoyaltyBadge.php
+- LoyaltyBadgeAward.php
+- LoyaltyCampaign.php
+- LoyaltyCampaignDispatch.php
+- LoyaltyCampaignVariant.php
+- LoyaltyCoupon.php
+- LoyaltyCouponRedemption.php
+- LoyaltyCustomer.php
+- LoyaltyCustomerMetric.php
+- LoyaltyCustomerSegment.php
+- LoyaltyCustomerTier.php
+- LoyaltyDonationPledge.php
+- LoyaltyEvent.php
+- LoyaltyFraudSignal.php
+- LoyaltyMission.php
+- LoyaltyMissionProgress.php
+- LoyaltyPointsBucket.php
+- LoyaltyPointsConsumption.php
+- LoyaltyPointsRule.php
+- LoyaltyReferral.php
+- LoyaltyReferralProgram.php
+- LoyaltyReward.php
+- LoyaltyRewardRedemption.php
+- LoyaltySegment.php
+- LoyaltyTier.php
+- LoyaltyWalletAccount.php
+- LoyaltyWalletLedger.php
+- منابع Filament:
+- src/Filament/Resources/LoyaltyAuditEventResource.php
+- src/Filament/Resources/LoyaltyBadgeResource.php
+- src/Filament/Resources/LoyaltyCampaignResource.php
+- src/Filament/Resources/LoyaltyCouponResource.php
+- src/Filament/Resources/LoyaltyCustomerResource.php
+- src/Filament/Resources/LoyaltyFraudSignalResource.php
+- src/Filament/Resources/LoyaltyMissionResource.php
+- src/Filament/Resources/LoyaltyPointsRuleResource.php
+- src/Filament/Resources/LoyaltyReferralProgramResource.php
+- src/Filament/Resources/LoyaltyReferralResource.php
+- src/Filament/Resources/LoyaltyRewardResource.php
+- src/Filament/Resources/LoyaltySegmentResource.php
+- src/Filament/Resources/LoyaltyTierResource.php
+- کنترلرها/API:
+- Api/V1/ApiController.php
+- Api/V1/CampaignController.php
+- Api/V1/CouponController.php
+- Api/V1/CustomerController.php
+- Api/V1/EventController.php
+- Api/V1/MissionController.php
+- Api/V1/OpenApiController.php
+- Api/V1/ReferralController.php
+- Api/V1/RewardController.php
+- Jobs/Queue:
+- ندارد
+- Policyها:
+- LoyaltyAuditEventPolicy.php
+- LoyaltyBadgePolicy.php
+- LoyaltyCampaignPolicy.php
+- LoyaltyCouponPolicy.php
+- LoyaltyCustomerPolicy.php
+- LoyaltyEventPolicy.php
+- LoyaltyFraudSignalPolicy.php
+- LoyaltyMissionPolicy.php
+- LoyaltyPointsRulePolicy.php
+- LoyaltyReferralPolicy.php
+- LoyaltyReferralProgramPolicy.php
+- LoyaltyRewardPolicy.php
+- LoyaltySegmentPolicy.php
+- LoyaltyTierPolicy.php
+
+## Tenancy و IAM
+- BelongsToTenant در کد: بله
+- TenantContext در کد: بله
+- IamAuthorization::allows در کد: بله
+- Capability Registry: بله
+- Scopeها (API): loyalty.campaign.view, loyalty.coupon.redeem, loyalty.coupon.view, loyalty.customer.manage, loyalty.customer.view, loyalty.event.ingest, loyalty.mission.view, loyalty.referral.manage, loyalty.referral.view, loyalty.reward.redeem, loyalty.reward.view, loyalty.view
+
+## مدل داده
+- Migrations:
+- 2026_01_05_000001_create_loyalty_core_tables.php
+- 2026_01_05_000002_create_loyalty_wallet_tables.php
+- 2026_01_05_000003_create_loyalty_reward_tables.php
+- 2026_01_05_000004_create_loyalty_referral_tables.php
+- 2026_01_05_000005_create_loyalty_gamification_tables.php
+- 2026_01_05_000006_create_loyalty_segment_campaign_tables.php
+- 2026_01_05_000007_create_loyalty_audit_fraud_tables.php
+- 2026_01_05_000008_create_loyalty_metrics_tables.php
+- 2026_01_05_000009_create_loyalty_donation_tables.php
+- جدول‌ها:
+- loyalty_audit_events
+- loyalty_badge_awards
+- loyalty_badges
+- loyalty_campaign_dispatches
+- loyalty_campaign_segments
+- loyalty_campaign_variants
+- loyalty_campaigns
+- loyalty_coupon_redemptions
+- loyalty_coupons
+- loyalty_customer_metrics
+- loyalty_customer_segments
+- loyalty_customer_tiers
+- loyalty_customers
+- loyalty_donation_pledges
+- loyalty_events
+- loyalty_fraud_signals
+- loyalty_mission_progress
+- loyalty_missions
+- loyalty_points_buckets
+- loyalty_points_consumptions
+- loyalty_points_rules
+- loyalty_referral_programs
+- loyalty_referrals
+- loyalty_reward_redemptions
+- loyalty_rewards
+- loyalty_segments
+- loyalty_tiers
+- loyalty_wallet_accounts
+- loyalty_wallet_ledgers
+- ایندکس‌ها: دارای ایندکس در مهاجرت‌ها
+
+## API
+- مسیر پایه: v1
+- OpenAPI: دارای مسیر /openapi
+- جزئیات: `docs/filament-loyalty-club/API.md`
+
+## تنظیمات
+- فایل‌های کانفیگ:
+- packages/filament-loyalty-club/config/filament-loyalty-club.php
+- کلیدهای env مرتبط:
+- LOYALTY_AI_ENABLED
+- LOYALTY_AI_PROVIDER
+- LOYALTY_API_RATE_LIMIT
+- LOYALTY_CAMPAIGN_PANEL
+- LOYALTY_CAMPAIGN_TRIGGER
+- LOYALTY_CASHBACK_ADAPTER
+- LOYALTY_CASHBACK_CURRENCY
+- LOYALTY_CASHBACK_ENABLED
+- LOYALTY_CASHBACK_FALLBACK_INTERNAL
+- LOYALTY_CHARITY_ENABLED
+- LOYALTY_EVENT_SOURCES
+- LOYALTY_LEADERBOARDS_ENABLED
+- LOYALTY_POINTS_CAP_DAILY
+- LOYALTY_POINTS_CAP_WEEKLY
+- LOYALTY_POINTS_EXPIRY_DAYS
+- LOYALTY_POINTS_EXPIRY_NOTIFY_DAYS
+- LOYALTY_POINTS_EXPIRY_STRATEGY
+- LOYALTY_POINTS_TRANSFER
+- LOYALTY_REDACT_LOGS
+- LOYALTY_REFERRAL_BLOCK_SELF
+- LOYALTY_REFERRAL_DEVICE_UNIQUENESS
+- LOYALTY_REFERRAL_IDENTITY_UNIQUENESS
+- LOYALTY_REFERRAL_MAX_PER_REFERRER
+- LOYALTY_REFERRAL_MIN_DAYS_SINCE_SIGNUP
+- LOYALTY_REFERRAL_PERIOD_DAYS
+- LOYALTY_REFERRAL_WAIT_DAYS
+- LOYALTY_RETENTION_AUDIT_DAYS
+- LOYALTY_RETENTION_CAMPAIGN_DAYS
+- LOYALTY_RETENTION_EVENTS_DAYS
+- LOYALTY_RETENTION_FRAUD_DAYS
+- LOYALTY_STORE_IP
+- LOYALTY_TIER_CYCLE_MONTHS
+- LOYALTY_TIER_RESET_STRATEGY
+
+## استقرار در پنل‌ها
+- Admin Panel: ثبت شده در AdminPanelProvider
+- Tenant Panel: ثبت شده در TenantPanelProvider

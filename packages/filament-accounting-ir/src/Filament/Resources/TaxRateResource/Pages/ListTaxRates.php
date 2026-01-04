@@ -2,10 +2,10 @@
 
 namespace Vendor\FilamentAccountingIr\Filament\Resources\TaxRateResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Vendor\FilamentAccountingIr\Filament\Resources\TaxRateResource;
 
-class ListTaxRates extends ListRecords
+class ListTaxRates extends ListRecordsWithCreate
 {
     protected static string $resource = TaxRateResource::class;
 }

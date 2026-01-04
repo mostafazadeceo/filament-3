@@ -1,0 +1,149 @@
+erDiagram
+    organizations ||--o{ tenants : owns
+    tenants ||--o{ sites : has
+    sites ||--o{ site_domains : has
+    sites ||--o{ content_cms_pages : has
+    sites ||--o{ blog_posts : has
+    sites ||--o{ commerce_orders : has
+    commerce_orders ||--o{ commerce_order_items : contains
+    commerce_orders ||--o{ commerce_order_payments : has
+    commerce_catalog_products ||--o{ commerce_order_items : references
+
+    tenants ||--o{ payment_gateway_connections : has
+    tenants ||--o{ payment_intents : has
+    tenants ||--o{ providers_core_job_logs : runs
+    tenants ||--o{ esim_go_connections : has
+    tenants ||--o{ esim_go_orders : has
+    commerce_orders ||--o{ esim_go_orders : has
+    esim_go_orders ||--o{ esim_go_esims : has
+
+    %% payment_gateway_connections is referenced via provider_key/meta (no FK)
+
+    organizations {
+        bigint id PK
+        string name
+    }
+
+    tenants {
+        bigint id PK
+        bigint organization_id FK
+        string name
+        string slug
+    }
+
+    sites {
+        bigint id PK
+        bigint tenant_id FK
+        string slug
+        string status
+        string theme_key
+    }
+
+    site_domains {
+        bigint id PK
+        bigint site_id FK
+        string host
+        string type
+        string status
+        timestamp verified_at
+        string tls_status
+        timestamp tls_issued_at
+        timestamp tls_expires_at
+    }
+
+    content_cms_pages {
+        bigint id PK
+        bigint tenant_id FK
+        bigint site_id FK
+        string slug
+        string status
+    }
+
+    blog_posts {
+        bigint id PK
+        bigint tenant_id FK
+        bigint site_id FK
+        string slug
+        string status
+    }
+
+    commerce_catalog_products {
+        bigint id PK
+        bigint tenant_id FK
+        string name
+        string status
+    }
+
+    commerce_orders {
+        bigint id PK
+        bigint tenant_id FK
+        bigint site_id FK
+        string status
+        string payment_status
+    }
+
+    commerce_order_items {
+        bigint id PK
+        bigint tenant_id FK
+        bigint order_id FK
+        bigint product_id FK
+        decimal quantity
+        decimal unit_price
+    }
+
+    commerce_order_payments {
+        bigint id PK
+        bigint tenant_id FK
+        bigint order_id FK
+        string method
+        string status
+    }
+
+    payment_gateway_connections {
+        bigint id PK
+        bigint tenant_id FK
+        string provider_key
+        string environment
+        bool is_active
+    }
+
+    payment_intents {
+        bigint id PK
+        bigint tenant_id FK
+        string provider_key
+        string status
+        string idempotency_key
+        string provider_reference
+        string redirect_url
+        decimal amount
+    }
+
+    providers_core_job_logs {
+        bigint id PK
+        bigint tenant_id FK
+        string provider_key
+        string job_type
+        string status
+    }
+
+    esim_go_connections {
+        bigint id PK
+        bigint tenant_id FK
+        string name
+        string status
+    }
+
+    esim_go_orders {
+        bigint id PK
+        bigint tenant_id FK
+        bigint commerce_order_id FK
+        string status
+    }
+
+    esim_go_esims {
+        bigint id PK
+        bigint tenant_id FK
+        bigint order_id FK
+        string iccid
+        string state
+    }

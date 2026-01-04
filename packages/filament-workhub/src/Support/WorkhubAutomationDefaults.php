@@ -5,7 +5,6 @@ namespace Haida\FilamentWorkhub\Support;
 use Haida\FilamentWorkhub\Models\Comment;
 use Haida\FilamentWorkhub\Models\Label;
 use Haida\FilamentWorkhub\Models\Status;
-use Haida\FilamentWorkhub\Models\WorkItem;
 use Haida\FilamentWorkhub\Services\WorkflowTransitionService;
 use Haida\FilamentWorkhub\Services\WorkhubAuditService;
 use Illuminate\Support\Arr;

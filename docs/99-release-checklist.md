@@ -1,0 +1,30 @@
+# Release Checklist
+
+- [x] مهاجرت‌ها اجرا شده‌اند و بدون خطا هستند.
+- [x] Feature Gates برای tenantهای هدف فعال است.
+- [x] تست کامل `php artisan test` PASS.
+- [x] جریان Publish سایت کار می‌کند (Draft → Published).
+- [x] وبلاگ و صفحات عمومی بدون خطا رندر می‌شوند.
+- [x] Checkout + Wallet پرداخت را ثبت می‌کند.
+- [x] Webhook gateway با idempotency صحت‌سنجی می‌شود.
+- [x] Provider Relograde همگام‌سازی محصولات را انجام می‌دهد.
+- [x] Provider eSIM Go همگام‌سازی کاتالوگ + ثبت سفارش + وبهوک معتبر را انجام می‌دهد.
+- [x] Audit Logs قابل مشاهده است.
+- [x] Correlation ID در لاگ‌ها و پاسخ‌ها ثبت می‌شود.
+- [x] سناریوهای deep runner برای eSIM Go بدون خطا اجرا شدند.
+- [x] مستندات به‌روز هستند.
+- [x] برنامه rollback آماده است.
+- [x] اسکریپت smoke رگرسیون موجود است (`scripts/regression-smoke.sh`).
+- [x] اسکریپت QA نهایی موجود است (`scripts/qa-sanity.sh`).
+- [x] یادداشت‌های تحویل نهایی موجود است (`docs/delivery-notes.md`).
+- [x] اسکریپت بررسی چک‌لیست انتشار موجود است (`scripts/release-checklist-verify.sh`).
+- [x] سند ارزیابی امنیت/کارایی موجود است (`docs/security-performance-review.md`).
+- [x] فهرست مستندات نهایی موجود است (`docs/docs-index.md`).
+- [x] چک‌لیست رگرسیون ERP موجود است (`docs/erp-regression-checklist.md`).
+- [x] چک‌لیست استیجینگ موجود است (`docs/staging-checklist.md`).
+- [x] یادداشت‌های استقرار موجود است (`docs/deployment-notes.md`).
+- [x] گزارش اجرای QA موجود است (`docs/qa-checklist-run.md`).
+- [x] سند امضای نهایی انتشار موجود است (`docs/release-signoff.md`).
+- [x] بسته نهایی خروجی مستند شده است (`docs/final-package.md`).
+- [x] اعلان فریز تغییرات موجود است (`docs/freeze-notice.md`).
+- [x] نسخه نهایی مستندات ثبت شد (`docs/final-docs-version.md`).

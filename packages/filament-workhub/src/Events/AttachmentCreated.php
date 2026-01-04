@@ -12,9 +12,7 @@ class AttachmentCreated implements WorkhubEvent
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public AttachmentDto $attachment, public array $meta = [])
-    {
-    }
+    public function __construct(public AttachmentDto $attachment, public array $meta = []) {}
 
     public function eventName(): string
     {

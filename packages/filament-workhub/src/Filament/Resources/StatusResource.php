@@ -4,11 +4,6 @@ namespace Haida\FilamentWorkhub\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
-use Haida\FilamentWorkhub\Filament\Resources\StatusResource\Pages\CreateStatus;
-use Haida\FilamentWorkhub\Filament\Resources\StatusResource\Pages\EditStatus;
-use Haida\FilamentWorkhub\Filament\Resources\StatusResource\Pages\ListStatuses;
-use Haida\FilamentWorkhub\Models\Status;
-use Haida\FilamentWorkhub\Models\Workflow;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -16,6 +11,11 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Haida\FilamentWorkhub\Filament\Resources\StatusResource\Pages\CreateStatus;
+use Haida\FilamentWorkhub\Filament\Resources\StatusResource\Pages\EditStatus;
+use Haida\FilamentWorkhub\Filament\Resources\StatusResource\Pages\ListStatuses;
+use Haida\FilamentWorkhub\Models\Status;
+use Haida\FilamentWorkhub\Models\Workflow;
 
 class StatusResource extends IamResource
 {

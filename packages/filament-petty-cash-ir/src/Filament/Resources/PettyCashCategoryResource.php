@@ -4,6 +4,7 @@ namespace Haida\FilamentPettyCashIr\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
+use Filamat\IamSuite\Support\TenantContext;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -15,6 +16,7 @@ use Haida\FilamentPettyCashIr\Filament\Resources\PettyCashCategoryResource\Pages
 use Haida\FilamentPettyCashIr\Filament\Resources\PettyCashCategoryResource\Pages\ListPettyCashCategories;
 use Haida\FilamentPettyCashIr\Models\PettyCashCategory;
 use Haida\FilamentPettyCashIr\Support\PettyCashStatuses;
+use Illuminate\Database\Eloquent\Builder;
 use Vendor\FilamentAccountingIr\Models\AccountingCompany;
 use Vendor\FilamentAccountingIr\Models\ChartAccount;
 
@@ -43,7 +45,14 @@ class PettyCashCategoryResource extends IamResource
                 static::tenantSelect(),
                 Select::make('company_id')
                     ->label('شرکت')
-                    ->options(fn () => AccountingCompany::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return AccountingCompany::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->required(),
                 TextInput::make('name')
@@ -59,7 +68,14 @@ class PettyCashCategoryResource extends IamResource
                     ->default(PettyCashStatuses::FUND_ACTIVE),
                 Select::make('accounting_account_id')
                     ->label('حساب هزینه')
-                    ->options(fn () => ChartAccount::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return ChartAccount::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->nullable(),
                 Textarea::make('description')
@@ -87,5 +103,10 @@ class PettyCashCategoryResource extends IamResource
             'create' => CreatePettyCashCategory::route('/create'),
             'edit' => EditPettyCashCategory::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return static::scopeByTenant(parent::getEloquentQuery());
     }
 }

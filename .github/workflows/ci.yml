@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pdo_sqlite
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-scripts
+
+      - name: Prepare app key
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Package discover
+        run: php artisan package:discover --ansi
+
+      - name: Run tests
+        run: php artisan test
+
+      - name: Demo e2e
+        run: DB_CONNECTION=sqlite DB_DATABASE=/tmp/haida_demo.sqlite CACHE_STORE=array QUEUE_CONNECTION=sync ./scripts/demo-e2e.sh
+
+      - name: Deep scenario runner
+        run: DB_CONNECTION=sqlite DB_DATABASE=/tmp/haida_deep.sqlite CACHE_STORE=array QUEUE_CONNECTION=sync php scripts/deep_scenario_runner.php

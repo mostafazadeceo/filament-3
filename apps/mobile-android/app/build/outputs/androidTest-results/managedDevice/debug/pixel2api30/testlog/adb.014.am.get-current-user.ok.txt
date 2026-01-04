@@ -1,0 +1,17 @@
+EXECUTING: /opt/android-sdk/platform-tools/adb -H localhost -P 5037 -s emulator-5554 shell am get-current-user
+CURRENT_WORKING_DIRECTORY: /var/www/hub.haida.co/apps/mobile-android
+START_TIME: 2026-01-03 18:48:57.306
+START_TIME-NANOS: 2026-01-03 18:48:57.306626410
+ENVIRONMENT:
+ANDROID_SDK_HOME=/opt/android-sdk
+ANDROID_ADB=/opt/android-sdk/platform-tools/adb
+*****************************************
+STDOUT/STDERR BELOW
+===================
+0
+
+===================
+END_TIME: 2026-01-03 18:48:57.489
+END_TIME-NANOS: 2026-01-03 18:48:57.489233770
+DURATION: 182ms
+EXIT CODE: 0

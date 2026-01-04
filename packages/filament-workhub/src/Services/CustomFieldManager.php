@@ -37,6 +37,7 @@ class CustomFieldManager
             $field = $fields->get($key);
             if (! $field) {
                 $errors[$key] = 'فیلد سفارشی معتبر نیست.';
+
                 continue;
             }
 
@@ -44,6 +45,7 @@ class CustomFieldManager
 
             if ($error) {
                 $errors[$key] = $error;
+
                 continue;
             }
 
@@ -83,6 +85,7 @@ class CustomFieldManager
                     ->where('field_id', $field->getKey())
                     ->where('work_item_id', $workItem->getKey())
                     ->delete();
+
                 continue;
             }
 
@@ -151,6 +154,18 @@ class CustomFieldManager
                 $filtered = $allowed === [] ? $value : array_values(array_intersect($value, $allowed));
 
                 return [$filtered, null];
+
+            case 'ai_field':
+                if (is_string($value)) {
+                    $decoded = json_decode($value, true);
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        return [$decoded, null];
+                    }
+
+                    return [$value, null];
+                }
+
+                return [$value, null];
 
             case 'textarea':
             case 'text':

@@ -1,0 +1,40 @@
+# Assumptions (PR-001)
+
+- PR workflow is simulated in `/docs/prs/` (no branch/PR created in this phase).
+- Production DB is MySQL (based on recent log evidence), while config defaults to sqlite; all new work must stay DB-agnostic.
+- Default queue, cache, and session drivers are `database` unless environment overrides.
+- No existing Site OS (site/domain/page builder) or domain/host routing logic exists; new capabilities will be added as packages.
+- Relograde provider exists and will be treated as the reference provider adapter to extend.
+- Current core versions: Laravel v12.43.1, Filament v4.3.1, PHP runtime 8.4.15.
+- Tailwind v4 + Vite v7 is the active asset pipeline.
+- Multi-panel setup is in place (admin + tenant); tenancy is enforced via IAM suite `TenantContext` and tenant-scoped models.
+- UI date display uses `app.display_timezone` (APP_DISPLAY_TIMEZONE) while storage remains UTC.
+- Platform core lifecycle tables use unprefixed names (`plugin_registry`, `plugin_migrations`, `tenant_plugins`) to match the PR-driven spec.
+- Site-level feature overrides are deferred until the Site Core package exists; PR-004 implements plan + tenant gates only.
+- Site domain records include a nullable `site_id` without a foreign key until the Site Core package introduces the sites table.
+- Module-level table prefixes will be aligned in a follow-up migration to comply with AGENTS.md (no data loss expected for new tables).
+- Site Builder Core uses unprefixed tables (`sites`, `site_brandings`, `site_publish_histories`) to align with site_domains naming.
+- Theme Engine publishes assets to `public/vendor/theme-engine` (optional, required for theme preview).
+- Page Builder stores templates in `page_builder_templates` and revisions in `page_builder_revisions` (unprefixed for now).
+- CMS pages use `content_cms_pages` and `content_cms_page_revisions` with home slug `home`.
+- Public site resolution falls back to the most recently published site when `SiteContext::getSiteId()` is null (tenant root subdomain).
+- CMS catch-all route excludes reserved slugs (default: `blog`) to prevent collisions with blog routes.
+- Blog tables use `blog_*` prefixes and public routes live under `/blog`.
+- Commerce catalog tables use `commerce_catalog_*` prefixes and products link optionally to accounting product/inventory tables.
+- Commerce checkout currently supports wallet payments only; gateway adapters and promo/tax/shipping engines are deferred.
+- Inventory reservation/stock decrement is not applied at checkout yet; the order events will be used for integration later.
+- Payments orchestrator ships with a dummy gateway adapter for webhook security tests; real providers will be added later.
+- Providers core logs allow nullable tenant_id to support existing global providers.
+- Relograde adapter uses default connection when no connection_id is provided.
+- Inventory sync for Relograde is currently marked unsupported and returns a failure result.
+- Observability فقط Correlation ID را مدیریت می‌کند و تغییرات middleware ندارد؛ هدر خروجی در رویداد RequestHandled اضافه می‌شود.
+- اسکریپت demo-e2e باید با متغیرهای محیطی SQLite اجرا شود تا به دیتابیس واقعی .env آسیب نزند.
+- تایید دامنه سفارشی با TXT یا CNAME انجام می‌شود؛ برای روش CNAME مقدار `PLATFORM_CNAME_TARGET` باید تنظیم شود.
+- صدور گواهی TLS به‌صورت hook طراحی شده و بدون تنظیم `TENANCY_DOMAINS_TLS_PROVIDER` فقط نتیجه ناموفق ثبت می‌کند.
+- اعتماد به پروکسی‌ها از طریق `TRUSTED_PROXIES` و `TRUSTED_HEADERS` کنترل می‌شود؛ در صورت عدم تنظیم، هدرهای Forwarded نادیده گرفته می‌شوند.
+- کاهش موجودی در Checkout از طریق صدور سند انبار نوع `issue` انجام می‌شود و فقط برای پرداخت موفق (wallet) فعال است؛ درگاه‌های async نیاز به توسعه بعدی دارند.
+- آداپتور درگاه tenant به‌صورت HMAC generic پیاده شده و آدرس‌های API از `settings` اتصال خوانده می‌شود.
+- eSIM Go: نام دقیق هدر امضای HMAC در مستندات مشخص نبود؛ لیست قابل پیکربندی از هدرها اضافه می‌شود و در RUNBOOK ذکر می‌گردد.
+- eSIM Go: رویدادهای location/position به‌دلایل No‑Surveillance فقط ack می‌شوند و ذخیره نمی‌گردند.
+- eSIM Go: فرایند تخصیص bundle ممکن است تا ۱۰ دقیقه طول بکشد؛ fulfillment به‌صورت async با polling محدود پیاده می‌شود.
+- eSIM Go: برای تعیین اتصال در وبهوک از پارامتر query `connection_id` استفاده می‌شود و در RUNBOOK مستند می‌گردد.

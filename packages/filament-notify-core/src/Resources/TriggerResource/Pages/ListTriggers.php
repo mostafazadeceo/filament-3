@@ -4,11 +4,11 @@ namespace Haida\FilamentNotify\Core\Resources\TriggerResource\Pages;
 
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Haida\FilamentNotify\Core\Resources\TriggerResource;
 use Illuminate\Support\Facades\Artisan;
 
-class ListTriggers extends ListRecords
+class ListTriggers extends ListRecordsWithCreate
 {
     protected static string $resource = TriggerResource::class;
 

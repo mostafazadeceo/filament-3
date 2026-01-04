@@ -6,6 +6,8 @@ namespace Filamat\IamSuite\Services;
 
 use Filamat\IamSuite\Models\AuditLog;
 use Filamat\IamSuite\Models\Tenant;
+use Filamat\IamSuite\Services\Automation\IamEventFactory;
+use Filamat\IamSuite\Services\Automation\IamEventPublisher;
 use Filamat\IamSuite\Support\TenantContext;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +15,11 @@ use Illuminate\Http\Request;
 
 class AuditService
 {
-    public function __construct(protected AuditHashService $hashService) {}
+    public function __construct(
+        protected AuditHashService $hashService,
+        protected IamEventFactory $eventFactory,
+        protected IamEventPublisher $publisher,
+    ) {}
 
     public function log(
         string $action,
@@ -45,7 +51,7 @@ class AuditService
             $hashData = $this->hashService->buildHash($tenant, $payload);
         }
 
-        return AuditLog::query()->create(array_merge([
+        $record = AuditLog::query()->create(array_merge([
             'tenant_id' => $tenant?->getKey(),
             'actor_id' => $actor?->getAuthIdentifier(),
             'action' => $action,
@@ -56,6 +62,13 @@ class AuditService
             'user_agent' => $request?->userAgent(),
             'created_at' => $createdAt,
         ], $hashData));
+
+        $automationEvent = $this->eventFactory->fromAudit($action, $subject, $diff, $actor, $tenant);
+        if ($automationEvent) {
+            $this->publisher->publish($automationEvent);
+        }
+
+        return $record;
     }
 
     protected function resolveTenant(?Model $subject): ?Tenant

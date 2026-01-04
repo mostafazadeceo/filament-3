@@ -2,10 +2,10 @@
 
 namespace Vendor\FilamentAccountingIr\Filament\Resources\TaxCategoryResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Vendor\FilamentAccountingIr\Filament\Resources\TaxCategoryResource;
 
-class ListTaxCategories extends ListRecords
+class ListTaxCategories extends ListRecordsWithCreate
 {
     protected static string $resource = TaxCategoryResource::class;
 }

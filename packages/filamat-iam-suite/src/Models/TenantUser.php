@@ -17,6 +17,9 @@ class TenantUser extends Model
         'joined_at' => 'datetime',
         'last_login_at' => 'datetime',
         'last_logout_at' => 'datetime',
+        'invited_at' => 'datetime',
+        'activated_at' => 'datetime',
+        'suspended_at' => 'datetime',
         'security_flags' => 'array',
     ];
 
@@ -28,5 +31,20 @@ class TenantUser extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(config('auth.providers.users.model'), 'user_id');
+    }
+
+    public function invitedBy(): BelongsTo
+    {
+        return $this->belongsTo(config('auth.providers.users.model'), 'invited_by_id');
+    }
+
+    public function activatedBy(): BelongsTo
+    {
+        return $this->belongsTo(config('auth.providers.users.model'), 'activated_by_id');
+    }
+
+    public function suspendedBy(): BelongsTo
+    {
+        return $this->belongsTo(config('auth.providers.users.model'), 'suspended_by_id');
     }
 }

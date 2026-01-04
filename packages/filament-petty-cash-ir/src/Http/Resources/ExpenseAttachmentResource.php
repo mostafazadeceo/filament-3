@@ -19,6 +19,7 @@ class ExpenseAttachmentResource extends JsonResource
             'original_name' => $this->original_name,
             'mime_type' => $this->mime_type,
             'size' => $this->size,
+            'content_hash' => $this->content_hash,
             'metadata' => $this->metadata,
             'created_at' => $this->created_at,
         ];

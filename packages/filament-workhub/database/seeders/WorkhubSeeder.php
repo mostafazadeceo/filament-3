@@ -6,8 +6,8 @@ use Filamat\IamSuite\Models\Tenant;
 use Filamat\IamSuite\Support\TenantContext;
 use Haida\FilamentWorkhub\Models\Status;
 use Haida\FilamentWorkhub\Models\Transition;
-use Haida\FilamentWorkhub\Models\WorkType;
 use Haida\FilamentWorkhub\Models\Workflow;
+use Haida\FilamentWorkhub\Models\WorkType;
 use Illuminate\Database\Seeder;
 
 class WorkhubSeeder extends Seeder

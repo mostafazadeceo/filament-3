@@ -1,0 +1,192 @@
+EXECUTING: /opt/android-sdk/emulator/emulator @dev30_aosp_atd_x86_Pixel_2 -no-window -no-audio -gpu auto-no-window -read-only -no-snapshot-save -no-boot-anim -delay-adb -id :app:pixel2api30DebugAndroidTest
+CURRENT_WORKING_DIRECTORY: /var/www/hub.haida.co/apps/mobile-android
+START_TIME: 2026-01-03 18:48:48.511
+START_TIME-NANOS: 2026-01-03 18:48:48.511353152
+ENVIRONMENT:
+PATH=/home/ubuntu/.npm-global/bin:/tmp/.tmpRyjbUc:/home/ubuntu/.cursor-server/bin/bb2dbaacf30bb7eb9fd48a37812a8f326defa530/bin/remote-cli:/home/ubuntu/.npm-global/bin:/home/ubuntu/.cursor-server/bin/bb2dbaacf30bb7eb9fd48a37812a8f326defa530/bin/remote-cli:/home/ubuntu/.npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/ubuntu/.cursor-server/extensions/openai.chatgpt-0.5.56-universal/bin/linux-x86_64
+BROWSER=/home/ubuntu/.cursor-server/bin/bb2dbaacf30bb7eb9fd48a37812a8f326defa530/bin/helpers/browser.sh
+VSCODE_HANDLES_SIGPIPE=true
+LESSCLOSE=/usr/bin/lesspipe %s %s
+XDG_DATA_DIRS=/usr/local/share:/usr/share:/var/lib/snapd/desktop
+VSCODE_HANDLES_UNCAUGHT_ERRORS=true
+RUST_LOG=warn
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+LANG=C.UTF-8
+XDG_SESSION_TYPE=tty
+XDG_SESSION_ID=1819
+ELECTRON_RUN_AS_NODE=1
+VSCODE_IPC_HOOK_CLI=/run/user/1000/vscode-ipc-5f062e09-ea19-4bf3-a24f-c838b8f20a91.sock
+LOGNAME=ubuntu
+VSCODE_AGENT_FOLDER=/home/ubuntu/.cursor-server
+PWD=/var/www/hub.haida.co/apps/mobile-android
+VSCODE_NLS_CONFIG={"userLocale":"en","osLocale":"en","resolvedLanguage":"en","defaultMessagesFile":"/home/ubuntu/.cursor-server/bin/bb2dbaacf30bb7eb9fd48a37812a8f326defa530/out/nls.messages.json","locale":"en","availableLanguages":{}}
+VSCODE_SERVER_SHUTDOWN_TIMEOUT=300
+_=./gradlew
+XDG_SESSION_CLASS=user
+CODEX_INTERNAL_ORIGINATOR_OVERRIDE=codex_vscode
+VSCODE_CWD=/home/ubuntu
+LESSOPEN=| /usr/bin/lesspipe %s
+SHELL=/bin/bash
+VSCODE_ESM_ENTRYPOINT=vs/workbench/api/node/extensionHostProcess
+SSH_CLIENT=5.117.147.43 16920 22
+ANDROID_SDK_ROOT=/opt/android-sdk
+USER=ubuntu
+SSH_CONNECTION=5.117.147.43 16920 130.185.121.227 22
+EVERYSPHERE_RIPGREP_PATH=/home/ubuntu/.cursor-server/bin/bb2dbaacf30bb7eb9fd48a37812a8f326defa530/resources/helpers/rg
+XDG_RUNTIME_DIR=/run/user/1000
+LS_COLORS=
+SHLVL=0
+HOME=/home/ubuntu
+ANDROID_AVD_HOME=/home/ubuntu/.android/avd/gradle-managed
+*****************************************
+STDOUT/STDERR BELOW
+===================
+INFO         | Android emulator version 36.3.10.0 (build_id 14472402) (CL:N/A)
+INFO         | Graphics backend: gfxstream
+INFO         | Found systemPath /opt/android-sdk/system-images/android-30/aosp_atd/x86/
+INFO         | Found systemPath /opt/android-sdk/system-images/android-30/aosp_atd/x86/
+WARNING      | Please update the emulator to one that supports the feature(s): Vulkan
+INFO         | Increasing RAM size to 2048MB
+INFO         | Guest GLES Driver: Auto (ext controls)
+WARNING      | Your GPU drivers may have a bug. Switching to software rendering.
+library_mode swangle_indirect gpu mode swangle_indirect
+INFO         | Checking system compatibility:
+INFO         |   Checking: hasSufficientDiskSpace
+INFO         |      Ok: Disk space requirements to run avd: `dev30_aosp_atd_x86_Pixel_2` are met
+INFO         |   Checking: hasSufficientHwGpu
+INFO         |      Ok: Hardware GPU compatibility checks are not required
+INFO         |   Checking: hasSufficientSystem
+INFO         |      Ok: System requirements to run avd: `dev30_aosp_atd_x86_Pixel_2` are met
+WARNING      | FeatureControl is requesting a non existing feature.
+INFO         | Storing crashdata in: /tmp/android-ubuntu/emu-crash-36.3.10.db, detection is enabled for process: 3904088
+INFO         | Initializing gfxstream backend
+INFO         | android_startOpenglesRenderer: gpu info
+INFO         | 
+INFO         | initIcdPaths: ICD set to 'swiftshader', using Swiftshader ICD
+INFO         | Setting ICD filenames for the loader = /opt/android-sdk/emulator/lib64/vulkan/vk_swiftshader_icd.json
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so]
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so]: not found in map, open for the first time
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so] (posix): begin
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so] (posix,linux): call dlopen on [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so]
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so] failed (posix). dlerror: []
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so.1]
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so.1]: not found in map, open for the first time
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so.1] (posix): begin
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so.1] (posix,linux): call dlopen on [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so.1]
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/qemu/linux-x86_64/lib64/vulkan/libvulkan.so.1] failed (posix). dlerror: []
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/lib64/vulkan/libvulkan.so]
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/lib64/vulkan/libvulkan.so]: not found in map, open for the first time
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/lib64/vulkan/libvulkan.so] (posix): begin
+INFO         | SharedLibrary::open for [/opt/android-sdk/emulator/lib64/vulkan/libvulkan.so] (posix,linux): call dlopen on [/opt/android-sdk/emulator/lib64/vulkan/libvulkan.so]
+INFO         | SharedLibrary::open succeeded for [/opt/android-sdk/emulator/lib64/vulkan/libvulkan.so].
+INFO         | Added library: /opt/android-sdk/emulator/lib64/vulkan/libvulkan.so
+INFO         | Selecting Vulkan device: SwiftShader Device (Subzero), Version: 1.3.0
+INFO         | Disabling sparse binding feature support
+INFO         | SharedLibrary::open for [libGLESv2.so]: not found in map, open for the first time
+INFO         | SharedLibrary::open for [libGLESv2.so] (posix): begin
+INFO         | SharedLibrary::open for [libGLESv2.so] (posix,linux): call dlopen on [libGLESv2.so]
+INFO         | SharedLibrary::open succeeded for [libGLESv2.so].
+INFO         | SharedLibrary::open for [libEGL.so]: not found in map, open for the first time
+INFO         | SharedLibrary::open for [libEGL.so] (posix): begin
+INFO         | SharedLibrary::open for [libEGL.so] (posix,linux): call dlopen on [libEGL.so]
+INFO         | SharedLibrary::open succeeded for [libEGL.so].
+INFO         | SharedLibrary::open for [libX11]
+INFO         | SharedLibrary::open for [libX11]: not found in map, open for the first time
+INFO         | SharedLibrary::open for [libX11] (posix): begin
+INFO         | SharedLibrary::open for [libX11] (posix,linux): call dlopen on [libX11.so]
+INFO         | SharedLibrary::open for [libX11] failed (posix). dlerror: []
+WARNING      | Could not open libX11.so, try libX11.so.6
+INFO         | SharedLibrary::open for [libX11.so.6]
+INFO         | SharedLibrary::open for [libX11.so.6]: not found in map, open for the first time
+INFO         | SharedLibrary::open for [libX11.so.6] (posix): begin
+INFO         | SharedLibrary::open for [libX11.so.6] (posix,linux): call dlopen on [libX11.so.6]
+INFO         | SharedLibrary::open succeeded for [libX11.so.6].
+INFO         | SharedLibrary::open for [libX11-xcb]
+INFO         | SharedLibrary::open for [libX11-xcb]: not found in map, open for the first time
+INFO         | SharedLibrary::open for [libX11-xcb] (posix): begin
+INFO         | SharedLibrary::open for [libX11-xcb] (posix,linux): call dlopen on [libX11-xcb.so]
+INFO         | SharedLibrary::open for [libX11-xcb] failed (posix). dlerror: []
+WARNING      | Could not open libX11-xcb.so, try libX11-xcb.so.1
+INFO         | SharedLibrary::open for [libX11-xcb.so.1]
+INFO         | SharedLibrary::open for [libX11-xcb.so.1]: not found in map, open for the first time
+INFO         | SharedLibrary::open for [libX11-xcb.so.1] (posix): begin
+INFO         | SharedLibrary::open for [libX11-xcb.so.1] (posix,linux): call dlopen on [libX11-xcb.so.1]
+INFO         | SharedLibrary::open succeeded for [libX11-xcb.so.1].
+INFO         | Initializing VkEmulation features:
+INFO         |     glInteropSupported: false
+INFO         |     useDeferredCommands: true
+INFO         |     createResourceWithRequirements: true
+INFO         |     useVulkanComposition: false
+INFO         |     useVulkanNativeSwapchain: false
+INFO         |     enable guestRenderDoc: false
+INFO         |     ASTC LDR emulation mode: Gpu
+INFO         |     enable ETC2 emulation: true
+INFO         |     enable Ycbcr emulation: false
+INFO         |     guestVulkanOnly: false
+INFO         |     useDedicatedAllocations: false
+INFO         | Graphics Adapter Vendor Google (Google Inc.)
+INFO         | Graphics Adapter Android Emulator OpenGL ES Translator (Google SwiftShader)
+INFO         | Graphics API Version OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0.0.1)
+INFO         | Graphics API Extensions GL_OES_EGL_sync GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_depth24 GL_OES_depth32 GL_OES_element_index_uint GL_OES_texture_float GL_OES_texture_float_linear GL_OES_compressed_paletted_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth_texture GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_packed_depth_stencil GL_OES_vertex_half_float GL_OES_standard_derivatives GL_OES_texture_npot GL_OES_rgb8_rgba8 GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_texture_format_BGRA8888 GL_APPLE_texture_format_BGRA8888 
+INFO         | Graphics Device Extensions N/A
+ERROR        | Setting read-only feature 'GLAsyncSwap' to '0'
+INFO         | Feature 'GLAsyncSwap' (50) is overridden to 'disabled'
+INFO         | Userspace boot properties:
+INFO         |   android.bootanim=0
+INFO         |   android.qemud=1
+INFO         |   androidboot.boot_devices=pci0000:00/0000:00:03.0 pci0000:00/0000:00:06.0
+INFO         |   androidboot.hardware=ranchu
+INFO         |   androidboot.hardware.vulkan=ranchu
+INFO         |   androidboot.serialno=EMULATOR36X3X10X0
+INFO         |   androidboot.vbmeta.digest=b7a552c336d3c548eb5af742e3872cc7c182f03d0110f77a7b88b5224572d1a6
+INFO         |   androidboot.vbmeta.hash_alg=sha256
+INFO         |   androidboot.vbmeta.size=6080
+INFO         |   qemu=1
+INFO         |   qemu.avd_name=dev30_aosp_atd_x86_Pixel_2
+INFO         |   qemu.camera_hq_edge_processing=0
+INFO         |   qemu.camera_protocol_ver=1
+INFO         |   qemu.dalvik.vm.heapsize=512m
+INFO         |   qemu.encrypt=1
+INFO         |   qemu.gles=1
+INFO         |   qemu.gltransport=pipe
+INFO         |   qemu.gltransport.drawFlushInterval=800
+INFO         |   qemu.hwcodec.avcdec=2
+INFO         |   qemu.hwcodec.hevcdec=2
+INFO         |   qemu.hwcodec.vpxdec=2
+INFO         |   qemu.opengles.version=196608
+INFO         |   qemu.settings.system.screen_off_timeout=2147483647
+INFO         |   qemu.uirenderer=skiagl
+INFO         |   qemu.vsync=60
+INFO         |   qemu.wifi=1
+host doesn't support requested feature: CPUID.01H:ECX.f16c [bit 29]
+host doesn't support requested feature: CPUID.80000001H:ECX.abm [bit 5]
+host doesn't support requested feature: CPUID.01H:ECX.f16c [bit 29]
+host doesn't support requested feature: CPUID.80000001H:ECX.abm [bit 5]
+INFO         | Monitoring duration of emulator setup.
+WARNING      | The emulator now requires a signed jwt token for gRPC access! Use the -grpc flag if you really want an open unprotected grpc port
+INFO         | Using security allow list from: /opt/android-sdk/emulator/lib/emulator_access.json
+WARNING      | *** Basic token auth should only be used by android-studio ***
+INFO         | The active JSON Web Key Sets can be found here: /run/user/1000/avd/running/3904088/jwks/7a54982b-1ffc-4681-9bf8-5793af7fdbf7/active.jwk
+INFO         | Scanning /run/user/1000/avd/running/3904088/jwks/7a54982b-1ffc-4681-9bf8-5793af7fdbf7 for jwk keys.
+INFO         | Started GRPC server at 127.0.0.1:8554, security: Local, auth: +token
+INFO         | Advertising in: /run/user/1000/avd/running/pid_3904088.ini
+INFO         | Setting display: 0 configuration to: 1080x1920, dpi: 420x420 
+INFO         | setDisplayActiveConfig 0
+INFO         | Loading snapshot 'default_boot'...
+WARNING      | Client not connected yet. Ignoring message!
+WARNING      | Client not connected yet. Ignoring message!
+WARNING      | Client not connected yet. Ignoring message!
+WARNING      | Unknown XR viewport mode requested: 0, ignored.
+
+WARNING      | Client not connected yet. Ignoring message!
+WARNING      | Client not connected yet. Ignoring message!
+WARNING      | Client not connected yet. Ignoring message!
+WARNING      | Client not connected yet. Ignoring message!
+WARNING      | Client not connected yet. Ignoring message!
+WARNING      | Client not connected yet. Ignoring message!
+INFO         | Successfully loaded snapshot 'default_boot' using 488 ms
+===================
+END_TIME: 2026-01-03 18:49:17.269
+END_TIME-NANOS: 2026-01-03 18:49:17.269565294
+DURATION: 28758ms
+EXIT CODE: 0

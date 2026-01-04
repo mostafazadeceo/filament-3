@@ -4,12 +4,6 @@ namespace Haida\FilamentWorkhub\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
-use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource\Pages\CreateWorkflow;
-use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource\Pages\EditWorkflow;
-use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource\Pages\ListWorkflows;
-use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource\RelationManagers\StatusesRelationManager;
-use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource\RelationManagers\TransitionsRelationManager;
-use Haida\FilamentWorkhub\Models\Workflow;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -17,6 +11,12 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource\Pages\CreateWorkflow;
+use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource\Pages\EditWorkflow;
+use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource\Pages\ListWorkflows;
+use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource\RelationManagers\StatusesRelationManager;
+use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource\RelationManagers\TransitionsRelationManager;
+use Haida\FilamentWorkhub\Models\Workflow;
 use Illuminate\Database\Eloquent\Builder;
 
 class WorkflowResource extends IamResource

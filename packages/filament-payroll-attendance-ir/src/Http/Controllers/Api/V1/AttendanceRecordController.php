@@ -25,6 +25,8 @@ class AttendanceRecordController extends ApiController
 
     public function show(PayrollAttendanceRecord $attendance_record): AttendanceRecordResource
     {
+        $this->logSensitiveAccess($attendance_record);
+
         return new AttendanceRecordResource($attendance_record);
     }
 

@@ -4,6 +4,7 @@ namespace Haida\FilamentPettyCashIr\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
+use Filamat\IamSuite\Support\TenantContext;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -14,6 +15,7 @@ use Haida\FilamentPettyCashIr\Filament\Resources\PettyCashFundResource\Pages\Edi
 use Haida\FilamentPettyCashIr\Filament\Resources\PettyCashFundResource\Pages\ListPettyCashFunds;
 use Haida\FilamentPettyCashIr\Models\PettyCashFund;
 use Haida\FilamentPettyCashIr\Support\PettyCashStatuses;
+use Illuminate\Database\Eloquent\Builder;
 use Vendor\FilamentAccountingIr\Models\AccountingBranch;
 use Vendor\FilamentAccountingIr\Models\AccountingCompany;
 use Vendor\FilamentAccountingIr\Models\ChartAccount;
@@ -37,6 +39,8 @@ class PettyCashFundResource extends IamResource
 
     protected static string|\UnitEnum|null $navigationGroup = 'تنخواه';
 
+    protected static array $eagerLoad = ['branch'];
+
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -44,12 +48,26 @@ class PettyCashFundResource extends IamResource
                 static::tenantSelect(),
                 Select::make('company_id')
                     ->label('شرکت')
-                    ->options(fn () => AccountingCompany::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return AccountingCompany::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->required(),
                 Select::make('branch_id')
                     ->label('شعبه')
-                    ->options(fn () => AccountingBranch::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return AccountingBranch::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->nullable(),
                 TextInput::make('name')
@@ -91,22 +109,50 @@ class PettyCashFundResource extends IamResource
                     ->default(0),
                 Select::make('accounting_cash_account_id')
                     ->label('حساب تنخواه (دفترکل)')
-                    ->options(fn () => ChartAccount::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return ChartAccount::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->nullable(),
                 Select::make('accounting_source_account_id')
                     ->label('حساب منبع تغذیه (دفترکل)')
-                    ->options(fn () => ChartAccount::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return ChartAccount::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->nullable(),
                 Select::make('default_expense_account_id')
                     ->label('حساب هزینه پیش‌فرض')
-                    ->options(fn () => ChartAccount::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return ChartAccount::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->nullable(),
                 Select::make('accounting_treasury_account_id')
                     ->label('حساب خزانه')
-                    ->options(fn () => TreasuryAccount::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return TreasuryAccount::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->nullable(),
             ])
@@ -133,5 +179,10 @@ class PettyCashFundResource extends IamResource
             'create' => CreatePettyCashFund::route('/create'),
             'edit' => EditPettyCashFund::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return static::scopeByTenant(parent::getEloquentQuery()->with(static::$eagerLoad));
     }
 }

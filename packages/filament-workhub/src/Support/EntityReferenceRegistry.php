@@ -22,8 +22,7 @@ class EntityReferenceRegistry
         string $icon,
         Closure $urlResolver,
         ?Closure $labelResolver = null
-    ): void
-    {
+    ): void {
         $this->items[$type] = [
             'type' => $type,
             'model' => $modelClass,

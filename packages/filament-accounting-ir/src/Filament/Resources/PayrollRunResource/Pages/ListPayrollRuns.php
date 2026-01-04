@@ -2,10 +2,10 @@
 
 namespace Vendor\FilamentAccountingIr\Filament\Resources\PayrollRunResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Vendor\FilamentAccountingIr\Filament\Resources\PayrollRunResource;
 
-class ListPayrollRuns extends ListRecords
+class ListPayrollRuns extends ListRecordsWithCreate
 {
     protected static string $resource = PayrollRunResource::class;
 }

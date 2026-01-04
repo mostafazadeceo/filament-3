@@ -1,0 +1,35 @@
+{
+    "name": "haida/mailtrap-core",
+    "version": "1.0.0",
+    "description": "Mailtrap core integration (API client, models, services, sync).",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "filamat/filamat-iam-suite": "dev-main",
+        "haida/commerce-catalog": "^1.0",
+        "haida/commerce-orders": "^1.0",
+        "haida/feature-gates": "^1.0",
+        "illuminate/cache": "^11.0|^12.0",
+        "illuminate/contracts": "^11.0|^12.0",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/http": "^11.0|^12.0",
+        "illuminate/queue": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haida\\MailtrapCore\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Haida\\MailtrapCore\\MailtrapCoreServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

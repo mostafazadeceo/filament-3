@@ -1,0 +1,5 @@
+packageName: com.haida.hubapp.api
+library: jvm-retrofit2
+serializationLibrary: moshi
+useCoroutines: true
+enumPropertyNaming: original

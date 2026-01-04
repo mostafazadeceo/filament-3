@@ -12,9 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class WorkhubAutomationEngine
 {
-    public function __construct(protected AutomationRegistry $registry)
-    {
-    }
+    public function __construct(protected AutomationRegistry $registry) {}
 
     public function handle(string $event, array $payload = []): void
     {

@@ -1,0 +1,154 @@
+# SPEC — filament-workhub
+
+## معرفی
+- پکیج: haida/filament-workhub
+- توضیح: Jira-inspired Workhub module for Filament v4.
+- Service Provider: Haida\FilamentWorkhub\FilamentWorkhubServiceProvider
+- Filament Plugin: Haida\FilamentWorkhub\FilamentWorkhubPlugin (id: workhub)
+
+## دامنه و قابلیت‌ها
+- مدل‌ها:
+- AiFieldRun.php
+- AiSummary.php
+- Attachment.php
+- AuditEvent.php
+- AutomationRule.php
+- Comment.php
+- CustomField.php
+- CustomFieldValue.php
+- Decision.php
+- EntityReference.php
+- Label.php
+- Project.php
+- ProjectAiUpdate.php
+- Status.php
+- TimeEntry.php
+- Transition.php
+- Watcher.php
+- WorkItem.php
+- WorkType.php
+- Workflow.php
+- منابع Filament:
+- src/Filament/Resources/AutomationRuleResource.php
+- src/Filament/Resources/CustomFieldResource.php
+- src/Filament/Resources/LabelResource.php
+- src/Filament/Resources/ProjectResource.php
+- src/Filament/Resources/StatusResource.php
+- src/Filament/Resources/TransitionResource.php
+- src/Filament/Resources/WorkItemResource.php
+- src/Filament/Resources/WorkTypeResource.php
+- src/Filament/Resources/WorkflowResource.php
+- کنترلرها/API:
+- Api/V1/ApiController.php
+- Api/V1/AttachmentController.php
+- Api/V1/AutomationRuleController.php
+- Api/V1/BaseController.php
+- Api/V1/CommentController.php
+- Api/V1/CustomFieldController.php
+- Api/V1/DecisionController.php
+- Api/V1/EntityReferenceController.php
+- Api/V1/LabelController.php
+- Api/V1/LinkController.php
+- Api/V1/OpenApiController.php
+- Api/V1/ProjectAiController.php
+- Api/V1/ProjectController.php
+- Api/V1/StatusController.php
+- Api/V1/TimeEntryController.php
+- Api/V1/TransitionController.php
+- Api/V1/WatcherController.php
+- Api/V1/WorkItemAiController.php
+- Api/V1/WorkItemController.php
+- Api/V1/WorkItemTransitionController.php
+- Api/V1/WorkTypeController.php
+- Api/V1/WorkflowController.php
+- Jobs/Queue:
+- GenerateAiFieldBulkJob.php
+- GenerateAiFieldRunJob.php
+- Policyها:
+- AttachmentPolicy.php
+- AuditEventPolicy.php
+- AutomationRulePolicy.php
+- CommentPolicy.php
+- CustomFieldPolicy.php
+- DecisionPolicy.php
+- EntityReferencePolicy.php
+- LabelPolicy.php
+- ProjectPolicy.php
+- StatusPolicy.php
+- TimeEntryPolicy.php
+- TransitionPolicy.php
+- WatcherPolicy.php
+- WorkItemPolicy.php
+- WorkTypePolicy.php
+- WorkflowPolicy.php
+
+## Tenancy و IAM
+- BelongsToTenant در کد: بله
+- TenantContext در کد: بله
+- IamAuthorization::allows در کد: بله
+- Capability Registry: بله
+- Scopeها (API): workhub.ai.project_reports.manage, workhub.ai.share, workhub.ai.use, workhub.attachment.manage, workhub.attachment.view, workhub.comment.manage, workhub.comment.view, workhub.decision.manage, workhub.decision.view, workhub.link.manage, workhub.link.view, workhub.project.view, workhub.time_entry.manage, workhub.time_entry.view, workhub.transition.manage, workhub.watcher.manage, workhub.watcher.view
+
+## مدل داده
+- Migrations:
+- 2025_12_27_010000_create_workhub_workflows_table.php
+- 2025_12_27_010001_create_workhub_statuses_table.php
+- 2025_12_27_010002_create_workhub_transitions_table.php
+- 2025_12_27_010003_create_workhub_work_types_table.php
+- 2025_12_27_010004_create_workhub_projects_table.php
+- 2025_12_27_010005_create_workhub_work_items_table.php
+- 2025_12_27_010006_create_workhub_labels_table.php
+- 2025_12_27_010007_create_workhub_label_work_item_table.php
+- 2025_12_27_010008_create_workhub_comments_table.php
+- 2025_12_27_010009_create_workhub_attachments_table.php
+- 2025_12_27_010010_create_workhub_watchers_table.php
+- 2025_12_27_010011_create_workhub_time_entries_table.php
+- 2025_12_27_010012_create_workhub_decisions_table.php
+- 2025_12_27_010013_create_workhub_audit_events_table.php
+- 2025_12_27_010014_create_workhub_entity_references_table.php
+- 2025_12_27_010015_create_workhub_automation_rules_table.php
+- 2025_12_27_010016_create_workhub_custom_fields_table.php
+- 2025_12_27_010017_create_workhub_custom_field_values_table.php
+- 2025_12_27_010018_add_last_ran_at_to_workhub_automation_rules_table.php
+- 2025_12_27_010019_add_allowed_link_types_to_workhub_projects_table.php
+- 2026_02_02_000001_create_workhub_ai_summaries_table.php
+- 2026_02_02_000002_create_workhub_project_ai_updates_table.php
+- 2026_02_02_000003_create_workhub_ai_field_runs_table.php
+- جدول‌ها:
+- workhub_ai_field_runs
+- workhub_ai_summaries
+- workhub_attachments
+- workhub_audit_events
+- workhub_automation_rules
+- workhub_comments
+- workhub_custom_field_values
+- workhub_custom_fields
+- workhub_decisions
+- workhub_entity_references
+- workhub_label_work_item
+- workhub_labels
+- workhub_project_ai_updates
+- workhub_projects
+- workhub_statuses
+- workhub_time_entries
+- workhub_transitions
+- workhub_watchers
+- workhub_work_items
+- workhub_work_types
+- workhub_workflows
+- ایندکس‌ها: دارای ایندکس در مهاجرت‌ها
+
+## API
+- مسیر پایه: v1
+- OpenAPI: دارای مسیر /openapi
+- جزئیات: `docs/filament-workhub/API.md`
+
+## تنظیمات
+- فایل‌های کانفیگ:
+- packages/filament-workhub/config/filament-workhub.php
+- کلیدهای env مرتبط:
+- ندارد
+
+## استقرار در پنل‌ها
+- Admin Panel: ثبت شده در AdminPanelProvider
+- Tenant Panel: ثبت شده در TenantPanelProvider

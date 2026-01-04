@@ -1,0 +1,31 @@
+{
+    "name": "haida/commerce-orders",
+    "version": "1.0.0",
+    "type": "library",
+    "description": "Commerce orders and payments for Haida platform.",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Haida\\CommerceOrders\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Haida\\CommerceOrders\\CommerceOrdersServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^4.0",
+        "filamat/filamat-iam-suite": "dev-main",
+        "haida/commerce-catalog": "^1.0",
+        "haida/site-builder-core": "^1.0",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

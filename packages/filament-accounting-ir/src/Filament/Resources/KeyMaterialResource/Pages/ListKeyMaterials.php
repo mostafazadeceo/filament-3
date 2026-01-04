@@ -2,10 +2,10 @@
 
 namespace Vendor\FilamentAccountingIr\Filament\Resources\KeyMaterialResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Vendor\FilamentAccountingIr\Filament\Resources\KeyMaterialResource;
 
-class ListKeyMaterials extends ListRecords
+class ListKeyMaterials extends ListRecordsWithCreate
 {
     protected static string $resource = KeyMaterialResource::class;
 }

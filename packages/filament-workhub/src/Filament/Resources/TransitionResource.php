@@ -4,12 +4,6 @@ namespace Haida\FilamentWorkhub\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
-use Haida\FilamentWorkhub\Filament\Resources\TransitionResource\Pages\CreateTransition;
-use Haida\FilamentWorkhub\Filament\Resources\TransitionResource\Pages\EditTransition;
-use Haida\FilamentWorkhub\Filament\Resources\TransitionResource\Pages\ListTransitions;
-use Haida\FilamentWorkhub\Models\Status;
-use Haida\FilamentWorkhub\Models\Transition;
-use Haida\FilamentWorkhub\Models\Workflow;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -19,6 +13,12 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Haida\FilamentWorkhub\Filament\Resources\TransitionResource\Pages\CreateTransition;
+use Haida\FilamentWorkhub\Filament\Resources\TransitionResource\Pages\EditTransition;
+use Haida\FilamentWorkhub\Filament\Resources\TransitionResource\Pages\ListTransitions;
+use Haida\FilamentWorkhub\Models\Status;
+use Haida\FilamentWorkhub\Models\Transition;
+use Haida\FilamentWorkhub\Models\Workflow;
 
 class TransitionResource extends IamResource
 {

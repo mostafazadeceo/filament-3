@@ -2,10 +2,10 @@
 
 namespace Haida\FilamentRelograde\Resources\RelogradeAccountResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Haida\FilamentRelograde\Resources\RelogradeAccountResource;
 
-class ListRelogradeAccounts extends ListRecords
+class ListRelogradeAccounts extends ListRecordsWithCreate
 {
     protected static string $resource = RelogradeAccountResource::class;
 }

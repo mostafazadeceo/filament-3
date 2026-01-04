@@ -20,6 +20,8 @@ final class PettyCashStatuses
 
     public const EXPENSE_SETTLED = 'settled';
 
+    public const EXPENSE_REVERSED = 'reversed';
+
     public const REPLENISHMENT_DRAFT = 'draft';
 
     public const REPLENISHMENT_SUBMITTED = 'submitted';
@@ -30,6 +32,8 @@ final class PettyCashStatuses
 
     public const REPLENISHMENT_REJECTED = 'rejected';
 
+    public const REPLENISHMENT_REVERSED = 'reversed';
+
     public const SETTLEMENT_DRAFT = 'draft';
 
     public const SETTLEMENT_SUBMITTED = 'submitted';
@@ -37,6 +41,8 @@ final class PettyCashStatuses
     public const SETTLEMENT_APPROVED = 'approved';
 
     public const SETTLEMENT_POSTED = 'posted';
+
+    public const SETTLEMENT_REVERSED = 'reversed';
 
     /**
      * @return array<string, string>
@@ -61,6 +67,7 @@ final class PettyCashStatuses
             self::EXPENSE_PAID => 'پرداخت‌شده',
             self::EXPENSE_REJECTED => 'رد‌شده',
             self::EXPENSE_SETTLED => 'تسویه‌شده',
+            self::EXPENSE_REVERSED => 'برگشت‌شده',
         ];
     }
 
@@ -75,6 +82,7 @@ final class PettyCashStatuses
             self::REPLENISHMENT_APPROVED => 'تأیید‌شده',
             self::REPLENISHMENT_PAID => 'پرداخت‌شده',
             self::REPLENISHMENT_REJECTED => 'رد‌شده',
+            self::REPLENISHMENT_REVERSED => 'برگشت‌شده',
         ];
     }
 
@@ -88,6 +96,7 @@ final class PettyCashStatuses
             self::SETTLEMENT_SUBMITTED => 'ارسال‌شده',
             self::SETTLEMENT_APPROVED => 'تأیید‌شده',
             self::SETTLEMENT_POSTED => 'قطعی‌شده',
+            self::SETTLEMENT_REVERSED => 'برگشت‌شده',
         ];
     }
 }

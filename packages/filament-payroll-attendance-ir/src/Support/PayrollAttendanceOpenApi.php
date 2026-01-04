@@ -70,6 +70,45 @@ class PayrollAttendanceOpenApi
                 '/api/v1/payroll-attendance/attendance-records/{attendance_record}/approve' => [
                     'post' => ['summary' => 'Approve attendance record'],
                 ],
+                '/api/v1/payroll-attendance/attendance-policies' => [
+                    'get' => ['summary' => 'List attendance policies'],
+                    'post' => ['summary' => 'Create attendance policy'],
+                ],
+                '/api/v1/payroll-attendance/attendance-policies/{attendance_policy}' => [
+                    'get' => ['summary' => 'Show attendance policy'],
+                    'put' => ['summary' => 'Update attendance policy'],
+                    'delete' => ['summary' => 'Delete attendance policy'],
+                ],
+                '/api/v1/payroll-attendance/time-events' => [
+                    'get' => ['summary' => 'List time events'],
+                    'post' => ['summary' => 'Create time event'],
+                ],
+                '/api/v1/payroll-attendance/time-events/{time_event}' => [
+                    'get' => ['summary' => 'Show time event'],
+                    'put' => ['summary' => 'Update time event'],
+                    'delete' => ['summary' => 'Delete time event'],
+                ],
+                '/api/v1/payroll-attendance/timesheets' => [
+                    'get' => ['summary' => 'List timesheets'],
+                ],
+                '/api/v1/payroll-attendance/timesheets/{timesheet}' => [
+                    'get' => ['summary' => 'Show timesheet'],
+                ],
+                '/api/v1/payroll-attendance/timesheets/generate' => [
+                    'post' => ['summary' => 'Generate timesheets'],
+                ],
+                '/api/v1/payroll-attendance/timesheets/{timesheet}/approve' => [
+                    'post' => ['summary' => 'Approve timesheet'],
+                ],
+                '/api/v1/payroll-attendance/attendance-exceptions' => [
+                    'get' => ['summary' => 'List attendance exceptions'],
+                ],
+                '/api/v1/payroll-attendance/attendance-exceptions/{attendance_exception}' => [
+                    'get' => ['summary' => 'Show attendance exception'],
+                ],
+                '/api/v1/payroll-attendance/attendance-exceptions/{attendance_exception}/resolve' => [
+                    'post' => ['summary' => 'Resolve attendance exception'],
+                ],
                 '/api/v1/payroll-attendance/leave-types' => [
                     'get' => ['summary' => 'List leave types'],
                     'post' => ['summary' => 'Create leave type'],
@@ -90,6 +129,36 @@ class PayrollAttendanceOpenApi
                 ],
                 '/api/v1/payroll-attendance/leave-requests/{leave_request}/approve' => [
                     'post' => ['summary' => 'Approve leave request'],
+                ],
+                '/api/v1/payroll-attendance/mission-requests' => [
+                    'get' => ['summary' => 'List mission requests'],
+                    'post' => ['summary' => 'Create mission request'],
+                ],
+                '/api/v1/payroll-attendance/mission-requests/{mission_request}' => [
+                    'get' => ['summary' => 'Show mission request'],
+                    'put' => ['summary' => 'Update mission request'],
+                    'delete' => ['summary' => 'Delete mission request'],
+                ],
+                '/api/v1/payroll-attendance/mission-requests/{mission_request}/approve' => [
+                    'post' => ['summary' => 'Approve mission request'],
+                ],
+                '/api/v1/payroll-attendance/mission-requests/{mission_request}/reject' => [
+                    'post' => ['summary' => 'Reject mission request'],
+                ],
+                '/api/v1/payroll-attendance/overtime-requests' => [
+                    'get' => ['summary' => 'List overtime requests'],
+                    'post' => ['summary' => 'Create overtime request'],
+                ],
+                '/api/v1/payroll-attendance/overtime-requests/{overtime_request}' => [
+                    'get' => ['summary' => 'Show overtime request'],
+                    'put' => ['summary' => 'Update overtime request'],
+                    'delete' => ['summary' => 'Delete overtime request'],
+                ],
+                '/api/v1/payroll-attendance/overtime-requests/{overtime_request}/approve' => [
+                    'post' => ['summary' => 'Approve overtime request'],
+                ],
+                '/api/v1/payroll-attendance/overtime-requests/{overtime_request}/reject' => [
+                    'post' => ['summary' => 'Reject overtime request'],
                 ],
                 '/api/v1/payroll-attendance/payroll-runs' => [
                     'get' => ['summary' => 'List payroll runs'],
@@ -135,6 +204,69 @@ class PayrollAttendanceOpenApi
                     'get' => ['summary' => 'Show advance'],
                     'put' => ['summary' => 'Update advance'],
                     'delete' => ['summary' => 'Delete advance'],
+                ],
+                '/api/v1/payroll-attendance/work-calendars' => [
+                    'get' => ['summary' => 'List work calendars'],
+                    'post' => ['summary' => 'Create work calendar'],
+                ],
+                '/api/v1/payroll-attendance/work-calendars/{work_calendar}' => [
+                    'get' => ['summary' => 'Show work calendar'],
+                    'put' => ['summary' => 'Update work calendar'],
+                    'delete' => ['summary' => 'Delete work calendar'],
+                ],
+                '/api/v1/payroll-attendance/holiday-rules' => [
+                    'get' => ['summary' => 'List holiday rules'],
+                    'post' => ['summary' => 'Create holiday rule'],
+                ],
+                '/api/v1/payroll-attendance/holiday-rules/{holiday_rule}' => [
+                    'get' => ['summary' => 'Show holiday rule'],
+                    'put' => ['summary' => 'Update holiday rule'],
+                    'delete' => ['summary' => 'Delete holiday rule'],
+                ],
+                '/api/v1/payroll-attendance/employee-consents' => [
+                    'get' => ['summary' => 'List employee consents'],
+                    'post' => ['summary' => 'Create employee consent'],
+                ],
+                '/api/v1/payroll-attendance/employee-consents/{employee_consent}' => [
+                    'get' => ['summary' => 'Show employee consent'],
+                    'put' => ['summary' => 'Update employee consent'],
+                    'delete' => ['summary' => 'Delete employee consent'],
+                ],
+                '/api/v1/payroll-attendance/sensitive-access-logs' => [
+                    'get' => ['summary' => 'List sensitive access logs'],
+                ],
+                '/api/v1/payroll-attendance/sensitive-access-logs/{sensitive_access_log}' => [
+                    'get' => ['summary' => 'Show sensitive access log'],
+                ],
+                '/api/v1/payroll-attendance/ai-logs' => [
+                    'get' => ['summary' => 'List AI logs'],
+                ],
+                '/api/v1/payroll-attendance/ai-logs/{payroll_ai_log}' => [
+                    'get' => ['summary' => 'Show AI log'],
+                ],
+                '/api/v1/payroll-attendance/reports/timesheet-summary' => [
+                    'get' => ['summary' => 'Timesheet summary report'],
+                ],
+                '/api/v1/payroll-attendance/reports/tardiness' => [
+                    'get' => ['summary' => 'Tardiness report'],
+                ],
+                '/api/v1/payroll-attendance/reports/overtime' => [
+                    'get' => ['summary' => 'Overtime report'],
+                ],
+                '/api/v1/payroll-attendance/reports/leave-balance' => [
+                    'get' => ['summary' => 'Leave balance report'],
+                ],
+                '/api/v1/payroll-attendance/reports/coverage-gaps' => [
+                    'get' => ['summary' => 'Coverage gaps report'],
+                ],
+                '/api/v1/payroll-attendance/reports/attendance-summary' => [
+                    'get' => ['summary' => 'Attendance summary report'],
+                ],
+                '/api/v1/payroll-attendance/reports/export' => [
+                    'post' => ['summary' => 'Export attendance reports'],
+                ],
+                '/api/v1/payroll-attendance/reports/ai/manager' => [
+                    'post' => ['summary' => 'AI manager report'],
                 ],
                 '/api/v1/payroll-attendance/openapi' => [
                     'get' => ['summary' => 'OpenAPI spec'],

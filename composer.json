@@ -19,12 +19,47 @@
         "haida/filament-notify-core": "^1.0",
         "haida/filament-notify-sms-ippanel": "^1.0",
         "haida/filament-notify-telegram": "^1.0",
+        "haida/filament-notify-mailtrap": "^1.0",
         "haida/filament-notify-webpush": "^1.0",
         "haida/filament-notify-whatsapp": "^1.0",
+        "haida/filament-ai-core": "^1.0",
         "haida/filament-petty-cash-ir": "^1.0",
         "haida/filament-relograde": "^1.0",
         "haida/filament-restaurant-ops": "^1.0",
+        "haida/filament-threecx": "^1.0",
         "haida/filament-workhub": "^1.0",
+        "haida/filament-loyalty-club": "^1.0",
+        "haida/content-cms": "^1.0",
+        "haida/feature-gates": "^1.0",
+        "haida/blog": "^1.0",
+        "haida/commerce-catalog": "^1.0",
+        "haida/commerce-checkout": "^1.0",
+        "haida/commerce-orders": "^1.0",
+        "haida/filament-commerce-core": "^1.0",
+        "haida/filament-commerce-experience": "^1.0",
+        "haida/filament-crypto-core": "^0.1.0",
+        "haida/filament-crypto-gateway": "^0.1.0",
+        "haida/filament-crypto-nodes": "^0.1.0",
+        "haida/filament-marketplace-connectors": "^1.0",
+        "haida/filament-payments": "^1.0",
+        "haida/filament-pos": "^1.0",
+        "haida/filament-storefront-builder": "^1.0",
+        "haida/mailtrap-core": "^1.0",
+        "haida/filament-mailtrap": "^1.0",
+        "haida/filament-meetings": "^1.0",
+        "haida/payments-orchestrator": "^1.0",
+        "haida/providers-core": "^1.0",
+        "haida/providers-esim-go-commerce": "^1.0",
+        "haida/providers-esim-go-core": "^1.0",
+        "haida/providers-esim-go-webhooks": "^1.0",
+        "haida/filament-providers-esim-go": "^1.0",
+        "haida/observability": "^1.0",
+        "haida/platform-core": "^1.0",
+        "haida/site-builder-core": "^1.0",
+        "haida/theme-engine": "^1.0",
+        "haida/page-builder": "^1.0",
+        "haida/tenancy-domains": "^1.0",
+        "haida/filament-app-api": "^1.0",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
@@ -43,18 +78,24 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
         "orchestra/testbench": "^10.0",
-        "phpunit/phpunit": "^11.5.3"
+        "pestphp/pest": "3.8.2",
+        "pestphp/pest-plugin-laravel": "3.2.0",
+        "phpunit/phpunit": "11.5.15"
     },
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "Haida\\FilamentCryptoCore\\": "packages/filament-crypto-core/src/",
+            "Haida\\FilamentCryptoGateway\\": "packages/filament-crypto-gateway/src/",
+            "Haida\\FilamentCryptoNodes\\": "packages/filament-crypto-nodes/src/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "Haida\\FilamentThreeCx\\Tests\\": "packages/filament-threecx/tests/"
         }
     },
     "scripts": {
@@ -123,6 +164,13 @@
         },
         {
             "type": "path",
+            "url": "packages/filament-notify-mailtrap",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "packages/filament-notify-whatsapp",
             "options": {
                 "symlink": true
@@ -144,7 +192,21 @@
         },
         {
             "type": "path",
+            "url": "packages/filament-ai-core",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "packages/filament-relograde",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-threecx",
             "options": {
                 "symlink": true
             }
@@ -172,7 +234,182 @@
         },
         {
             "type": "path",
+            "url": "packages/filament-meetings",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-loyalty-club",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/mailtrap-core",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-mailtrap",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "packages/filament-accounting-ir",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/content-cms",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/blog",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/commerce-catalog",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/commerce-checkout",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/commerce-orders",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-commerce-core",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-commerce-experience",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-crypto-core",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-crypto-gateway",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-crypto-nodes",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-marketplace-connectors",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-payments",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-pos",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-storefront-builder",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/payments-orchestrator",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/providers-core",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/providers-esim-go-core",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/providers-esim-go-commerce",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/providers-esim-go-webhooks",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-providers-esim-go",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/observability",
             "options": {
                 "symlink": true
             }
@@ -193,7 +430,56 @@
         },
         {
             "type": "path",
+            "url": "packages/feature-gates",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/platform-core",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/tenancy-domains",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/site-builder-core",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/theme-engine",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/page-builder",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "packages/filamat-iam-suite",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-app-api",
             "options": {
                 "symlink": true
             }

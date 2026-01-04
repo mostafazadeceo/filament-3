@@ -48,7 +48,7 @@ it('resolves permission with overrides', function () {
     ]);
 
     $role->givePermissionTo($permission);
-    $user->assignRole($role, $tenant->getKey());
+    $user->assignRole($role);
 
     PermissionOverride::query()->create([
         'tenant_id' => $tenant->getKey(),
@@ -82,7 +82,7 @@ it('denies permissions without active subscription', function () {
     ]);
 
     $role->givePermissionTo($permission);
-    $user->assignRole($role, $tenant->getKey());
+    $user->assignRole($role);
 
     $result = app(AccessService::class)->checkPermission($user, $tenant, 'orders.view');
 

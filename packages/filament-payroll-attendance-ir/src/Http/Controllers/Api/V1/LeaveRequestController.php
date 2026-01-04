@@ -25,6 +25,8 @@ class LeaveRequestController extends ApiController
 
     public function show(PayrollLeaveRequest $leave_request): LeaveRequestResource
     {
+        $this->logSensitiveAccess($leave_request);
+
         return new LeaveRequestResource($leave_request);
     }
 

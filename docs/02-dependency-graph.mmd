@@ -1,0 +1,130 @@
+flowchart LR
+  App[Laravel App]
+  AdminPanel[Filament Admin Panel]
+  TenantPanel[Filament Tenant Panel]
+  IAM[IAM Suite\nTenancy + RBAC + Wallet + Subscriptions]
+  PlatformCore[Platform Core\nPlugin Lifecycle]
+  FeatureGates[Feature Gates\nPlan + Tenant Overrides]
+  TenancyDomains[Tenancy Domains\nSite Domains + Host Resolver]
+  SiteBuilderCore[Site Builder Core\nSites + Branding]
+  ContentCMS[Content CMS\nPages + SEO]
+  Blog[Blog\nPosts + Taxonomy]
+  CommerceCatalog[Commerce Catalog\nProducts + Variants]
+  CommerceCheckout[Commerce Checkout\nCarts + Wallet Checkout]
+  CommerceOrders[Commerce Orders\nOrders + Payments]
+  PaymentsOrchestrator[Payments Orchestrator\nGateway Intents + Webhooks]
+  ProvidersCore[Providers Core\nAdapter Registry + Job Logs]
+  EsimGoCore[Provider eSIM Go Core]
+  EsimGoCommerce[Provider eSIM Go Commerce]
+  EsimGoWebhooks[Provider eSIM Go Webhooks]
+  EsimGoFilament[Filament Provider eSIM Go]
+  Observability[Observability\nCorrelation IDs]
+  ThemeEngine[Theme Engine\nTheme Registry + Assets]
+  PageBuilder[Page Builder\nTemplates + Sanitizer]
+  Notify[Notify Core + Channels]
+  Currency[Currency Rates]
+  Relograde[Relograde Provider]
+  Workhub[Workhub]
+  Accounting[Accounting IR]
+  Payroll[Payroll Attendance IR]
+  RestaurantOps[Restaurant Ops]
+  PettyCash[Petty Cash IR]
+  ApiDocs[API Docs Builder]
+  Jalali[Jalali/Hijri Packages]
+
+  App --> AdminPanel
+  App --> TenantPanel
+  App --> Jalali
+  App --> PlatformCore
+  App --> FeatureGates
+  App --> TenancyDomains
+  App --> SiteBuilderCore
+  App --> ContentCMS
+  App --> Blog
+  App --> CommerceCatalog
+  App --> CommerceCheckout
+  App --> CommerceOrders
+  App --> PaymentsOrchestrator
+  App --> ProvidersCore
+  App --> EsimGoCore
+  App --> EsimGoCommerce
+  App --> EsimGoWebhooks
+  App --> EsimGoFilament
+  App --> Observability
+  App --> ThemeEngine
+  App --> PageBuilder
+
+  AdminPanel --> IAM
+  AdminPanel --> Notify
+  AdminPanel --> Currency
+  AdminPanel --> Relograde
+  AdminPanel --> EsimGoFilament
+  AdminPanel --> Workhub
+  AdminPanel --> ContentCMS
+  AdminPanel --> Blog
+  AdminPanel --> CommerceCatalog
+  AdminPanel --> CommerceOrders
+  AdminPanel --> Accounting
+  AdminPanel --> Payroll
+  AdminPanel --> RestaurantOps
+  AdminPanel --> PettyCash
+  AdminPanel --> ApiDocs
+
+  TenantPanel --> IAM
+  TenantPanel --> Workhub
+  TenantPanel --> ContentCMS
+  TenantPanel --> Blog
+  TenantPanel --> CommerceCatalog
+  TenantPanel --> CommerceOrders
+  TenantPanel --> Accounting
+  TenantPanel --> Payroll
+  TenantPanel --> RestaurantOps
+  TenantPanel --> PettyCash
+  TenantPanel --> ApiDocs
+  TenantPanel --> EsimGoFilament
+
+  Workhub --> IAM
+  Accounting --> IAM
+  Payroll --> IAM
+  RestaurantOps --> IAM
+  PettyCash --> IAM
+  Relograde --> IAM
+  Notify --> IAM
+  FeatureGates --> IAM
+  SiteBuilderCore --> IAM
+  ContentCMS --> IAM
+  Blog --> IAM
+  CommerceCatalog --> IAM
+  CommerceCheckout --> IAM
+  CommerceOrders --> IAM
+  PaymentsOrchestrator --> IAM
+  ProvidersCore --> IAM
+  EsimGoCore --> IAM
+  EsimGoCommerce --> IAM
+  EsimGoWebhooks --> IAM
+  PageBuilder --> IAM
+
+  ContentCMS --> PageBuilder
+  ContentCMS --> ThemeEngine
+  ContentCMS --> SiteBuilderCore
+  Blog --> PageBuilder
+  Blog --> ThemeEngine
+  Blog --> SiteBuilderCore
+  CommerceCatalog --> SiteBuilderCore
+  CommerceCatalog --> Currency
+  CommerceOrders --> CommerceCatalog
+  CommerceCheckout --> CommerceCatalog
+  CommerceCheckout --> CommerceOrders
+  CommerceOrders --> SiteBuilderCore
+  PaymentsOrchestrator --> CommerceOrders
+  Relograde --> ProvidersCore
+  EsimGoCore --> ProvidersCore
+  EsimGoCommerce --> EsimGoCore
+  EsimGoCommerce --> CommerceCatalog
+  EsimGoCommerce --> CommerceOrders
+  EsimGoCommerce --> ProvidersCore
+  EsimGoWebhooks --> EsimGoCore
+  EsimGoWebhooks --> ProvidersCore
+  EsimGoCore --> Notify
+  RestaurantOps --> Accounting
+  PettyCash --> Accounting

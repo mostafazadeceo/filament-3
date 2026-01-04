@@ -114,5 +114,4 @@ class AutomationRegistry
         $callback($this);
         $this->defaultsRegistered = true;
     }
-
 }

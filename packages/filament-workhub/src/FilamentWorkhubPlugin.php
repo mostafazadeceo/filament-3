@@ -11,9 +11,9 @@ use Haida\FilamentWorkhub\Filament\Resources\LabelResource;
 use Haida\FilamentWorkhub\Filament\Resources\ProjectResource;
 use Haida\FilamentWorkhub\Filament\Resources\StatusResource;
 use Haida\FilamentWorkhub\Filament\Resources\TransitionResource;
+use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource;
 use Haida\FilamentWorkhub\Filament\Resources\WorkItemResource;
 use Haida\FilamentWorkhub\Filament\Resources\WorkTypeResource;
-use Haida\FilamentWorkhub\Filament\Resources\WorkflowResource;
 
 class FilamentWorkhubPlugin implements Plugin
 {

@@ -1,0 +1,238 @@
+# SPEC — filamat-iam-suite
+
+## معرفی
+- پکیج: filamat/filamat-iam-suite
+- توضیح: Filamat 4 IAM Suite for Filament v4
+- Service Provider: Filamat\IamSuite\FilamatIamSuiteServiceProvider
+- Filament Plugin: Filamat\IamSuite\FilamatIamSuitePlugin (id: filamat-iam-suite)
+
+## دامنه و قابلیت‌ها
+- مدل‌ها:
+- AccessRequest.php
+- AccessRequestApproval.php
+- ApiDoc.php
+- ApiKey.php
+- ApiKeyScope.php
+- AuditLog.php
+- DelegatedAdminScope.php
+- Group.php
+- IamAiActionProposal.php
+- IamAiReport.php
+- ImpersonationSession.php
+- MfaMethod.php
+- Notification.php
+- Organization.php
+- OtpCode.php
+- PermissionOverride.php
+- PermissionSnapshot.php
+- PermissionTemplate.php
+- PrivilegeActivation.php
+- PrivilegeEligibility.php
+- PrivilegeRequest.php
+- PrivilegeRequestApproval.php
+- ProtectedActionToken.php
+- SecurityEvent.php
+- Subscription.php
+- SubscriptionPlan.php
+- Tenant.php
+- TenantUser.php
+- UserInvitation.php
+- UserProfile.php
+- UserSession.php
+- Wallet.php
+- WalletHold.php
+- WalletTransaction.php
+- Webhook.php
+- WebhookDelivery.php
+- WebhookNonce.php
+- منابع Filament:
+- src/Filament/Resources/ApiDocsResource.php
+- src/Filament/Resources/ApiKeyResource.php
+- src/Filament/Resources/AuditLogResource.php
+- src/Filament/Resources/GroupResource.php
+- src/Filament/Resources/IamAiActionProposalResource.php
+- src/Filament/Resources/IamAiReportResource.php
+- src/Filament/Resources/IamResource.php
+- src/Filament/Resources/ImpersonationSessionResource.php
+- src/Filament/Resources/MfaMethodResource.php
+- src/Filament/Resources/NotificationResource.php
+- src/Filament/Resources/OrganizationResource.php
+- src/Filament/Resources/PermissionOverrideResource.php
+- src/Filament/Resources/PermissionResource.php
+- src/Filament/Resources/PermissionTemplateResource.php
+- src/Filament/Resources/PrivilegeActivationResource.php
+- src/Filament/Resources/PrivilegeEligibilityResource.php
+- src/Filament/Resources/PrivilegeRequestResource.php
+- src/Filament/Resources/RoleResource.php
+- src/Filament/Resources/SecurityEventResource.php
+- src/Filament/Resources/SubscriptionPlanResource.php
+- src/Filament/Resources/SubscriptionResource.php
+- src/Filament/Resources/TenantResource.php
+- src/Filament/Resources/UserInvitationResource.php
+- src/Filament/Resources/UserResource.php
+- src/Filament/Resources/UserSessionResource.php
+- src/Filament/Resources/WalletHoldResource.php
+- src/Filament/Resources/WalletResource.php
+- src/Filament/Resources/WalletTransactionResource.php
+- src/Filament/Resources/WebhookResource.php
+- کنترلرها/API:
+- Api/V1/BaseController.php
+- Api/V1/Concerns/RequiresReason.php
+- Api/V1/GroupController.php
+- Api/V1/ImpersonationApiController.php
+- Api/V1/InvitationController.php
+- Api/V1/MfaController.php
+- Api/V1/N8nCallbackController.php
+- Api/V1/NotificationController.php
+- Api/V1/PermissionController.php
+- Api/V1/PrivilegeActivationController.php
+- Api/V1/PrivilegeEligibilityController.php
+- Api/V1/PrivilegeRequestController.php
+- Api/V1/ProtectedActionController.php
+- Api/V1/RoleController.php
+- Api/V1/ScimController.php
+- Api/V1/SessionController.php
+- Api/V1/SsoController.php
+- Api/V1/SubscriptionController.php
+- Api/V1/SubscriptionPlanController.php
+- Api/V1/TenantController.php
+- Api/V1/UserController.php
+- Api/V1/WalletController.php
+- Api/V1/WalletHoldController.php
+- Api/V1/WalletTransactionController.php
+- ImpersonationController.php
+- Webhooks/NotificationWebhookController.php
+- Webhooks/PaymentWebhookController.php
+- Jobs/Queue:
+- DeliverWebhookJob.php
+- SendNotificationJob.php
+- SendOtpJob.php
+- SyncCapabilitiesJob.php
+- Policyها:
+- ندارد
+
+## Tenancy و IAM
+- BelongsToTenant در کد: بله
+- TenantContext در کد: بله
+- IamAuthorization::allows در کد: بله
+- Capability Registry: بله
+- Scopeها (API): automation.manage, iam, iam.impersonate, mfa.manage, mfa.reset, notification.send, pam.activate, pam.approve, pam.request, pam.revoke, scim.manage, scim.view, session, session.revoke, sso.manage, sso.view, user.invite, user.view, wallet
+
+## مدل داده
+- Migrations:
+- 2025_01_01_000001_create_organizations_table.php
+- 2025_01_01_000002_create_tenants_table.php
+- 2025_01_01_000003_create_tenant_user_table.php
+- 2025_01_01_000004_add_iam_columns_to_users_table.php
+- 2025_01_01_000005_create_roles_table.php
+- 2025_01_01_000006_create_permissions_table.php
+- 2025_01_01_000007_create_model_has_roles_table.php
+- 2025_01_01_000008_create_model_has_permissions_table.php
+- 2025_01_01_000009_create_role_has_permissions_table.php
+- 2025_01_01_000010_create_groups_table.php
+- 2025_01_01_000011_create_group_user_table.php
+- 2025_01_01_000012_create_group_role_table.php
+- 2025_01_01_000013_create_group_permission_table.php
+- 2025_01_01_000014_create_permission_overrides_table.php
+- 2025_01_01_000015_create_permission_templates_table.php
+- 2025_01_01_000016_create_wallets_table.php
+- 2025_01_01_000017_create_wallet_transactions_table.php
+- 2025_01_01_000018_create_wallet_holds_table.php
+- 2025_01_01_000019_create_subscription_plans_table.php
+- 2025_01_01_000020_create_subscriptions_table.php
+- 2025_01_01_000021_create_webhooks_table.php
+- 2025_01_01_000022_create_webhook_deliveries_table.php
+- 2025_01_01_000023_create_notifications_table.php
+- 2025_01_01_000024_create_otp_codes_table.php
+- 2025_01_01_000025_create_audit_logs_table.php
+- 2025_01_01_000026_create_security_events_table.php
+- 2025_01_01_000027_create_api_keys_table.php
+- 2025_01_01_000028_create_access_requests_table.php
+- 2025_01_01_000029_create_access_request_approvals_table.php
+- 2025_01_01_000030_create_permission_snapshots_table.php
+- 2025_01_01_000031_create_delegated_admin_scopes_table.php
+- 2025_01_01_000032_add_audit_hash_chain_columns.php
+- 2025_01_01_000033_create_api_key_scopes_table.php
+- 2025_01_01_000034_create_webhook_nonces_table.php
+- 2025_01_01_000035_create_user_profiles_table.php
+- 2025_01_01_000036_add_tenant_id_columns_to_spatie_tables.php
+- 2025_01_01_000037_create_iam_user_invitations_table.php
+- 2025_01_01_000038_add_lifecycle_columns_to_tenant_user_table.php
+- 2025_01_01_000039_create_iam_privilege_eligibilities_table.php
+- 2025_01_01_000040_create_iam_privilege_requests_table.php
+- 2025_01_01_000041_create_iam_privilege_request_approvals_table.php
+- 2025_01_01_000042_create_iam_privilege_activations_table.php
+- 2025_01_01_000043_create_iam_impersonation_sessions_table.php
+- 2025_01_01_000044_create_iam_user_sessions_table.php
+- 2025_01_01_000045_create_iam_protected_action_tokens_table.php
+- 2025_01_01_000046_create_iam_mfa_methods_table.php
+- 2025_01_01_000047_add_automation_columns_to_webhooks_table.php
+- 2025_01_01_000048_create_iam_ai_reports_table.php
+- 2025_01_01_000049_create_iam_ai_action_proposals_table.php
+- 2025_01_01_000050_expand_webhook_secret_column.php
+- جدول‌ها:
+- access_request_approvals
+- access_requests
+- api_key_scopes
+- api_keys
+- audit_logs
+- delegated_admin_scopes
+- group_permission
+- group_role
+- group_user
+- groups
+- iam_ai_action_proposals
+- iam_ai_reports
+- iam_impersonation_sessions
+- iam_mfa_methods
+- iam_privilege_activations
+- iam_privilege_eligibilities
+- iam_privilege_request_approvals
+- iam_privilege_requests
+- iam_protected_action_tokens
+- iam_user_invitations
+- iam_user_sessions
+- model_has_permissions
+- model_has_roles
+- organizations
+- otp_codes
+- permission_overrides
+- permission_snapshots
+- permission_templates
+- permissions
+- role_has_permissions
+- roles
+- security_events
+- subscription_plans
+- subscriptions
+- tenant_user
+- tenants
+- user_profiles
+- wallet_holds
+- wallet_transactions
+- wallets
+- webhook_deliveries
+- webhook_nonces
+- webhooks
+- ایندکس‌ها: دارای ایندکس در مهاجرت‌ها
+
+## API
+- مسیر پایه: filamat-iam, v1
+- OpenAPI: ندارد/نامشخص
+- جزئیات: `docs/filamat-iam-suite/API.md`
+
+## تنظیمات
+- فایل‌های کانفیگ:
+- packages/filamat-iam-suite/config/n8n_event_catalog.php
+- packages/filamat-iam-suite/config/filamat-iam.php
+- کلیدهای env مرتبط:
+- APP_NAME
+- FILAMAT_IAM_N8N_API_BASE_URL
+- FILAMAT_IAM_N8N_API_KEY
+- FILAMAT_IAM_N8N_INBOUND_TOKEN
+- FILAMAT_IAM_NOTIFICATION_WEBHOOK_SECRET
+- FILAMAT_IAM_PAYMENT_WEBHOOK_SECRET
+
+## استقرار در پنل‌ها
+- Admin Panel: ثبت شده در AdminPanelProvider
+- Tenant Panel: ثبت شده در TenantPanelProvider

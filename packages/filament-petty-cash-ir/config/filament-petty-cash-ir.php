@@ -14,7 +14,27 @@ return [
         'allow_edit_after_submit' => false,
     ],
 
+    'attachments' => [
+        'disk' => 'public',
+        'duplicate_detection' => true,
+    ],
+
     'alerts' => [
         'threshold_enabled' => true,
+    ],
+
+    'idempotency' => [
+        'enabled' => true,
+    ],
+
+    'ai' => [
+        'enabled' => false,
+        'provider' => \Haida\FilamentPettyCashIr\Infrastructure\Ai\FakeAiProvider::class,
+        'allow_store_prompts' => false,
+        'redaction' => ['description', 'reference', 'payee_name'],
+        'log_retention_days' => 30,
+        'anomaly_threshold' => 0.7,
+        'create_exceptions' => true,
+        'max_scan' => 200,
     ],
 ];

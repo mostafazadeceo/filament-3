@@ -34,6 +34,9 @@ class PettyCashSettlement extends Model
         'total_replenished',
         'approved_at',
         'posted_at',
+        'reversed_at',
+        'reversed_by',
+        'reversal_reason',
         'notes',
         'metadata',
     ];
@@ -45,6 +48,7 @@ class PettyCashSettlement extends Model
         'total_replenished' => 'decimal:2',
         'approved_at' => 'datetime',
         'posted_at' => 'datetime',
+        'reversed_at' => 'datetime',
         'metadata' => 'array',
     ];
 
@@ -86,5 +90,10 @@ class PettyCashSettlement extends Model
     public function postedByUser(): BelongsTo
     {
         return $this->belongsTo(\App\Models\User::class, 'posted_by');
+    }
+
+    public function reversedByUser(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\User::class, 'reversed_by');
     }
 }

@@ -1,0 +1,36 @@
+[project]
+name = "kyc-defense"
+version = "0.1.0"
+description = "Defensive KYC research toolkit for document/selfie quality and forensics."
+readme = "kyc_defense/README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Haida Research"}]
+
+dependencies = [
+  "numpy>=1.24",
+  "Pillow>=10.0",
+]
+
+[project.optional-dependencies]
+opencv = ["opencv-python>=4.8"]
+metrics = ["scikit-learn>=1.4"]
+yaml = ["PyYAML>=6.0"]
+virtualcam = ["pyvirtualcam>=0.10"]
+jsonschema = ["jsonschema>=4.22"]
+
+[project.scripts]
+kyc-defense = "kyc_defense.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["kyc_defense*"]
+exclude = ["docs*", "tests*", ".venv*"]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["kyc_defense/tests"]
+addopts = "-q"

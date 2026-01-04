@@ -67,6 +67,7 @@ class WorkflowTransitionService
                 WorkItemDto::fromModel($item),
                 TransitionDto::fromModel($transition)
             ));
+
             return $item;
         });
     }

@@ -4,15 +4,15 @@ namespace Haida\FilamentWorkhub\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
-use Haida\FilamentWorkhub\Filament\Resources\LabelResource\Pages\CreateLabel;
-use Haida\FilamentWorkhub\Filament\Resources\LabelResource\Pages\EditLabel;
-use Haida\FilamentWorkhub\Filament\Resources\LabelResource\Pages\ListLabels;
-use Haida\FilamentWorkhub\Models\Label;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Haida\FilamentWorkhub\Filament\Resources\LabelResource\Pages\CreateLabel;
+use Haida\FilamentWorkhub\Filament\Resources\LabelResource\Pages\EditLabel;
+use Haida\FilamentWorkhub\Filament\Resources\LabelResource\Pages\ListLabels;
+use Haida\FilamentWorkhub\Models\Label;
 
 class LabelResource extends IamResource
 {

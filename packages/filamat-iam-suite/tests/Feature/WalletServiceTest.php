@@ -26,7 +26,7 @@ it('handles idempotent wallet credits', function () {
     $service->credit($wallet, 10, 'credit-1');
 
     expect(WalletTransaction::query()->where('wallet_id', $wallet->getKey())->count())->toBe(1);
-    expect($wallet->fresh()->balance)->toBe(10.0);
+    expect($wallet->fresh()->balance)->toBe('10.0000');
 });
 
 it('prevents debit when balance is insufficient', function () {

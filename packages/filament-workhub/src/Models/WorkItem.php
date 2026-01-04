@@ -5,8 +5,6 @@ namespace Haida\FilamentWorkhub\Models;
 use App\Models\User;
 use Haida\FilamentWorkhub\Database\Factories\WorkItemFactory;
 use Haida\FilamentWorkhub\Models\Concerns\UsesTenant;
-use Haida\FilamentWorkhub\Models\EntityReference;
-use Haida\FilamentWorkhub\Models\CustomFieldValue;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -125,6 +123,16 @@ class WorkItem extends Model
     public function customFieldValues(): HasMany
     {
         return $this->hasMany(CustomFieldValue::class, 'work_item_id');
+    }
+
+    public function aiSummaries(): HasMany
+    {
+        return $this->hasMany(AiSummary::class, 'work_item_id');
+    }
+
+    public function aiFieldRuns(): HasMany
+    {
+        return $this->hasMany(AiFieldRun::class, 'work_item_id');
     }
 
     public function links(): MorphMany

@@ -53,6 +53,7 @@ return [
         'enabled' => true,
         'token' => env('CURRENCY_RATES_PUBLIC_TOKEN'),
         'token_header' => 'X-Rate-Token',
+        'rate_limit' => '60,1',
     ],
 
     'cache' => [

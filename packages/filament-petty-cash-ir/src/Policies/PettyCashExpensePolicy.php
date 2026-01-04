@@ -63,4 +63,9 @@ class PettyCashExpensePolicy
     {
         return $this->allow('petty_cash.expense.reject', $expense);
     }
+
+    public function reverse(PettyCashExpense $expense): bool
+    {
+        return $this->allow('petty_cash.expense.reverse', $expense);
+    }
 }

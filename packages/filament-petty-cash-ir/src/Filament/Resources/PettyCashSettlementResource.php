@@ -4,6 +4,7 @@ namespace Haida\FilamentPettyCashIr\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
+use Filamat\IamSuite\Support\TenantContext;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -20,6 +21,7 @@ use Haida\FilamentPettyCashIr\Models\PettyCashFund;
 use Haida\FilamentPettyCashIr\Models\PettyCashSettlement;
 use Haida\FilamentPettyCashIr\Services\PettyCashPostingService;
 use Haida\FilamentPettyCashIr\Support\PettyCashStatuses;
+use Illuminate\Database\Eloquent\Builder;
 use Vendor\FilamentAccountingIr\Models\AccountingBranch;
 use Vendor\FilamentAccountingIr\Models\AccountingCompany;
 
@@ -41,6 +43,8 @@ class PettyCashSettlementResource extends IamResource
 
     protected static string|\UnitEnum|null $navigationGroup = 'تنخواه';
 
+    protected static array $eagerLoad = ['fund'];
+
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -48,17 +52,38 @@ class PettyCashSettlementResource extends IamResource
                 static::tenantSelect(),
                 Select::make('company_id')
                     ->label('شرکت')
-                    ->options(fn () => AccountingCompany::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return AccountingCompany::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->required(),
                 Select::make('branch_id')
                     ->label('شعبه')
-                    ->options(fn () => AccountingBranch::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return AccountingBranch::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->nullable(),
                 Select::make('fund_id')
                     ->label('تنخواه')
-                    ->options(fn () => PettyCashFund::query()->pluck('name', 'id')->toArray())
+                    ->options(function () {
+                        $tenantId = TenantContext::getTenantId();
+
+                        return PettyCashFund::query()
+                            ->when($tenantId, fn ($query) => $query->where('tenant_id', $tenantId))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
                     ->required(),
                 DatePicker::make('period_start')
@@ -136,5 +161,10 @@ class PettyCashSettlementResource extends IamResource
             'create' => CreatePettyCashSettlement::route('/create'),
             'edit' => EditPettyCashSettlement::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return static::scopeByTenant(parent::getEloquentQuery()->with(static::$eagerLoad));
     }
 }

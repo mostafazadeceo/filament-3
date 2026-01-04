@@ -34,6 +34,10 @@ class OtpService
             'attempts' => 0,
         ]);
 
+        $this->securityEventService->record('otp.requested', 'info', $user, $tenant, [
+            'purpose' => $purpose,
+        ]);
+
         $this->notificationService->queueOtp($otp, $code);
 
         return $otp;

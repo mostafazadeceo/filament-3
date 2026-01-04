@@ -6,12 +6,19 @@ namespace Filamat\IamSuite\Services;
 
 use Filamat\IamSuite\Models\SecurityEvent;
 use Filamat\IamSuite\Models\Tenant;
+use Filamat\IamSuite\Services\Automation\IamEventFactory;
+use Filamat\IamSuite\Services\Automation\IamEventPublisher;
 use Filamat\IamSuite\Support\TenantContext;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 
 class SecurityEventService
 {
+    public function __construct(
+        protected IamEventFactory $eventFactory,
+        protected IamEventPublisher $publisher,
+    ) {}
+
     public function record(
         string $type,
         string $severity = 'info',
@@ -23,7 +30,7 @@ class SecurityEventService
         $tenant ??= TenantContext::getTenant();
         $request ??= request();
 
-        return SecurityEvent::query()->create([
+        $event = SecurityEvent::query()->create([
             'tenant_id' => $tenant?->getKey(),
             'user_id' => $user?->getAuthIdentifier(),
             'type' => $type,
@@ -33,5 +40,12 @@ class SecurityEventService
             'user_agent' => $request?->userAgent(),
             'occurred_at' => now(),
         ]);
+
+        $automationEvent = $this->eventFactory->fromSecurityEvent($event);
+        if ($automationEvent) {
+            $this->publisher->publish($automationEvent);
+        }
+
+        return $event;
     }
 }

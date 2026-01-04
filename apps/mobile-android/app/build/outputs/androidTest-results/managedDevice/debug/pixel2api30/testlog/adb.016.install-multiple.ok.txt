@@ -1,0 +1,17 @@
+EXECUTING: /opt/android-sdk/platform-tools/adb -H localhost -P 5037 -s emulator-5554 install-multiple -t --user 0 -r -d /var/www/hub.haida.co/apps/mobile-android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+CURRENT_WORKING_DIRECTORY: /var/www/hub.haida.co/apps/mobile-android
+START_TIME: 2026-01-03 18:49:01.119
+START_TIME-NANOS: 2026-01-03 18:49:01.119265352
+ENVIRONMENT:
+ANDROID_SDK_HOME=/opt/android-sdk
+ANDROID_ADB=/opt/android-sdk/platform-tools/adb
+*****************************************
+STDOUT/STDERR BELOW
+===================
+Success
+
+===================
+END_TIME: 2026-01-03 18:49:02.206
+END_TIME-NANOS: 2026-01-03 18:49:02.206043238
+DURATION: 1086ms
+EXIT CODE: 0

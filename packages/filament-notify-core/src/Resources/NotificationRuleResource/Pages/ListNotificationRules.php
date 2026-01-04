@@ -2,10 +2,10 @@
 
 namespace Haida\FilamentNotify\Core\Resources\NotificationRuleResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Haida\FilamentNotify\Core\Resources\NotificationRuleResource;
 
-class ListNotificationRules extends ListRecords
+class ListNotificationRules extends ListRecordsWithCreate
 {
     protected static string $resource = NotificationRuleResource::class;
 }

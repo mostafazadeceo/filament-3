@@ -1,0 +1,32 @@
+{
+    "name": "haida/filament-providers-esim-go",
+    "version": "1.0.0",
+    "description": "Filament UI for eSIM Go provider.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^3.0|^4.0",
+        "filamat/filamat-iam-suite": "dev-main",
+        "haida/providers-esim-go-core": "^1.0",
+        "haida/providers-esim-go-commerce": "^1.0",
+        "haida/providers-esim-go-webhooks": "^1.0",
+        "haida/providers-core": "^1.0",
+        "illuminate/support": "^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haida\\FilamentProvidersEsimGo\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Haida\\FilamentProvidersEsimGo\\FilamentProvidersEsimGoServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

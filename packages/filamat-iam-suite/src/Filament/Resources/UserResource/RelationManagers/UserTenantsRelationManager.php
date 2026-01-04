@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Filamat\IamSuite\Filament\Resources\UserResource\RelationManagers;
 
 use Filamat\IamSuite\Services\AuditService;
+use Filamat\IamSuite\Services\UserLifecycleService;
 use Filamat\IamSuite\Support\IamAuthorization;
 use Filamat\IamSuite\Support\TenantContext;
 use Filament\Actions\Action;
@@ -12,6 +13,7 @@ use Filament\Actions\AttachAction;
 use Filament\Actions\DetachAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -76,6 +78,7 @@ class UserTenantsRelationManager extends RelationManager
                             ->default('active')
                             ->required(),
                         DateTimePicker::make('joined_at')->label('تاریخ عضویت')->nullable(),
+                        Textarea::make('reason')->label('دلیل')->required(),
                     ])
                     ->after(function (AttachAction $action) {
                         $owner = $this->getOwnerRecord();
@@ -86,6 +89,7 @@ class UserTenantsRelationManager extends RelationManager
                             'user_id' => $owner?->getKey(),
                             'role' => $data['role'] ?? 'member',
                             'status' => $data['status'] ?? 'active',
+                            'reason' => $data['reason'] ?? null,
                         ]);
                     }),
             ])
@@ -93,30 +97,47 @@ class UserTenantsRelationManager extends RelationManager
                 Action::make('activate')
                     ->label('فعال‌سازی')
                     ->visible(fn ($record) => IamAuthorization::allows('iam.manage') && ($record->pivot->status ?? null) !== 'active')
-                    ->action(function ($record) {
-                        $record->pivot->update(['status' => 'active']);
-                        app(AuditService::class)->log('tenant.user.activated', $record, [
-                            'user_id' => $this->getOwnerRecord()?->getKey(),
-                        ]);
+                    ->form([
+                        Textarea::make('reason')->label('دلیل')->required(),
+                    ])
+                    ->action(function ($record, array $data) {
+                        $tenant = $record;
+                        $user = $this->getOwnerRecord();
+                        if (! $user) {
+                            return;
+                        }
+
+                        app(UserLifecycleService::class)->activate($tenant, $user, auth()->user(), $data['reason'] ?? null);
                     }),
                 Action::make('deactivate')
                     ->label('غیرفعال‌سازی')
                     ->visible(fn ($record) => IamAuthorization::allows('iam.manage') && ($record->pivot->status ?? null) === 'active')
-                    ->action(function ($record) {
-                        $record->pivot->update(['status' => 'inactive']);
-                        app(AuditService::class)->log('tenant.user.deactivated', $record, [
-                            'user_id' => $this->getOwnerRecord()?->getKey(),
-                        ]);
+                    ->form([
+                        Textarea::make('reason')->label('دلیل')->required(),
+                    ])
+                    ->action(function ($record, array $data) {
+                        $tenant = $record;
+                        $user = $this->getOwnerRecord();
+                        if (! $user) {
+                            return;
+                        }
+
+                        app(UserLifecycleService::class)->suspend($tenant, $user, auth()->user(), $data['reason'] ?? null);
                     }),
                 DetachAction::make()
                     ->label('حذف عضویت')
                     ->visible(fn () => IamAuthorization::allows('iam.manage'))
+                    ->form([
+                        Textarea::make('reason')->label('دلیل')->required(),
+                    ])
                     ->after(function (DetachAction $action) {
                         $owner = $this->getOwnerRecord();
                         $record = $action->getRecord();
+                        $data = $action->getData();
 
                         app(AuditService::class)->log('tenant.user.detached', $record, [
                             'user_id' => $owner?->getKey(),
+                            'reason' => $data['reason'] ?? null,
                         ]);
                     }),
             ]);

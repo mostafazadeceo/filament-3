@@ -12,9 +12,7 @@ class ProjectCreated implements WorkhubEvent
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public ProjectDto $project, public array $meta = [])
-    {
-    }
+    public function __construct(public ProjectDto $project, public array $meta = []) {}
 
     public function eventName(): string
     {

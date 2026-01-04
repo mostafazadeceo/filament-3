@@ -1,0 +1,38 @@
+EXECUTING: /opt/android-sdk/platform-tools/adb -H localhost -P 5037 -s emulator-5554 shell am instrument -w -r -e additionalTestOutputDir /sdcard/Android/media/com.haida.hubapp/additional_test_output -e testTimeoutSeconds 31536000 com.haida.hubapp.test/androidx.test.runner.AndroidJUnitRunner
+CURRENT_WORKING_DIRECTORY: /var/www/hub.haida.co/apps/mobile-android
+START_TIME: 2026-01-03 18:49:03.307
+START_TIME-NANOS: 2026-01-03 18:49:03.307937393
+ENVIRONMENT:
+ANDROID_SDK_HOME=/opt/android-sdk
+ANDROID_ADB=/opt/android-sdk/platform-tools/adb
+*****************************************
+STDOUT/STDERR BELOW
+===================
+INSTRUMENTATION_STATUS: class=com.haida.hubapp.ExampleInstrumentedTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.haida.hubapp.ExampleInstrumentedTest:
+INSTRUMENTATION_STATUS: test=appContext
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.haida.hubapp.ExampleInstrumentedTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=appContext
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.062
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1
+===================
+END_TIME: 2026-01-03 18:49:13.363
+END_TIME-NANOS: 2026-01-03 18:49:13.363109453
+DURATION: 10055ms
+EXIT CODE: 0

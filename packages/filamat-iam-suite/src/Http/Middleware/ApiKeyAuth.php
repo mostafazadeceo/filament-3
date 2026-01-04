@@ -18,7 +18,10 @@ class ApiKeyAuth
         $token = $request->header($header);
 
         if ($token) {
-            $apiKey = ApiKey::query()->where('token_hash', hash('sha256', $token))->first();
+            $apiKey = ApiKey::query()
+                ->withoutGlobalScopes()
+                ->where('token_hash', hash('sha256', $token))
+                ->first();
 
             if (! $apiKey || ($apiKey->expires_at && $apiKey->expires_at->isPast())) {
                 return response()->json(['message' => 'کلید نامعتبر است.'], 401);

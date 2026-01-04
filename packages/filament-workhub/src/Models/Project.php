@@ -55,6 +55,11 @@ class Project extends Model
         return $this->hasMany(WorkItem::class, 'project_id');
     }
 
+    public function aiUpdates(): HasMany
+    {
+        return $this->hasMany(ProjectAiUpdate::class, 'project_id');
+    }
+
     public function allowsLinkType(string $type): bool
     {
         $allowed = $this->allowed_link_types ?? [];

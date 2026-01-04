@@ -11,15 +11,17 @@ use Haida\FilamentWorkhub\Http\Controllers\Api\V1\DecisionController;
 use Haida\FilamentWorkhub\Http\Controllers\Api\V1\LabelController;
 use Haida\FilamentWorkhub\Http\Controllers\Api\V1\LinkController;
 use Haida\FilamentWorkhub\Http\Controllers\Api\V1\OpenApiController;
+use Haida\FilamentWorkhub\Http\Controllers\Api\V1\ProjectAiController;
 use Haida\FilamentWorkhub\Http\Controllers\Api\V1\ProjectController;
 use Haida\FilamentWorkhub\Http\Controllers\Api\V1\StatusController;
 use Haida\FilamentWorkhub\Http\Controllers\Api\V1\TimeEntryController;
 use Haida\FilamentWorkhub\Http\Controllers\Api\V1\TransitionController;
 use Haida\FilamentWorkhub\Http\Controllers\Api\V1\WatcherController;
+use Haida\FilamentWorkhub\Http\Controllers\Api\V1\WorkflowController;
+use Haida\FilamentWorkhub\Http\Controllers\Api\V1\WorkItemAiController;
 use Haida\FilamentWorkhub\Http\Controllers\Api\V1\WorkItemController;
 use Haida\FilamentWorkhub\Http\Controllers\Api\V1\WorkItemTransitionController;
 use Haida\FilamentWorkhub\Http\Controllers\Api\V1\WorkTypeController;
-use Haida\FilamentWorkhub\Http\Controllers\Api\V1\WorkflowController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('api/v1/workhub')
@@ -96,6 +98,24 @@ Route::prefix('api/v1/workhub')
             ->middleware('filamat-iam.scope:workhub.comment.manage');
         Route::delete('comments/{comment}', [CommentController::class, 'destroy'])
             ->middleware('filamat-iam.scope:workhub.comment.manage');
+
+        Route::post('work-items/{workItem}/ai/personal-summary', [WorkItemAiController::class, 'personalSummary'])
+            ->middleware('filamat-iam.scope:workhub.ai.use');
+        Route::post('work-items/{workItem}/ai/shared-summary', [WorkItemAiController::class, 'sharedSummary'])
+            ->middleware('filamat-iam.scope:workhub.ai.share');
+        Route::post('work-items/{workItem}/ai/thread-summary', [WorkItemAiController::class, 'threadSummary'])
+            ->middleware('filamat-iam.scope:workhub.ai.use');
+        Route::post('work-items/{workItem}/ai/generate-subtasks', [WorkItemAiController::class, 'generateSubtasks'])
+            ->middleware('filamat-iam.scope:workhub.ai.use');
+        Route::post('work-items/{workItem}/ai/progress-update', [WorkItemAiController::class, 'progressUpdate'])
+            ->middleware('filamat-iam.scope:workhub.ai.use');
+        Route::post('work-items/{workItem}/ai/find-similar', [WorkItemAiController::class, 'findSimilar'])
+            ->middleware('filamat-iam.scope:workhub.ai.use');
+
+        Route::post('projects/{project}/ai/executive-summary', [ProjectAiController::class, 'executiveSummary'])
+            ->middleware('filamat-iam.scope:workhub.ai.project_reports.manage');
+        Route::get('projects/{project}/ai/stuck-tasks', [ProjectAiController::class, 'stuckTasks'])
+            ->middleware('filamat-iam.scope:workhub.ai.project_reports.manage');
 
         Route::get('work-items/{workItem}/attachments', [AttachmentController::class, 'index'])
             ->middleware('filamat-iam.scope:workhub.attachment.view');
