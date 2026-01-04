@@ -83,7 +83,22 @@ class ImapInboxReader
             $htmlBody = null;
 
             if ($storeBody) {
-                $textBody = imap_body($imap, (int) $msgNo, FT_PEEK) ?: null;
+                $structure = imap_fetchstructure($imap, (int) $msgNo);
+                if ($structure) {
+                    $textBody = $this->extractBodyPart($imap, (int) $msgNo, $structure, 'plain');
+                    $htmlBody = $this->extractBodyPart($imap, (int) $msgNo, $structure, 'html');
+
+                    if ($textBody === null && $htmlBody === null) {
+                        $fallback = imap_body($imap, (int) $msgNo, FT_PEEK) ?: null;
+                        $decoded = $this->decodeBody($fallback, $structure->encoding ?? null);
+
+                        if (strtoupper((string) ($structure->subtype ?? '')) === 'HTML') {
+                            $htmlBody = $decoded;
+                        } else {
+                            $textBody = $decoded;
+                        }
+                    }
+                }
             }
 
             $messageId = $overview->message_id ?? ($parsedHeaders->message_id ?? null);
@@ -155,5 +170,50 @@ class ImapInboxReader
         }
 
         return array_values(array_unique($emails));
+    }
+
+    protected function extractBodyPart($imap, int $msgNo, object $structure, string $subtype, string $partNumber = ''): ?string
+    {
+        $target = strtoupper($subtype);
+
+        if (! empty($structure->parts)) {
+            foreach ($structure->parts as $index => $part) {
+                $currentPart = $partNumber === '' ? (string) ($index + 1) : $partNumber.'.'.($index + 1);
+
+                if (isset($part->type, $part->subtype) && (int) $part->type === 0 && strtoupper((string) $part->subtype) === $target) {
+                    $body = imap_fetchbody($imap, $msgNo, $currentPart, FT_PEEK) ?: null;
+
+                    return $this->decodeBody($body, $part->encoding ?? null);
+                }
+
+                if (! empty($part->parts)) {
+                    $found = $this->extractBodyPart($imap, $msgNo, $part, $subtype, $currentPart);
+                    if ($found !== null) {
+                        return $found;
+                    }
+                }
+            }
+        } elseif (isset($structure->type, $structure->subtype) && (int) $structure->type === 0) {
+            if (strtoupper((string) ($structure->subtype ?? '')) === $target) {
+                $body = imap_body($imap, $msgNo, FT_PEEK) ?: null;
+
+                return $this->decodeBody($body, $structure->encoding ?? null);
+            }
+        }
+
+        return null;
+    }
+
+    protected function decodeBody(?string $body, mixed $encoding): ?string
+    {
+        if ($body === null) {
+            return null;
+        }
+
+        return match ((int) $encoding) {
+            3 => base64_decode($body) ?: $body,
+            4 => quoted_printable_decode($body),
+            default => $body,
+        };
     }
 }

@@ -79,10 +79,14 @@ class IppanelPatternChannelDriver implements ChannelDriver
 
         if ($patternCode) {
             $renderer = app(TemplateRenderer::class);
+            $contextData = $this->expandContext($context->context);
             $paramMap = $meta['param_map'] ?? [];
-            $params = $this->buildPatternParams($paramMap, $context->context, $renderer);
+            $params = $this->buildPatternParams($paramMap, $contextData, $renderer);
             if (empty($params)) {
-                $params = $this->buildDirectParams($meta['params'] ?? null, $context->context, $renderer);
+                $params = $this->buildDirectParams($meta['params'] ?? null, $contextData, $renderer);
+            }
+            if (empty($params)) {
+                $params = $this->buildTokenParams($contextData, $message, $renderer);
             }
 
             $response = Http::withHeaders([
@@ -290,6 +294,13 @@ class IppanelPatternChannelDriver implements ChannelDriver
      */
     protected function buildPatternParams(mixed $paramMap, array $context, TemplateRenderer $renderer): array
     {
+        if (is_string($paramMap)) {
+            $decoded = json_decode($paramMap, true);
+            if (is_array($decoded)) {
+                $paramMap = $decoded;
+            }
+        }
+
         if (! is_array($paramMap) || $paramMap === []) {
             return [];
         }
@@ -313,6 +324,13 @@ class IppanelPatternChannelDriver implements ChannelDriver
      */
     protected function buildDirectParams(mixed $params, array $context, TemplateRenderer $renderer): array
     {
+        if (is_string($params)) {
+            $decoded = json_decode($params, true);
+            if (is_array($decoded)) {
+                $params = $decoded;
+            }
+        }
+
         if (! is_array($params) || $params === []) {
             return [];
         }
@@ -340,6 +358,9 @@ class IppanelPatternChannelDriver implements ChannelDriver
     {
         if (is_string($path)) {
             $path = trim($path);
+            if (str_starts_with($path, 'context.')) {
+                $path = substr($path, 8);
+            }
             if ($path !== '' && str_contains($path, '{{')) {
                 $value = $renderer->renderString($path, $context);
             } elseif ($path !== '') {
@@ -391,6 +412,47 @@ class IppanelPatternChannelDriver implements ChannelDriver
 
     /**
      * @param  array<string, mixed>  $context
+     * @return array<string, mixed>
+     */
+    protected function buildTokenParams(array $context, RenderedMessage $message, TemplateRenderer $renderer): array
+    {
+        $token = $this->resolveAliasValue(['token', 'code', 'otp', 'otp_code', 'verification_code', 'pin'], $context);
+        if ($this->isEmptyParam($token)) {
+            $token = $this->extractTokenFromMessage($message);
+        }
+
+        if ($this->isEmptyParam($token)) {
+            return [];
+        }
+
+        return ['token' => $token];
+    }
+
+    protected function extractTokenFromMessage(RenderedMessage $message): ?string
+    {
+        $candidates = [];
+
+        $body = trim((string) $message->body);
+        if ($body !== '') {
+            $candidates[] = $body;
+        }
+
+        $subject = trim((string) ($message->subject ?? ''));
+        if ($subject !== '') {
+            $candidates[] = $subject;
+        }
+
+        foreach ($candidates as $candidate) {
+            if (preg_match('/\\b\\d{4,10}\\b/', $candidate, $matches)) {
+                return $matches[0];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $context
      */
     protected function resolveAliasValue(array $aliases, array $context): mixed
     {
@@ -419,6 +481,19 @@ class IppanelPatternChannelDriver implements ChannelDriver
         }
 
         return $params;
+    }
+
+    /**
+     * @param  array<string, mixed>  $context
+     * @return array<string, mixed>
+     */
+    protected function expandContext(array $context): array
+    {
+        if (! array_key_exists('context', $context)) {
+            $context['context'] = $context;
+        }
+
+        return $context;
     }
 
     protected function isEmptyParam(mixed $value): bool
