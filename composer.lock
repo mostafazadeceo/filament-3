@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "14510808f8328087e5ba12b261ec347e",
+    "content-hash": "8c4a111abed6b8ebd0016001f41dd8f5",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -3288,6 +3288,44 @@
                 "proprietary"
             ],
             "description": "Customer Loyalty Club module for Filament v4.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "haida/filament-mailops",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/filament-mailops",
+                "reference": "7faaf727be46efbc431fff8735adc1f565b9a731"
+            },
+            "require": {
+                "filamat/filamat-iam-suite": "dev-main",
+                "filament/filament": "^4.0",
+                "illuminate/database": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Haida\\FilamentMailOps\\FilamentMailOpsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Haida\\FilamentMailOps\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Filament mail operations for tenant email management.",
             "transport-options": {
                 "symlink": true,
                 "relative": true
