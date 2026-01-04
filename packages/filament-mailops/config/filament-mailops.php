@@ -19,6 +19,7 @@ return [
         'host' => env('MAILOPS_SMTP_HOST', 'mail.abrak.org'),
         'port' => env('MAILOPS_SMTP_PORT', 587),
         'encryption' => env('MAILOPS_SMTP_ENCRYPTION', 'tls'),
+        'ehlo_domain' => env('MAILOPS_SMTP_EHLO_DOMAIN'),
     ],
     'imap' => [
         'host' => env('MAILOPS_IMAP_HOST', 'mail.abrak.org'),

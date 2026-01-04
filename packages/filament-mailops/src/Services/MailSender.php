@@ -56,8 +56,12 @@ class MailSender
         $host = $settings['smtp_host'] ?? config('filament-mailops.smtp.host');
         $port = (int) ($settings['smtp_port'] ?? config('filament-mailops.smtp.port', 587));
         $encryption = $settings['smtp_encryption'] ?? config('filament-mailops.smtp.encryption', 'tls');
+        $ehloDomain = $settings['smtp_ehlo_domain'] ?? config('filament-mailops.smtp.ehlo_domain');
         if ($encryption === 'none') {
             $encryption = null;
+        }
+        if (! $ehloDomain) {
+            $ehloDomain = $this->resolveEmailDomain($mailbox->email);
         }
 
         config([
@@ -68,6 +72,7 @@ class MailSender
                 'encryption' => $encryption,
                 'username' => $mailbox->email,
                 'password' => $mailbox->password,
+                'local_domain' => $ehloDomain ?: config('mail.mailers.smtp.local_domain'),
                 'timeout' => 15,
             ],
         ]);
@@ -82,12 +87,14 @@ class MailSender
 
         $subject = $data['subject'] ?? null;
         $html = $data['html_body'] ?? null;
-        $text = $data['text_body'] ?? null;
+        $text = $this->normalizeTextBody($data['text_body'] ?? null, $html);
 
         $fromName = $mailbox->display_name ?: config('filament-mailops.from.name');
 
         Mail::mailer('mailops')->send([], [], function (Message $message) use ($mailbox, $fromName, $to, $cc, $bcc, $subject, $html, $text) {
             $message->from($mailbox->email, $fromName ?: null);
+            $message->replyTo($mailbox->email, $fromName ?: null);
+            $message->returnPath($mailbox->email);
             $message->to($to);
 
             if ($cc !== []) {
@@ -102,12 +109,12 @@ class MailSender
                 $message->subject($subject);
             }
 
-            if ($html) {
-                $message->html($html);
-            }
-
             if ($text) {
                 $message->text($text);
+            }
+
+            if ($html) {
+                $message->html($html);
             }
         });
     }
@@ -127,5 +134,31 @@ class MailSender
         }
 
         return array_values(array_filter(array_map('trim', $emails)));
+    }
+
+    protected function normalizeTextBody(?string $text, ?string $html): ?string
+    {
+        $text = $text !== null ? trim($text) : null;
+        if ($text !== null && $text !== '') {
+            return $text;
+        }
+
+        if (! $html) {
+            return null;
+        }
+
+        $plain = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $plain = preg_replace('/[ \t]+/', ' ', $plain);
+        $plain = preg_replace('/\R{3,}/', "\n\n", $plain);
+        $plain = trim((string) $plain);
+
+        return $plain !== '' ? $plain : null;
+    }
+
+    protected function resolveEmailDomain(string $email): ?string
+    {
+        $parts = explode('@', $email);
+
+        return $parts[1] ?? null;
     }
 }
