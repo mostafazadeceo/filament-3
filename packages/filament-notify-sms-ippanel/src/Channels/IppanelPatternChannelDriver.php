@@ -6,6 +6,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Haida\FilamentNotify\Core\Contracts\ChannelDriver;
 use Haida\FilamentNotify\Core\Support\Context\DeliveryContext;
+use Haida\FilamentNotify\Core\Support\Rendering\TemplateRenderer;
 use Haida\FilamentNotify\Core\Support\Rendering\RenderedMessage;
 use Haida\FilamentNotify\Core\Support\Sending\DeliveryResult;
 use Haida\FilamentNotify\Core\Support\Testing\ChannelTestContextFactory;
@@ -77,12 +78,11 @@ class IppanelPatternChannelDriver implements ChannelDriver
         }
 
         if ($patternCode) {
+            $renderer = app(TemplateRenderer::class);
             $paramMap = $meta['param_map'] ?? [];
-            $params = [];
-            if (is_array($paramMap)) {
-                foreach ($paramMap as $key => $path) {
-                    $params[$key] = data_get($context->context, $path);
-                }
+            $params = $this->buildPatternParams($paramMap, $context->context, $renderer);
+            if (empty($params)) {
+                $params = $this->buildDirectParams($meta['params'] ?? null, $context->context, $renderer);
             }
 
             $response = Http::withHeaders([
@@ -282,5 +282,155 @@ class IppanelPatternChannelDriver implements ChannelDriver
         }
 
         return $baseUrl;
+    }
+
+    /**
+     * @param  array<string, mixed>  $context
+     * @return array<string, mixed>
+     */
+    protected function buildPatternParams(mixed $paramMap, array $context, TemplateRenderer $renderer): array
+    {
+        if (! is_array($paramMap) || $paramMap === []) {
+            return [];
+        }
+
+        $params = [];
+        foreach ($paramMap as $key => $path) {
+            if (! is_string($key) || $key === '') {
+                continue;
+            }
+
+            $value = $this->resolveParamValue($key, $path, $context, $renderer);
+            $params[$key] = $value;
+        }
+
+        return $this->applyParamAliases($params, $context);
+    }
+
+    /**
+     * @param  array<string, mixed>  $context
+     * @return array<string, mixed>
+     */
+    protected function buildDirectParams(mixed $params, array $context, TemplateRenderer $renderer): array
+    {
+        if (! is_array($params) || $params === []) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($params as $key => $value) {
+            if (! is_string($key) || $key === '') {
+                continue;
+            }
+
+            if (is_string($value) && str_contains($value, '{{')) {
+                $value = $renderer->renderString($value, $context);
+            }
+
+            $normalized[$key] = $value;
+        }
+
+        return $this->applyParamAliases($normalized, $context);
+    }
+
+    /**
+     * @param  array<string, mixed>  $context
+     */
+    protected function resolveParamValue(string $key, mixed $path, array $context, TemplateRenderer $renderer): mixed
+    {
+        if (is_string($path)) {
+            $path = trim($path);
+            if ($path !== '' && str_contains($path, '{{')) {
+                $value = $renderer->renderString($path, $context);
+            } elseif ($path !== '') {
+                $value = data_get($context, $path);
+            } else {
+                $value = null;
+            }
+        } else {
+            $value = $path;
+        }
+
+        if (! $this->isEmptyParam($value)) {
+            return $value;
+        }
+
+        $fallback = $this->resolveFallbackValue($key, $context);
+        if (! $this->isEmptyParam($fallback)) {
+            return $fallback;
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param  array<string, mixed>  $context
+     */
+    protected function resolveFallbackValue(string $key, array $context): mixed
+    {
+        $paths = [
+            $key,
+            'action.data.' . $key,
+            'action.context.' . $key,
+            'record.' . $key,
+            'record.metadata.' . $key,
+            'record.meta.' . $key,
+            'record.payload.' . $key,
+            'record.context.' . $key,
+        ];
+
+        foreach ($paths as $path) {
+            $value = data_get($context, $path);
+            if (! $this->isEmptyParam($value)) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $context
+     */
+    protected function resolveAliasValue(array $aliases, array $context): mixed
+    {
+        foreach ($aliases as $alias) {
+            $value = $this->resolveFallbackValue((string) $alias, $context);
+            if (! $this->isEmptyParam($value)) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $params
+     * @param  array<string, mixed>  $context
+     * @return array<string, mixed>
+     */
+    protected function applyParamAliases(array $params, array $context): array
+    {
+        if (array_key_exists('token', $params) && $this->isEmptyParam($params['token'])) {
+            $token = $this->resolveAliasValue(['code', 'otp', 'otp_code', 'verification_code', 'pin'], $context);
+            if (! $this->isEmptyParam($token)) {
+                $params['token'] = $token;
+            }
+        }
+
+        return $params;
+    }
+
+    protected function isEmptyParam(mixed $value): bool
+    {
+        if ($value === null) {
+            return true;
+        }
+
+        if (is_string($value) && trim($value) === '') {
+            return true;
+        }
+
+        return false;
     }
 }

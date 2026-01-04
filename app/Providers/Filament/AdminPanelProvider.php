@@ -13,6 +13,7 @@ use Haida\FilamentPettyCashIr\FilamentPettyCashIrPlugin;
 use Haida\FilamentRelograde\RelogradePlugin;
 use Haida\FilamentProvidersEsimGo\ProvidersEsimGoPlugin;
 use Haida\FilamentMailtrap\MailtrapPlugin;
+use Haida\FilamentMailOps\MailOpsPlugin;
 use Haida\FilamentRestaurantOps\FilamentRestaurantOpsPlugin;
 use Haida\FilamentThreeCx\Filament\FilamentThreeCxPlugin;
 use Haida\FilamentWorkhub\FilamentWorkhubPlugin;
@@ -162,6 +163,9 @@ class AdminPanelProvider extends PanelProvider
         $plugins[] = ProvidersEsimGoPlugin::make();
         if (class_exists(MailtrapPlugin::class)) {
             $plugins[] = MailtrapPlugin::make();
+        }
+        if (class_exists(MailOpsPlugin::class)) {
+            $plugins[] = MailOpsPlugin::make();
         }
         $plugins[] = FilamentAccountingIrPlugin::make();
         $plugins[] = FilamentPayrollAttendanceIrPlugin::make();

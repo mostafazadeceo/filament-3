@@ -627,6 +627,13 @@ final class PermissionLabels
             'support.ticket' => 'تیکت پشتیبانی',
             'support.message' => 'پیام پشتیبانی',
             'support.attachment' => 'پیوست پشتیبانی',
+            'mailops' => 'ایمیل',
+            'mailops.domain' => 'دامنه ایمیل',
+            'mailops.mailbox' => 'صندوق ایمیل',
+            'mailops.alias' => 'نام مستعار ایمیل',
+            'mailops.outbound' => 'ایمیل خروجی',
+            'mailops.inbound' => 'ایمیل دریافتی',
+            'mailops.settings' => 'تنظیمات ایمیل',
             default => null,
         };
     }
@@ -662,6 +669,7 @@ final class PermissionLabels
             'transfer' => 'انتقال',
             'export' => 'خروجی',
             'send' => 'ارسال',
+            'sync' => 'همگام‌سازی',
             'retry' => 'تلاش مجدد',
             'redeem' => 'بازخرید',
             'issue' => 'صدور',

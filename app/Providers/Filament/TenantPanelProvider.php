@@ -26,6 +26,7 @@ use Haida\FilamentStorefrontBuilder\FilamentStorefrontBuilderPlugin;
 use Haida\ProvidersCore\ProvidersCorePlugin;
 use Haida\FilamentProvidersEsimGo\ProvidersEsimGoPlugin;
 use Haida\FilamentMailtrap\MailtrapPlugin;
+use Haida\FilamentMailOps\MailOpsPlugin;
 use Haida\FilamentThreeCx\Filament\FilamentThreeCxPlugin;
 use Haida\PageBuilder\PageBuilderPlugin;
 use Haida\SiteBuilderCore\SiteBuilderCorePlugin;
@@ -88,6 +89,7 @@ class TenantPanelProvider extends PanelProvider
                 ProvidersCorePlugin::make(),
                 ProvidersEsimGoPlugin::make(),
                 ...(class_exists(MailtrapPlugin::class) ? [MailtrapPlugin::make()] : []),
+                ...(class_exists(MailOpsPlugin::class) ? [MailOpsPlugin::make()] : []),
                 FilamentAccountingIrPlugin::make(),
                 FilamentPayrollAttendanceIrPlugin::make(),
                 FilamentRestaurantOpsPlugin::make(),

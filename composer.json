@@ -46,6 +46,7 @@
         "haida/filament-storefront-builder": "^1.0",
         "haida/mailtrap-core": "^1.0",
         "haida/filament-mailtrap": "^1.0",
+        "haida/filament-mailops": "^1.0",
         "haida/filament-meetings": "^1.0",
         "haida/payments-orchestrator": "^1.0",
         "haida/providers-core": "^1.0",
@@ -256,6 +257,13 @@
         {
             "type": "path",
             "url": "packages/filament-mailtrap",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-mailops",
             "options": {
                 "symlink": true
             }
