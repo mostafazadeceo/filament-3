@@ -3,14 +3,14 @@
 namespace Haida\TenancyDomains;
 
 use Filamat\IamSuite\Contracts\CapabilityRegistryInterface;
-use Haida\TenancyDomains\Models\SiteDomain;
+use Haida\TenancyDomains\Console\RenewCertificatesCommand;
 use Haida\TenancyDomains\Middleware\ResolveTenantFromHost;
+use Haida\TenancyDomains\Models\SiteDomain;
+use Haida\TenancyDomains\Policies\SiteDomainPolicy;
 use Haida\TenancyDomains\Services\CertificateManager;
 use Haida\TenancyDomains\Services\DomainVerificationService;
 use Haida\TenancyDomains\Services\SiteDomainService;
 use Haida\TenancyDomains\Support\TenancyDomainsCapabilities;
-use Haida\TenancyDomains\Policies\SiteDomainPolicy;
-use Haida\TenancyDomains\Console\RenewCertificatesCommand;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPackageTools\Package;

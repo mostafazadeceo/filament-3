@@ -9,6 +9,5 @@ class GatewayIntentResponse
         public ?string $redirectUrl = null,
         public string $status = 'pending',
         public array $meta = []
-    ) {
-    }
+    ) {}
 }

@@ -4,11 +4,11 @@ namespace Haida\ContentCms\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -74,6 +74,7 @@ class CmsPageResource extends IamResource
                         }
 
                         $decoded = json_decode($state, true);
+
                         return is_array($decoded) ? $decoded : null;
                     }),
                 Textarea::make('draft_content')
@@ -94,6 +95,7 @@ class CmsPageResource extends IamResource
                         }
 
                         $decoded = json_decode($state, true);
+
                         return is_array($decoded) ? $decoded : [];
                     }),
             ])

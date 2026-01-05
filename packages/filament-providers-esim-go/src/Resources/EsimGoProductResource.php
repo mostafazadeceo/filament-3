@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Haida\FilamentProvidersEsimGo\Resources;
 
 use Filamat\IamSuite\Filament\Resources\IamResource;
-use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\ViewAction;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Resources\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
@@ -232,7 +230,7 @@ class EsimGoProductResource extends IamResource
                     TextEntry::make('data_amount_mb')->label('حجم')->suffix(' MB'),
                     TextEntry::make('price')
                         ->label('قیمت')
-                        ->formatStateUsing(fn ($state, EsimGoProduct $record) => $record->price . ' ' . $record->currency),
+                        ->formatStateUsing(fn ($state, EsimGoProduct $record) => $record->price.' '.$record->currency),
                     TextEntry::make('autostart')
                         ->label('شروع خودکار')
                         ->badge()
@@ -253,7 +251,8 @@ class EsimGoProductResource extends IamResource
                                 ->formatStateUsing(function ($state, array $record) {
                                     $iso = $record['iso'] ?? null;
                                     $flag = static::flagEmoji(is_string($iso) ? $iso : null);
-                                    return trim($flag . ' ' . (string) $state);
+
+                                    return trim($flag.' '.(string) $state);
                                 }),
                             TextEntry::make('iso')->label('کد'),
                             TextEntry::make('region')->label('قاره/منطقه'),
@@ -311,7 +310,7 @@ class EsimGoProductResource extends IamResource
             $icon = is_array($meta) && ! empty($meta['icon']) ? $meta['icon'] : '🧩';
             $id = Str::slug($group, '_');
 
-            return trim($icon . ' ' . $label . ' #' . $id);
+            return trim($icon.' '.$label.' #'.$id);
         }, $groups)));
     }
 
@@ -325,7 +324,8 @@ class EsimGoProductResource extends IamResource
         return array_values(array_filter(array_map(function (string $region) use ($map) {
             $label = $map[$region] ?? $region;
             $icon = static::regionIcon($region);
-            return trim($icon . ' ' . $label);
+
+            return trim($icon.' '.$label);
         }, $regions)));
     }
 
@@ -347,7 +347,7 @@ class EsimGoProductResource extends IamResource
                 return null;
             }
 
-            return trim($flag . ' ' . $name);
+            return trim($flag.' '.$name);
         }, $meta)));
     }
 
@@ -368,7 +368,7 @@ class EsimGoProductResource extends IamResource
 
         $roaming = array_values(array_filter((array) $record->roaming_enabled));
         if ($roaming !== []) {
-            $features[] = '📡 رومینگ: ' . implode('، ', $roaming);
+            $features[] = '📡 رومینگ: '.implode('، ', $roaming);
         }
 
         $allowances = array_values(array_filter((array) $record->allowances));
@@ -385,7 +385,7 @@ class EsimGoProductResource extends IamResource
                 is_string($unit) ? $unit : null,
             ])));
             if ($desc !== '') {
-                $features[] = '📦 ' . $desc;
+                $features[] = '📦 '.$desc;
             }
         }
 
@@ -417,7 +417,7 @@ class EsimGoProductResource extends IamResource
             ])));
 
             if ($label !== '') {
-                $items[] = '📦 ' . $label;
+                $items[] = '📦 '.$label;
             }
         }
 
@@ -432,10 +432,11 @@ class EsimGoProductResource extends IamResource
 
         if ($mb >= 1024) {
             $gb = round($mb / 1024, 1);
-            return $gb . ' GB';
+
+            return $gb.' GB';
         }
 
-        return $mb . ' MB';
+        return $mb.' MB';
     }
 
     protected static function regionIcon(string $region): string
@@ -462,18 +463,20 @@ class EsimGoProductResource extends IamResource
         $a = mb_ord($iso[0]) - 65 + 0x1F1E6;
         $b = mb_ord($iso[1]) - 65 + 0x1F1E6;
 
-        return mb_chr($a) . mb_chr($b);
+        return mb_chr($a).mb_chr($b);
     }
 
     protected static function primaryRegion(EsimGoProduct $record): ?string
     {
         $region = (array) $record->region;
+
         return $region[0] ?? null;
     }
 
     protected static function primaryGroup(EsimGoProduct $record): ?string
     {
         $groups = (array) $record->groups;
+
         return $groups[0] ?? null;
     }
 
@@ -518,7 +521,7 @@ class EsimGoProductResource extends IamResource
             $icon = is_array($meta) && ! empty($meta['icon']) ? $meta['icon'] : '🧩';
             $id = Str::slug((string) $key, '_');
 
-            return [$key => trim($icon . ' ' . $display . ' #' . $id)];
+            return [$key => trim($icon.' '.$display.' #'.$id)];
         })->all();
     }
 
@@ -533,7 +536,8 @@ class EsimGoProductResource extends IamResource
         return collect($regions)->mapWithKeys(function ($label, $key) use ($labels) {
             $display = $labels[$key] ?? $label;
             $icon = static::regionIcon((string) $key);
-            return [$key => trim($icon . ' ' . $display)];
+
+            return [$key => trim($icon.' '.$display)];
         })->all();
     }
 
@@ -563,7 +567,7 @@ class EsimGoProductResource extends IamResource
             ->sortBy('name')
             ->mapWithKeys(function (array $item) {
                 $flag = static::flagEmoji(is_string($item['iso']) ? $item['iso'] : null);
-                $label = trim($flag . ' ' . $item['name']);
+                $label = trim($flag.' '.$item['name']);
 
                 return [$item['name'] => $label];
             })

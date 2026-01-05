@@ -13,7 +13,7 @@ Route::middleware(['web', 'resolve.site'])
         $pattern = '.+';
         if (is_array($reserved) && $reserved !== []) {
             $escaped = array_map(static fn ($slug) => preg_quote((string) $slug, '/'), $reserved);
-            $pattern = '^(?!(' . implode('|', $escaped) . ')$).+';
+            $pattern = '^(?!('.implode('|', $escaped).')$).+';
         }
 
         Route::get('{slug}', [PageController::class, 'show'])

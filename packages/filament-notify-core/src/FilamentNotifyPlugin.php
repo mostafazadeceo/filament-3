@@ -4,11 +4,11 @@ namespace Haida\FilamentNotify\Core;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Haida\FilamentNotify\Core\Pages\ChannelSettingsPage;
 use Haida\FilamentNotify\Core\Resources\DeliveryLogResource;
 use Haida\FilamentNotify\Core\Resources\NotificationRuleResource;
 use Haida\FilamentNotify\Core\Resources\TemplateResource;
 use Haida\FilamentNotify\Core\Resources\TriggerResource;
-use Haida\FilamentNotify\Core\Pages\ChannelSettingsPage;
 
 class FilamentNotifyPlugin implements Plugin
 {

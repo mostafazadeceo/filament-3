@@ -10,9 +10,9 @@ use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -27,6 +27,7 @@ use Haida\ProvidersEsimGoCore\Support\EsimGoLabels;
 class EsimGoConnectionResource extends IamResource
 {
     use InteractsWithTenant;
+
     protected static ?string $model = EsimGoConnection::class;
 
     protected static ?string $permissionPrefix = 'esim_go.connection';
@@ -80,7 +81,7 @@ class EsimGoConnectionResource extends IamResource
                             $connectionId = $record?->getKey();
                             $url = url('/api/v1/providers/esim-go/callback');
                             if ($connectionId) {
-                                $url .= '?connection_id=' . $connectionId;
+                                $url .= '?connection_id='.$connectionId;
                             }
                             $component->state($url);
                         }),

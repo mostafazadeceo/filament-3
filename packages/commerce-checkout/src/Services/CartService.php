@@ -111,6 +111,7 @@ class CartService
         if ($quantity <= 0) {
             $item->delete();
             $this->recalculate($item->cart);
+
             return $item;
         }
 

@@ -51,7 +51,7 @@ class CommerceInventoryItemResource extends IamResource
                     ->options(fn () => CommerceVariant::query()
                         ->get()
                         ->mapWithKeys(fn (CommerceVariant $variant) => [
-                            $variant->getKey() => trim(($variant->sku ?: '') . ' ' . ($variant->name ?: '')),
+                            $variant->getKey() => trim(($variant->sku ?: '').' '.($variant->name ?: '')),
                         ])
                         ->toArray())
                     ->searchable()

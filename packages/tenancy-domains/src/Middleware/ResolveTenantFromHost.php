@@ -38,7 +38,7 @@ class ResolveTenantFromHost
             return $next($request);
         }
 
-        $domainsTable = (new SiteDomain())->getTable();
+        $domainsTable = (new SiteDomain)->getTable();
         if (! Schema::hasTable($domainsTable)) {
             throw new NotFoundHttpException('Host not recognized.');
         }
@@ -78,7 +78,7 @@ class ResolveTenantFromHost
 
     private function isSubdomainOf(string $host, string $rootDomain): bool
     {
-        return $host !== $rootDomain && str_ends_with($host, '.' . $rootDomain);
+        return $host !== $rootDomain && str_ends_with($host, '.'.$rootDomain);
     }
 
     private function extractSubdomain(string $host, string $rootDomain): ?string
@@ -87,7 +87,7 @@ class ResolveTenantFromHost
             return null;
         }
 
-        $suffix = '.' . $rootDomain;
+        $suffix = '.'.$rootDomain;
         $slug = substr($host, 0, -strlen($suffix));
 
         return $slug !== '' ? $slug : null;

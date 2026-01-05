@@ -18,6 +18,6 @@ class FilamentNotifyWhatsAppServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        app(ChannelRegistry::class)->register(new WhatsAppChannelDriver());
+        app(ChannelRegistry::class)->register(new WhatsAppChannelDriver);
     }
 }

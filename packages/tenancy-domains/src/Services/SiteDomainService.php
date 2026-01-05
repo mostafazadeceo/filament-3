@@ -2,15 +2,14 @@
 
 namespace Haida\TenancyDomains\Services;
 
-use Haida\TenancyDomains\Models\SiteDomain;
 use Haida\TenancyDomains\Jobs\IssueCertificate;
+use Haida\TenancyDomains\Models\SiteDomain;
 
 class SiteDomainService
 {
     public function __construct(
         private readonly DomainVerificationService $verificationService,
-    ) {
-    }
+    ) {}
 
     public function requestVerification(SiteDomain $domain, ?string $method = null): SiteDomain
     {

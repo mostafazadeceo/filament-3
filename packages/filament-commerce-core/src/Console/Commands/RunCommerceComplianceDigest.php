@@ -42,6 +42,7 @@ class RunCommerceComplianceDigest extends Command
         $tenants = $tenantQuery->get();
         if ($tenants->isEmpty()) {
             $this->warn('No tenants found for compliance digest.');
+
             return self::SUCCESS;
         }
 
@@ -96,11 +97,13 @@ class RunCommerceComplianceDigest extends Command
 
             if ($dryRun) {
                 $this->line('Digest generated for tenant '.$tenant->slug.' (dry-run).');
+
                 continue;
             }
 
             if ($openCount < $minOpen) {
                 $this->line('Digest skipped for tenant '.$tenant->slug.' (min open not met).');
+
                 continue;
             }
 

@@ -11,9 +11,7 @@ use InvalidArgumentException;
 
 class ProviderJobReprocessService
 {
-    public function __construct(private readonly ProviderJobDispatcher $dispatcher)
-    {
-    }
+    public function __construct(private readonly ProviderJobDispatcher $dispatcher) {}
 
     public function reprocess(ProviderJobLog $log): ProviderJobLog
     {

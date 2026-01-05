@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Haida\ProvidersEsimGoCore\Services;
 
+use Haida\FilamentNotify\Core\Support\Triggers\TriggerDispatcher;
 use Haida\ProvidersEsimGoCore\Models\EsimGoCallback;
 use Haida\ProvidersEsimGoCore\Models\EsimGoConnection;
 use Haida\ProvidersEsimGoCore\Models\EsimGoEsim;
 use Haida\ProvidersEsimGoCore\Models\EsimGoInventoryUsage;
-use Haida\FilamentNotify\Core\Support\Triggers\TriggerDispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 

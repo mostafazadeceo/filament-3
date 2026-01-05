@@ -18,8 +18,7 @@ class WebhookHandler
     public function __construct(
         protected DatabaseManager $db,
         protected GatewayRegistry $registry
-    ) {
-    }
+    ) {}
 
     public function handle(Request $request, string $providerKey): array
     {

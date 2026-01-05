@@ -10,7 +10,7 @@ use Haida\MailtrapCore\Models\MailtrapAudienceContact;
 class MailtrapAudienceService
 {
     /**
-     * @param array<int, array<string, mixed>> $contacts
+     * @param  array<int, array<string, mixed>>  $contacts
      */
     public function upsertContacts(MailtrapAudience $audience, array $contacts): int
     {

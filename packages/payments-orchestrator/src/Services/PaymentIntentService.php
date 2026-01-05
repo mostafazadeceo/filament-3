@@ -9,9 +9,7 @@ use Illuminate\Validation\ValidationException;
 
 class PaymentIntentService
 {
-    public function __construct(protected GatewayRegistry $registry)
-    {
-    }
+    public function __construct(protected GatewayRegistry $registry) {}
 
     /**
      * @param  array<string, mixed>  $payload

@@ -4,8 +4,8 @@ namespace Haida\FilamentPos;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Haida\FilamentPos\Filament\Resources\PosCashMovementResource;
 use Haida\FilamentPos\Filament\Resources\PosCashierSessionResource;
+use Haida\FilamentPos\Filament\Resources\PosCashMovementResource;
 use Haida\FilamentPos\Filament\Resources\PosDeviceResource;
 use Haida\FilamentPos\Filament\Resources\PosRegisterResource;
 use Haida\FilamentPos\Filament\Resources\PosSaleResource;

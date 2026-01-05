@@ -2,17 +2,15 @@
 
 namespace Haida\FilamentPos\Services;
 
-use Haida\FilamentPos\Models\PosCashMovement;
 use Haida\FilamentPos\Models\PosCashierSession;
+use Haida\FilamentPos\Models\PosCashMovement;
 use Haida\FilamentPos\Models\PosRegister;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\DatabaseManager;
 
 class PosCashierSessionService
 {
-    public function __construct(protected DatabaseManager $db)
-    {
-    }
+    public function __construct(protected DatabaseManager $db) {}
 
     public function openSession(PosRegister $register, float $openingFloat = 0, ?int $deviceId = null, ?Authenticatable $actor = null): PosCashierSession
     {

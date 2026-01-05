@@ -5,8 +5,8 @@ namespace Haida\ThemeEngine;
 class ThemeDefinition
 {
     /**
-     * @param array<string, string> $tokens
-     * @param array<string, string> $assets
+     * @param  array<string, string>  $tokens
+     * @param  array<string, string>  $assets
      */
     public function __construct(
         public string $key,
@@ -17,11 +17,10 @@ class ThemeDefinition
         public array $assets = [],
         public ?string $view = null,
         public ?string $createdAtJalali = null,
-    ) {
-    }
+    ) {}
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      */
     public static function fromArray(string $key, array $payload): self
     {

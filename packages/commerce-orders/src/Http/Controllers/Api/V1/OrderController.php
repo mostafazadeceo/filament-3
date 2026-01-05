@@ -2,12 +2,12 @@
 
 namespace Haida\CommerceOrders\Http\Controllers\Api\V1;
 
+use Filamat\IamSuite\Support\TenantContext;
 use Haida\CommerceOrders\Http\Requests\UpdateOrderRequest;
 use Haida\CommerceOrders\Http\Resources\OrderResource;
 use Haida\CommerceOrders\Models\Order;
 use Haida\FeatureGates\Services\FeatureGateService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Filamat\IamSuite\Support\TenantContext;
 use Illuminate\Validation\ValidationException;
 
 class OrderController extends ApiController

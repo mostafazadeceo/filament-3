@@ -3,13 +3,13 @@
 namespace Haida\FilamentNotify\WebPush\Http;
 
 use Filament\Facades\Filament;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Haida\FilamentNotify\Core\Models\ChannelSetting;
 use Haida\FilamentNotify\Core\Support\Rendering\RenderedMessage;
 use Haida\FilamentNotify\Core\Support\Testing\ChannelTestContextFactory;
 use Haida\FilamentNotify\WebPush\Channels\WebPushChannelDriver;
 use Haida\FilamentNotify\WebPush\Models\WebPushSubscription;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class WebPushSubscriptionController extends Controller
 {
@@ -65,7 +65,7 @@ class WebPushSubscriptionController extends Controller
     protected function sendWelcomeNotification(object $user, array $channelSettings, string $panelId): void
     {
         try {
-            $driver = new WebPushChannelDriver();
+            $driver = new WebPushChannelDriver;
             $context = ChannelTestContextFactory::make(
                 $panelId,
                 'webpush',

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Filamat\IamSuite;
 
-use Filamat\IamSuite\Filament\Pages\NotificationDashboard;
 use Filamat\IamSuite\Filament\Pages\MegaAdminGuide;
 use Filamat\IamSuite\Filament\Pages\MegaAdminOnboarding;
+use Filamat\IamSuite\Filament\Pages\NotificationDashboard;
 use Filamat\IamSuite\Filament\Pages\OrganizationGuide;
 use Filamat\IamSuite\Filament\Pages\PermissionSimulator;
 use Filamat\IamSuite\Filament\Pages\SuperAdminDashboard;
@@ -28,8 +28,8 @@ use Filamat\IamSuite\Filament\Resources\PermissionTemplateResource;
 use Filamat\IamSuite\Filament\Resources\PrivilegeActivationResource;
 use Filamat\IamSuite\Filament\Resources\PrivilegeEligibilityResource;
 use Filamat\IamSuite\Filament\Resources\PrivilegeRequestResource;
-use Filamat\IamSuite\Filament\Resources\RoleResource;
 use Filamat\IamSuite\Filament\Resources\QuickActionResource;
+use Filamat\IamSuite\Filament\Resources\RoleResource;
 use Filamat\IamSuite\Filament\Resources\SecurityEventResource;
 use Filamat\IamSuite\Filament\Resources\SubscriptionPlanResource;
 use Filamat\IamSuite\Filament\Resources\SubscriptionResource;

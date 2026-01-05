@@ -12,9 +12,7 @@ use Illuminate\Contracts\Container\Container;
 
 class CertificateManager
 {
-    public function __construct(private readonly Container $container)
-    {
-    }
+    public function __construct(private readonly Container $container) {}
 
     public function issue(SiteDomain $domain, ?string $providerKey = null): CertificateResult
     {

@@ -6,12 +6,12 @@ namespace Haida\ProvidersCore\Jobs;
 
 use Filamat\IamSuite\Models\Tenant;
 use Filamat\IamSuite\Support\TenantContext;
+use Haida\ProvidersCore\Contracts\ProviderAdapter;
 use Haida\ProvidersCore\DataTransferObjects\ProviderContext;
 use Haida\ProvidersCore\DataTransferObjects\ProviderResult;
 use Haida\ProvidersCore\Models\ProviderJobLog;
 use Haida\ProvidersCore\Services\ProviderRegistry;
 use Haida\ProvidersCore\Support\ProviderAction;
-use Haida\ProvidersCore\Contracts\ProviderAdapter;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -27,6 +27,7 @@ class ProviderActionJob implements ShouldQueue
     use SerializesModels;
 
     public int $tries;
+
     public int $timeout;
 
     public function __construct(

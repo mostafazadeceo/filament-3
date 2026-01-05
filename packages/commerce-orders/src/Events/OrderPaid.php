@@ -12,7 +12,5 @@ class OrderPaid
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public Order $order, public OrderPayment $payment)
-    {
-    }
+    public function __construct(public Order $order, public OrderPayment $payment) {}
 }

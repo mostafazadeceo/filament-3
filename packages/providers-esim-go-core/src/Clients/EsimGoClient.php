@@ -12,7 +12,6 @@ use Haida\ProvidersEsimGoCore\Support\EsimGoRateLimiter;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\LazyCollection;
@@ -121,7 +120,7 @@ class EsimGoClient
             return $callback();
         }
 
-        $key = EsimGoCacheKey::make($prefix . ':' . $this->connection->getKey(), $params);
+        $key = EsimGoCacheKey::make($prefix.':'.$this->connection->getKey(), $params);
         $store = config('providers-esim-go-core.cache.store');
         $cache = $store ? Cache::store($store) : Cache::store();
 
@@ -136,12 +135,12 @@ class EsimGoClient
 
         $url = $this->buildUrl($resource);
 
-        $rateLimitKey = 'esim-go:' . $this->connection->getKey();
+        $rateLimitKey = 'esim-go:'.$this->connection->getKey();
         $rateConfig = config('providers-esim-go-core.rate_limit', []);
         $maxRequests = (int) ($rateConfig['max_requests'] ?? 10);
         $perSeconds = (int) ($rateConfig['per_seconds'] ?? 1);
 
-        $this->rateLimiter->throttle($rateLimitKey . ':' . $perSeconds, $maxRequests);
+        $this->rateLimiter->throttle($rateLimitKey.':'.$perSeconds, $maxRequests);
 
         $startedAt = microtime(true);
 
@@ -193,6 +192,7 @@ class EsimGoClient
             }, function (Throwable $exception): bool {
                 if ($exception instanceof RequestException) {
                     $status = $exception->response?->status();
+
                     return in_array($status, [429, 503], true);
                 }
 

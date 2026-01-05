@@ -42,7 +42,7 @@ class FilamentNotifyServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        app(ChannelRegistry::class)->register(new MailChannelDriver());
+        app(ChannelRegistry::class)->register(new MailChannelDriver);
 
         Event::listen(ActionCalled::class, ActionCalledListener::class);
 

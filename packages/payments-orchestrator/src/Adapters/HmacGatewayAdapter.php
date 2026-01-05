@@ -17,9 +17,7 @@ use InvalidArgumentException;
 
 class HmacGatewayAdapter implements GatewayAdapterInterface
 {
-    public function __construct(protected WebhookSignature $signature)
-    {
-    }
+    public function __construct(protected WebhookSignature $signature) {}
 
     public function key(): string
     {
@@ -32,8 +30,8 @@ class HmacGatewayAdapter implements GatewayAdapterInterface
             $runId = (string) (config('payments-orchestrator.fake_run_id') ?: Str::upper(Str::random(6)));
 
             return new GatewayIntentResponse(
-                'ref-' . $runId,
-                'https://gateway.test/redirect/' . $runId,
+                'ref-'.$runId,
+                'https://gateway.test/redirect/'.$runId,
                 'requires_action',
                 [
                     'scenario' => 'fake',

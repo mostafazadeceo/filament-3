@@ -6,8 +6,8 @@ namespace Filamat\IamSuite\Filament\Resources\TenantResource\Pages;
 
 use Filamat\IamSuite\Filament\Resources\TenantResource;
 use Filamat\IamSuite\Services\TenantProvisioningService;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class EditTenant extends EditRecord
 {

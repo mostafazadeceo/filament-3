@@ -6,7 +6,6 @@ namespace Haida\FilamentAppApi\Tests\Feature;
 
 use Filamat\IamSuite\Models\ApiKey;
 use Filamat\IamSuite\Models\Tenant;
-use Haida\FilamentAppApi\Models\AppSyncChange;
 use Haida\FilamentAppApi\Tests\TestCase;
 use Illuminate\Support\Str;
 

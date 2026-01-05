@@ -3,6 +3,7 @@
 namespace Haida\FilamentNotify\Core\Support\Recipients;
 
 use Illuminate\Database\Eloquent\Model;
+
 class RecipientResolver
 {
     /**
@@ -21,6 +22,7 @@ class RecipientResolver
                 if ($user instanceof Model) {
                     $this->pushRecipient($recipients, $this->fromModel($user));
                 }
+
                 continue;
             }
 
@@ -29,6 +31,7 @@ class RecipientResolver
                 foreach ($emails as $email) {
                     $this->pushRecipient($recipients, new Recipient(email: $email));
                 }
+
                 continue;
             }
 
@@ -37,6 +40,7 @@ class RecipientResolver
                 foreach ($phones as $phone) {
                     $this->pushRecipient($recipients, new Recipient(phone: $phone));
                 }
+
                 continue;
             }
 
@@ -62,6 +66,7 @@ class RecipientResolver
                         }
                     }
                 }
+
                 continue;
             }
 
@@ -114,6 +119,7 @@ class RecipientResolver
     protected function splitList(string $value): array
     {
         $items = preg_split('/[\n,]+/', $value) ?: [];
+
         return array_values(array_filter(array_map('trim', $items)));
     }
 
@@ -124,7 +130,7 @@ class RecipientResolver
     {
         $key = $recipient->email ?: ($recipient->phone ?: ($recipient->telegramChatId ?: ($recipient->whatsappNumber ?: $recipient->baleChatId)));
         if (! $key && $recipient->notifiable) {
-            $key = $recipient->notifiable::class . ':' . $recipient->notifiable->getKey();
+            $key = $recipient->notifiable::class.':'.$recipient->notifiable->getKey();
         }
 
         if (! $key) {

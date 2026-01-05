@@ -72,7 +72,7 @@ class MailtrapDomainService
     }
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      */
     public function create(MailtrapConnection $connection, array $payload): MailtrapSendingDomain
     {
@@ -110,7 +110,7 @@ class MailtrapDomainService
     }
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      */
     public function update(MailtrapConnection $connection, MailtrapSendingDomain $domain, array $payload): MailtrapSendingDomain
     {

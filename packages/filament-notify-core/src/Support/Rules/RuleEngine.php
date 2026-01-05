@@ -72,7 +72,7 @@ class RuleEngine
                         'channel_settings' => $channelSettings,
                         'template_id' => $template?->id,
                     ])->onConnection(config('filament-notify.queue.connection'))
-                      ->onQueue(config('filament-notify.queue.queue'));
+                        ->onQueue(config('filament-notify.queue.queue'));
                 }
             }
         }
@@ -96,6 +96,7 @@ class RuleEngine
 
         if (! Cache::has($cacheKey)) {
             Cache::put($cacheKey, 1, now()->addSeconds((int) $seconds));
+
             return true;
         }
 

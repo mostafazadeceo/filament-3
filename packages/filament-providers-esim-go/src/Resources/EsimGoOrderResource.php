@@ -13,9 +13,9 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Haida\ProvidersEsimGoCore\Exceptions\EsimGoApiException;
 use Haida\FilamentProvidersEsimGo\Resources\EsimGoOrderResource\Pages\ListEsimGoOrders;
 use Haida\FilamentProvidersEsimGo\Resources\EsimGoOrderResource\Pages\ViewEsimGoOrder;
+use Haida\ProvidersEsimGoCore\Exceptions\EsimGoApiException;
 use Haida\ProvidersEsimGoCore\Models\EsimGoOrder;
 use Haida\ProvidersEsimGoCore\Services\EsimGoOrderService;
 use Haida\ProvidersEsimGoCore\Support\EsimGoLabels;
@@ -111,7 +111,7 @@ class EsimGoOrderResource extends IamResource
                         ->columnSpanFull(),
                     TextEntry::make('total')
                         ->label('مبلغ')
-                        ->formatStateUsing(fn ($state, EsimGoOrder $record) => $record->total . ' ' . $record->currency),
+                        ->formatStateUsing(fn ($state, EsimGoOrder $record) => $record->total.' '.$record->currency),
                     TextEntry::make('updated_at')->label('آخرین بروزرسانی')->jalaliDateTime(),
                 ])
                 ->columns(3),

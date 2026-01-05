@@ -4,11 +4,11 @@ namespace Haida\Blog\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -17,7 +17,6 @@ use Haida\Blog\Filament\Resources\BlogPostResource\Pages\EditBlogPost;
 use Haida\Blog\Filament\Resources\BlogPostResource\Pages\ListBlogPosts;
 use Haida\Blog\Models\BlogCategory;
 use Haida\Blog\Models\BlogPost;
-use Haida\Blog\Models\BlogTag;
 use Haida\Blog\Services\BlogPostService;
 use Haida\SiteBuilderCore\Models\Site;
 
@@ -85,6 +84,7 @@ class BlogPostResource extends IamResource
                         }
 
                         $decoded = json_decode($state, true);
+
                         return is_array($decoded) ? $decoded : null;
                     }),
                 Textarea::make('draft_content')

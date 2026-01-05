@@ -217,7 +217,7 @@ class EsimGoCommerceService
     protected function upsertCatalogProduct(Site $site, EsimGoProduct $product): CatalogProduct
     {
         $slug = $this->generateSlug($site, $product->bundle_name, $product->catalog_product_id);
-        $sku = 'ESIM-' . Str::upper(Str::slug($product->bundle_name, '-'));
+        $sku = 'ESIM-'.Str::upper(Str::slug($product->bundle_name, '-'));
 
         $price = (float) $product->price;
         $currency = (string) ($product->currency ?: $site->currency);
@@ -264,7 +264,7 @@ class EsimGoCommerceService
 
     protected function upsertCatalogVariant(CatalogProduct $catalogProduct, EsimGoProduct $product): CatalogVariant
     {
-        $sku = $catalogProduct->sku ?: ('ESIM-' . Str::upper(Str::slug($product->bundle_name, '-')));
+        $sku = $catalogProduct->sku ?: ('ESIM-'.Str::upper(Str::slug($product->bundle_name, '-')));
 
         $price = (float) $product->price;
         $currency = (string) ($product->currency ?: $catalogProduct->currency);
@@ -321,7 +321,7 @@ class EsimGoCommerceService
     {
         $base = Str::slug($name);
         if ($base === '') {
-            $base = 'esim-' . Str::lower(Str::random(6));
+            $base = 'esim-'.Str::lower(Str::random(6));
         }
 
         $slug = $base;
@@ -332,7 +332,7 @@ class EsimGoCommerceService
             ->exists();
 
         if ($exists) {
-            $slug = $base . '-' . substr(sha1($name), 0, 6);
+            $slug = $base.'-'.substr(sha1($name), 0, 6);
         }
 
         return $slug;

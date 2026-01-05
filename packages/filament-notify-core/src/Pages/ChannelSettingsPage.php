@@ -3,16 +3,16 @@
 namespace Haida\FilamentNotify\Core\Pages;
 
 use Filament\Actions\Action;
-use Filament\Notifications\Notification;
-use Filament\Pages\Page;
+use Filament\Facades\Filament;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Facades\Filament;
+use Filament\Notifications\Notification;
+use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Haida\FilamentNotify\Core\Channels\ChannelRegistry;
 use Haida\FilamentNotify\Core\Contracts\ChannelDriver;
 use Haida\FilamentNotify\Core\Contracts\SupportsChatIdDiscovery;
-use Haida\FilamentNotify\Core\Channels\ChannelRegistry;
 use Haida\FilamentNotify\Core\Models\ChannelSetting;
 use Haida\FilamentNotify\Core\Support\Sending\DeliveryResult;
 use Illuminate\Support\Str;
@@ -124,7 +124,7 @@ class ChannelSettingsPage extends Page implements HasForms
         $key = $driver->key();
         $formSchema = $driver->connectionTestForm();
 
-        $action = Action::make('test_connection_' . $key)
+        $action = Action::make('test_connection_'.$key)
             ->label('تست اتصال')
             ->icon('heroicon-o-link')
             ->color('gray')
@@ -137,7 +137,7 @@ class ChannelSettingsPage extends Page implements HasForms
 
         if (! empty($formSchema)) {
             $action->form($formSchema)
-                ->modalHeading('تست اتصال - ' . $driver->label())
+                ->modalHeading('تست اتصال - '.$driver->label())
                 ->modalSubmitActionLabel('بررسی');
         }
 
@@ -148,13 +148,13 @@ class ChannelSettingsPage extends Page implements HasForms
     {
         $key = $driver->key();
 
-        return Action::make('test_send_' . $key)
+        return Action::make('test_send_'.$key)
             ->label('تست ارسال')
             ->icon('heroicon-o-paper-airplane')
             ->color('primary')
             ->extraAttributes(['data-fn-ignore' => true])
             ->form($driver->sendTestForm())
-            ->modalHeading('تست ارسال - ' . $driver->label())
+            ->modalHeading('تست ارسال - '.$driver->label())
             ->modalSubmitActionLabel('ارسال')
             ->action(function (array $data) use ($driver, $key): void {
                 $settings = $this->getChannelSettingsFromForm($key);
@@ -168,7 +168,7 @@ class ChannelSettingsPage extends Page implements HasForms
     {
         $key = $driver->key();
 
-        return Action::make('discover_chat_id_' . $key)
+        return Action::make('discover_chat_id_'.$key)
             ->label('دریافت چت آیدی')
             ->icon('heroicon-o-identification')
             ->color('gray')
@@ -179,6 +179,7 @@ class ChannelSettingsPage extends Page implements HasForms
 
                 if (! $result->success) {
                     $this->notifyTestResult($driver->key(), $driver->label(), 'دریافت چت آیدی', $result);
+
                     return;
                 }
 
@@ -194,6 +195,7 @@ class ChannelSettingsPage extends Page implements HasForms
                         'دریافت چت آیدی',
                         DeliveryResult::failure('bale_no_updates'),
                     );
+
                     return;
                 }
 
@@ -206,7 +208,7 @@ class ChannelSettingsPage extends Page implements HasForms
                 $label = $this->formatChatLabel($chat);
                 Notification::make()
                     ->title('چت آیدی تنظیم شد.')
-                    ->body($label ?: ('چت آیدی: ' . $chat['id']))
+                    ->body($label ?: ('چت آیدی: '.$chat['id']))
                     ->success()
                     ->send();
             });
@@ -354,16 +356,16 @@ class ChannelSettingsPage extends Page implements HasForms
         $parts = [];
 
         if (! empty($chat['username'])) {
-            $parts[] = '@' . $chat['username'];
+            $parts[] = '@'.$chat['username'];
         }
 
-        $name = trim((string) ($chat['first_name'] ?? '') . ' ' . (string) ($chat['last_name'] ?? ''));
+        $name = trim((string) ($chat['first_name'] ?? '').' '.(string) ($chat['last_name'] ?? ''));
         if ($name !== '') {
             $parts[] = $name;
         }
 
         if (! empty($chat['id'])) {
-            $parts[] = 'ID: ' . $chat['id'];
+            $parts[] = 'ID: '.$chat['id'];
         }
 
         return implode(' | ', $parts);
@@ -396,31 +398,31 @@ class ChannelSettingsPage extends Page implements HasForms
 
         if (array_key_exists('status', $response)) {
             $status = $response['status'];
-            $lines[] = 'وضعیت: ' . ($status === true ? 'موفق' : ($status === false ? 'ناموفق' : (string) $status));
+            $lines[] = 'وضعیت: '.($status === true ? 'موفق' : ($status === false ? 'ناموفق' : (string) $status));
         }
 
         if (! empty($response['message'])) {
-            $lines[] = 'پیام: ' . $response['message'];
+            $lines[] = 'پیام: '.$response['message'];
         }
 
         if (! empty($response['message_code'])) {
-            $lines[] = 'کد پیام: ' . $response['message_code'];
+            $lines[] = 'کد پیام: '.$response['message_code'];
         }
 
         $data = $response['data'] ?? null;
         if (is_array($data)) {
             if (! empty($data['user_name'])) {
-                $lines[] = 'کاربر: ' . $data['user_name'];
+                $lines[] = 'کاربر: '.$data['user_name'];
             } elseif (! empty($data['name'])) {
-                $lines[] = 'کاربر: ' . $data['name'];
+                $lines[] = 'کاربر: '.$data['name'];
             }
 
             if (! empty($data['user_id'])) {
-                $lines[] = 'شناسه کاربر: ' . $data['user_id'];
+                $lines[] = 'شناسه کاربر: '.$data['user_id'];
             }
 
             if (! empty($data['mobile'])) {
-                $lines[] = 'موبایل: ' . $data['mobile'];
+                $lines[] = 'موبایل: '.$data['mobile'];
             }
         }
 
@@ -440,21 +442,21 @@ class ChannelSettingsPage extends Page implements HasForms
         }
 
         if (array_key_exists('ok', $response)) {
-            $lines[] = 'وضعیت: ' . ($response['ok'] ? 'موفق' : 'ناموفق');
+            $lines[] = 'وضعیت: '.($response['ok'] ? 'موفق' : 'ناموفق');
         }
 
         $result = $response['result'] ?? null;
         if (is_array($result)) {
             if (! empty($result['message_id'])) {
-                $lines[] = 'شناسه پیام: ' . $result['message_id'];
+                $lines[] = 'شناسه پیام: '.$result['message_id'];
             }
 
             $username = $result['username'] ?? null;
             $firstName = $result['first_name'] ?? null;
             if ($username || $firstName) {
                 $label = $firstName ?: $username;
-                $suffix = $username ? ' (@' . $username . ')' : '';
-                $lines[] = 'بات: ' . $label . $suffix;
+                $suffix = $username ? ' (@'.$username.')' : '';
+                $lines[] = 'بات: '.$label.$suffix;
             }
         }
 
@@ -483,11 +485,11 @@ class ChannelSettingsPage extends Page implements HasForms
         $lines = [];
 
         if (! empty($response['messages'][0]['id'])) {
-            $lines[] = 'شناسه پیام: ' . $response['messages'][0]['id'];
+            $lines[] = 'شناسه پیام: '.$response['messages'][0]['id'];
         }
 
         if (! empty($response['contacts'][0]['wa_id'])) {
-            $lines[] = 'شماره واتساپ: ' . $response['contacts'][0]['wa_id'];
+            $lines[] = 'شماره واتساپ: '.$response['contacts'][0]['wa_id'];
         }
 
         return $lines ?: $this->summarizeGenericResponse($response);
@@ -501,7 +503,7 @@ class ChannelSettingsPage extends Page implements HasForms
     {
         $errors = $response['errors'] ?? null;
         if (is_array($errors) && ! empty($errors)) {
-            return ['خطاها: ' . count($errors) . ' مورد'];
+            return ['خطاها: '.count($errors).' مورد'];
         }
 
         return ['اعلان ارسال شد.'];
@@ -516,27 +518,27 @@ class ChannelSettingsPage extends Page implements HasForms
         $lines = [];
 
         if (! empty($response['mailer'])) {
-            $lines[] = 'سرویس: ' . $response['mailer'];
+            $lines[] = 'سرویس: '.$response['mailer'];
         }
 
         if (! empty($response['transport'])) {
-            $lines[] = 'ترنسپورت: ' . $response['transport'];
+            $lines[] = 'ترنسپورت: '.$response['transport'];
         }
 
         if (! empty($response['host'])) {
-            $lines[] = 'هاست: ' . $response['host'];
+            $lines[] = 'هاست: '.$response['host'];
         }
 
         if (! empty($response['port'])) {
-            $lines[] = 'پورت: ' . $response['port'];
+            $lines[] = 'پورت: '.$response['port'];
         }
 
         if (! empty($response['scheme'])) {
-            $lines[] = 'نوع اتصال: ' . $response['scheme'];
+            $lines[] = 'نوع اتصال: '.$response['scheme'];
         }
 
         if (! empty($response['message'])) {
-            $lines[] = 'پیام: ' . $response['message'];
+            $lines[] = 'پیام: '.$response['message'];
         }
 
         return $lines ?: ['ایمیل ارسال شد.'];
@@ -552,25 +554,25 @@ class ChannelSettingsPage extends Page implements HasForms
 
         if (array_key_exists('status', $response)) {
             $status = $response['status'];
-            $lines[] = 'وضعیت: ' . ($status === true ? 'موفق' : ($status === false ? 'ناموفق' : (string) $status));
+            $lines[] = 'وضعیت: '.($status === true ? 'موفق' : ($status === false ? 'ناموفق' : (string) $status));
         }
 
         if (! empty($response['message'])) {
-            $lines[] = 'پیام: ' . $response['message'];
+            $lines[] = 'پیام: '.$response['message'];
         }
 
         if (! empty($response['message_code'])) {
-            $lines[] = 'کد پیام: ' . $response['message_code'];
+            $lines[] = 'کد پیام: '.$response['message_code'];
         }
 
         if (! empty($response['code'])) {
-            $lines[] = 'کد: ' . $response['code'];
+            $lines[] = 'کد: '.$response['code'];
         }
 
         if (! empty($response['status']) && isset($response['body'])) {
-            $lines[] = 'کد HTTP: ' . $response['status'];
+            $lines[] = 'کد HTTP: '.$response['status'];
             if (is_string($response['body']) && $response['body'] !== '') {
-                $lines[] = 'پاسخ: ' . $response['body'];
+                $lines[] = 'پاسخ: '.$response['body'];
             }
         }
 

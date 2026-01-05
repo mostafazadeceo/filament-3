@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Filamat\IamSuite\Support;
 
 use Filamat\IamSuite\Contracts\CapabilityRegistryInterface;
+use Filamat\IamSuite\Models\Tenant;
 use Filamat\IamSuite\Services\ModuleCatalog;
 use Filamat\IamSuite\Services\OrganizationEntitlementService;
-use Filamat\IamSuite\Models\Tenant;
 use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;

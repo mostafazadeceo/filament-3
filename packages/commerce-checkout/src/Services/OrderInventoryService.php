@@ -18,8 +18,7 @@ class OrderInventoryService
     public function __construct(
         protected DatabaseManager $db,
         protected InventoryDocService $docService
-    ) {
-    }
+    ) {}
 
     public function issueForOrder(Order $order): void
     {

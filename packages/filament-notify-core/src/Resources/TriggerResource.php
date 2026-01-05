@@ -3,8 +3,8 @@
 namespace Haida\FilamentNotify\Core\Resources;
 
 use Filament\Resources\Resource;
-use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Haida\FilamentNotify\Core\Models\Trigger;
 use Haida\FilamentNotify\Core\Resources\TriggerResource\Pages\ListTriggers;
 use Illuminate\Database\Eloquent\Builder;

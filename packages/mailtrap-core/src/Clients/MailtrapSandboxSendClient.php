@@ -38,7 +38,7 @@ class MailtrapSandboxSendClient
         $rateConfig = config('mailtrap-core.rate_limit', []);
         $maxRequests = (int) ($rateConfig['max_requests'] ?? 10);
         $perSeconds = (int) ($rateConfig['per_seconds'] ?? 1);
-        $rateLimitKey = 'mailtrap-sandbox-send:' . $this->connection->getKey() . ':' . $perSeconds;
+        $rateLimitKey = 'mailtrap-sandbox-send:'.$this->connection->getKey().':'.$perSeconds;
 
         $this->rateLimiter->throttle($rateLimitKey, $maxRequests);
 
@@ -88,6 +88,7 @@ class MailtrapSandboxSendClient
             }, function (Throwable $exception): bool {
                 if ($exception instanceof RequestException) {
                     $status = $exception->response?->status();
+
                     return in_array($status, [429, 503], true);
                 }
 

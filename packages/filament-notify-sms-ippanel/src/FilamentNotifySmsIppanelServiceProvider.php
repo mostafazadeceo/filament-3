@@ -18,6 +18,6 @@ class FilamentNotifySmsIppanelServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        app(ChannelRegistry::class)->register(new IppanelPatternChannelDriver());
+        app(ChannelRegistry::class)->register(new IppanelPatternChannelDriver);
     }
 }

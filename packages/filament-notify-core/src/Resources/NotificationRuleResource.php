@@ -4,16 +4,16 @@ namespace Haida\FilamentNotify\Core\Resources;
 
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Schemas\Components\Utilities\Get;
 use Haida\FilamentNotify\Core\Channels\ChannelRegistry;
 use Haida\FilamentNotify\Core\Models\NotificationRule;
 use Haida\FilamentNotify\Core\Models\Template;

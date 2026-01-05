@@ -6,9 +6,9 @@ namespace Haida\FilamentMailtrap;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Haida\FilamentMailtrap\Resources\MailtrapConnectionResource;
 use Haida\FilamentMailtrap\Resources\MailtrapAudienceResource;
 use Haida\FilamentMailtrap\Resources\MailtrapCampaignResource;
+use Haida\FilamentMailtrap\Resources\MailtrapConnectionResource;
 use Haida\FilamentMailtrap\Resources\MailtrapInboxResource;
 use Haida\FilamentMailtrap\Resources\MailtrapMessageResource;
 use Haida\FilamentMailtrap\Resources\MailtrapOfferResource;

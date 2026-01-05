@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Haida\MailtrapCore\Clients;
 
+use GuzzleHttp\Psr7\Response as PsrResponse;
 use Haida\MailtrapCore\Exceptions\MailtrapApiException;
 use Haida\MailtrapCore\Models\MailtrapConnection;
 use Haida\MailtrapCore\Support\MailtrapFakeResponse;
 use Haida\MailtrapCore\Support\MailtrapRateLimiter;
-use GuzzleHttp\Psr7\Response as PsrResponse;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
@@ -100,7 +100,7 @@ class MailtrapClient
     }
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      */
     protected function buildInboxPayload(array $payload): array
     {
@@ -108,7 +108,7 @@ class MailtrapClient
     }
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      * @return array<string, string>
      */
     protected function buildInboxData(array $payload): array
@@ -208,7 +208,7 @@ class MailtrapClient
         $rateConfig = config('mailtrap-core.rate_limit', []);
         $maxRequests = (int) ($rateConfig['max_requests'] ?? 10);
         $perSeconds = (int) ($rateConfig['per_seconds'] ?? 1);
-        $rateLimitKey = 'mailtrap:' . $this->connection->getKey() . ':' . $perSeconds;
+        $rateLimitKey = 'mailtrap:'.$this->connection->getKey().':'.$perSeconds;
 
         $this->rateLimiter->throttle($rateLimitKey, $maxRequests);
 
@@ -258,6 +258,7 @@ class MailtrapClient
             }, function (Throwable $exception): bool {
                 if ($exception instanceof RequestException) {
                     $status = $exception->response?->status();
+
                     return in_array($status, [429, 503], true);
                 }
 

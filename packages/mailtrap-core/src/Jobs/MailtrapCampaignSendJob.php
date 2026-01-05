@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Haida\MailtrapCore\Jobs;
 
-use Filamat\IamSuite\Support\TenantContext;
 use Filamat\IamSuite\Models\Tenant;
+use Filamat\IamSuite\Support\TenantContext;
 use Haida\MailtrapCore\Models\MailtrapCampaign;
 use Haida\MailtrapCore\Models\MailtrapCampaignSend;
 use Haida\MailtrapCore\Services\MailtrapSendService;
@@ -24,6 +24,7 @@ class MailtrapCampaignSendJob implements ShouldQueue
     use SerializesModels;
 
     public int $tries = 3;
+
     public int $timeout = 900;
 
     public function __construct(
@@ -121,6 +122,7 @@ class MailtrapCampaignSendJob implements ShouldQueue
             if ($remaining > 0) {
                 $campaign->update(['stats' => $stats]);
                 self::dispatch($campaign->getKey())->delay(now()->addSeconds(5))->onQueue((string) config('mailtrap-core.queue', 'default'));
+
                 return;
             }
 

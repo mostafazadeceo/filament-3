@@ -21,6 +21,6 @@ class FilamentNotifyMailtrapServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        app(ChannelRegistry::class)->register(new MailtrapChannelDriver());
+        app(ChannelRegistry::class)->register(new MailtrapChannelDriver);
     }
 }

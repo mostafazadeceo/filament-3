@@ -21,7 +21,7 @@ Route::prefix('api/v1/mailtrap')
         ApiKeyAuth::class,
         ApiAuth::class,
         ResolveTenant::class,
-        'throttle:' . config('mailtrap-core.api.rate_limit', '60,1'),
+        'throttle:'.config('mailtrap-core.api.rate_limit', '60,1'),
     ])
     ->group(function () {
         Route::apiResource('connections', ConnectionController::class)

@@ -90,7 +90,7 @@ class MessageController extends ApiController
 
         return response()->streamDownload(function () use ($content): void {
             echo $content;
-        }, 'attachment-' . $attachment . '.bin');
+        }, 'attachment-'.$attachment.'.bin');
     }
 
     protected function refreshIfRequested(MailtrapMessage $message, MailtrapMessageService $service): MailtrapMessage

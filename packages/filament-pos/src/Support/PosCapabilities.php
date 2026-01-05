@@ -3,8 +3,8 @@
 namespace Haida\FilamentPos\Support;
 
 use Filamat\IamSuite\Contracts\CapabilityRegistryInterface;
-use Haida\FilamentPos\Policies\PosCashMovementPolicy;
 use Haida\FilamentPos\Policies\PosCashierSessionPolicy;
+use Haida\FilamentPos\Policies\PosCashMovementPolicy;
 use Haida\FilamentPos\Policies\PosDevicePolicy;
 use Haida\FilamentPos\Policies\PosRegisterPolicy;
 use Haida\FilamentPos\Policies\PosSalePolicy;

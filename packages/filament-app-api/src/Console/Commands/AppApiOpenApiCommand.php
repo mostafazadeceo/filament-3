@@ -18,6 +18,7 @@ class AppApiOpenApiCommand extends Command
         $spec = json_encode(AppOpenApi::toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         if (! $spec) {
             $this->error('OpenAPI generation failed.');
+
             return self::FAILURE;
         }
 
@@ -25,10 +26,12 @@ class AppApiOpenApiCommand extends Command
         if ($path) {
             file_put_contents($path, $spec);
             $this->info("OpenAPI written to {$path}");
+
             return self::SUCCESS;
         }
 
         $this->line($spec);
+
         return self::SUCCESS;
     }
 }

@@ -18,6 +18,6 @@ class FilamentNotifyTelegramServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        app(ChannelRegistry::class)->register(new TelegramChannelDriver());
+        app(ChannelRegistry::class)->register(new TelegramChannelDriver);
     }
 }

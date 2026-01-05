@@ -10,9 +10,9 @@ use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Actions\ViewAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Section;
@@ -89,6 +89,7 @@ class MailtrapSendingDomainResource extends IamResource
                         $connection = MailtrapConnection::query()->find($record->connection_id);
                         if (! $connection) {
                             Notification::make()->title('اتصال یافت نشد.')->danger()->send();
+
                             return;
                         }
                         try {
@@ -110,6 +111,7 @@ class MailtrapSendingDomainResource extends IamResource
                         $connection = MailtrapConnection::query()->find($record->connection_id);
                         if (! $connection) {
                             Notification::make()->title('اتصال یافت نشد.')->danger()->send();
+
                             return;
                         }
 

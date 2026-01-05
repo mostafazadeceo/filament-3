@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Haida\ProvidersEsimGoCore;
 
+use Filamat\IamSuite\Contracts\CapabilityRegistryInterface;
 use Haida\ProvidersCore\Services\ProviderRegistry;
 use Haida\ProvidersEsimGoCore\Adapters\EsimGoProviderAdapter;
 use Haida\ProvidersEsimGoCore\Clients\EsimGoClientFactory;
@@ -28,7 +29,6 @@ use Haida\ProvidersEsimGoCore\Services\EsimGoOrderService;
 use Haida\ProvidersEsimGoCore\Services\EsimGoWebhookService;
 use Haida\ProvidersEsimGoCore\Support\EsimGoCapabilities;
 use Haida\ProvidersEsimGoCore\Support\EsimGoRateLimiter;
-use Filamat\IamSuite\Contracts\CapabilityRegistryInterface;
 use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;

@@ -12,9 +12,7 @@ use InvalidArgumentException;
 
 class DummyGatewayAdapter implements GatewayAdapterInterface
 {
-    public function __construct(protected WebhookSignature $signature)
-    {
-    }
+    public function __construct(protected WebhookSignature $signature) {}
 
     public function key(): string
     {
@@ -23,8 +21,8 @@ class DummyGatewayAdapter implements GatewayAdapterInterface
 
     public function createIntent(PaymentIntent $intent, array $payload): GatewayIntentResponse
     {
-        $reference = 'dummy-' . $intent->getKey();
-        $redirectUrl = 'https://example.test/pay/' . $intent->getKey();
+        $reference = 'dummy-'.$intent->getKey();
+        $redirectUrl = 'https://example.test/pay/'.$intent->getKey();
 
         return new GatewayIntentResponse($reference, $redirectUrl, 'requires_action');
     }

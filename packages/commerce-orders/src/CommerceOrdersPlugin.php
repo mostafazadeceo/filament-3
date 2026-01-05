@@ -4,8 +4,8 @@ namespace Haida\CommerceOrders;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Haida\CommerceOrders\Filament\Resources\CommerceOrderResource;
 use Haida\CommerceOrders\Filament\Resources\CommerceOrderRefundResource;
+use Haida\CommerceOrders\Filament\Resources\CommerceOrderResource;
 use Haida\CommerceOrders\Filament\Resources\CommerceOrderReturnResource;
 
 class CommerceOrdersPlugin implements Plugin

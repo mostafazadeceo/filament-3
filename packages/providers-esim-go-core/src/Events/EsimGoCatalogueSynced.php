@@ -13,7 +13,5 @@ class EsimGoCatalogueSynced
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public EsimGoConnection $connection, public int $count)
-    {
-    }
+    public function __construct(public EsimGoConnection $connection, public int $count) {}
 }

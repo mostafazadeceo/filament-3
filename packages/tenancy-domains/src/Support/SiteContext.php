@@ -5,7 +5,9 @@ namespace Haida\TenancyDomains\Support;
 class SiteContext
 {
     private static ?int $tenantId = null;
+
     private static ?int $siteId = null;
+
     private static ?string $host = null;
 
     public static function set(?int $tenantId, ?int $siteId, ?string $host): void

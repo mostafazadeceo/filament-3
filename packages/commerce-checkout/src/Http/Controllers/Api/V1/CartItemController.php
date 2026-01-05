@@ -2,6 +2,7 @@
 
 namespace Haida\CommerceCheckout\Http\Controllers\Api\V1;
 
+use Filamat\IamSuite\Support\TenantContext;
 use Haida\CommerceCatalog\Models\CatalogProduct;
 use Haida\CommerceCatalog\Models\CatalogVariant;
 use Haida\CommerceCheckout\Http\Requests\StoreCartItemRequest;
@@ -11,14 +12,11 @@ use Haida\CommerceCheckout\Models\Cart;
 use Haida\CommerceCheckout\Models\CartItem;
 use Haida\CommerceCheckout\Services\CartService;
 use Haida\FeatureGates\Services\FeatureGateService;
-use Filamat\IamSuite\Support\TenantContext;
 use Illuminate\Validation\ValidationException;
 
 class CartItemController extends ApiController
 {
-    public function __construct(protected CartService $service)
-    {
-    }
+    public function __construct(protected CartService $service) {}
 
     public function store(StoreCartItemRequest $request, Cart $cart): CartResource
     {

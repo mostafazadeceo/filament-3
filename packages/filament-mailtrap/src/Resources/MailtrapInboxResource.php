@@ -10,9 +10,9 @@ use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Actions\ViewAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Section;
@@ -108,13 +108,14 @@ class MailtrapInboxResource extends IamResource
                                 ->title('اتصال یافت نشد')
                                 ->danger()
                                 ->send();
+
                             return;
                         }
                         try {
                             $count = $service->syncMessages($connection, $record, []);
                             Notification::make()
                                 ->title('پیام‌ها همگام شدند')
-                                ->body('تعداد: ' . count($count))
+                                ->body('تعداد: '.count($count))
                                 ->success()
                                 ->send();
                         } catch (\Throwable $exception) {
@@ -133,6 +134,7 @@ class MailtrapInboxResource extends IamResource
                         $connection = MailtrapConnection::query()->find($record->connection_id);
                         if (! $connection) {
                             Notification::make()->title('اتصال یافت نشد.')->danger()->send();
+
                             return;
                         }
 
@@ -171,11 +173,11 @@ class MailtrapInboxResource extends IamResource
         return $schema->components([
             Section::make('مشخصات Inbox')
                 ->schema([
-                TextEntry::make('name')->label('نام'),
-                TextEntry::make('inbox_id')->label('Inbox ID'),
-                TextEntry::make('status')
-                    ->label('وضعیت')
-                    ->formatStateUsing(fn ($state) => MailtrapLabels::inboxStatus($state)),
+                    TextEntry::make('name')->label('نام'),
+                    TextEntry::make('inbox_id')->label('Inbox ID'),
+                    TextEntry::make('status')
+                        ->label('وضعیت')
+                        ->formatStateUsing(fn ($state) => MailtrapLabels::inboxStatus($state)),
                     TextEntry::make('username')->label('نام کاربری'),
                     TextEntry::make('email_domain')->label('دامنه ایمیل'),
                     TextEntry::make('api_domain')->label('API Domain'),

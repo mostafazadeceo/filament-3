@@ -2,9 +2,9 @@
 
 namespace Haida\FilamentRelograde;
 
+use Haida\FilamentRelograde\Adapters\RelogradeProviderAdapter;
 use Haida\FilamentRelograde\Clients\RelogradeClientFactory;
 use Haida\FilamentRelograde\Commands\RelogradeInstallCommand;
-use Haida\FilamentRelograde\Adapters\RelogradeProviderAdapter;
 use Haida\FilamentRelograde\Services\RelogradeAlertService;
 use Haida\FilamentRelograde\Services\RelogradeApiLogger;
 use Haida\FilamentRelograde\Services\RelogradeAuditLogger;

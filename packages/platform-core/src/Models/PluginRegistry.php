@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class PluginRegistry extends Model
 {
     public const STATUS_INSTALLED = 'installed';
+
     public const STATUS_DISABLED = 'disabled';
 
     protected $guarded = [];

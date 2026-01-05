@@ -3,7 +3,6 @@
 namespace Haida\FilamentCommerceExperience\Http\Controllers\Api\V1;
 
 use Haida\FilamentCommerceExperience\Http\Requests\StoreCsatSurveyRequest;
-use Haida\FilamentCommerceExperience\Models\ExperienceCsatSurvey;
 use Haida\FilamentCommerceExperience\Services\CsatSurveyService;
 use Illuminate\Http\JsonResponse;
 

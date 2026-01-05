@@ -17,7 +17,6 @@ use Haida\CommerceCatalog\Filament\Resources\CatalogProductResource\Pages\EditCa
 use Haida\CommerceCatalog\Filament\Resources\CatalogProductResource\Pages\ListCatalogProducts;
 use Haida\CommerceCatalog\Filament\Resources\CatalogProductResource\RelationManagers\CatalogMediaRelationManager;
 use Haida\CommerceCatalog\Filament\Resources\CatalogProductResource\RelationManagers\CatalogVariantsRelationManager;
-use Haida\CommerceCatalog\Models\CatalogCollection;
 use Haida\CommerceCatalog\Models\CatalogProduct;
 use Haida\SiteBuilderCore\Models\Site;
 use Vendor\FilamentAccountingIr\Models\InventoryItem;
@@ -116,7 +115,7 @@ class CatalogProductResource extends IamResource
                         ->with('product')
                         ->get()
                         ->mapWithKeys(fn (InventoryItem $item) => [
-                            $item->getKey() => trim(($item->sku ?: '') . ' ' . ($item->product?->name ?: '')),
+                            $item->getKey() => trim(($item->sku ?: '').' '.($item->product?->name ?: '')),
                         ])
                         ->toArray())
                     ->searchable()

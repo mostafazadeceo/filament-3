@@ -3,8 +3,8 @@
 namespace Haida\FilamentNotify\Telegram\Channels;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Haida\FilamentNotify\Core\Contracts\ChannelDriver;
 use Haida\FilamentNotify\Core\Support\Context\DeliveryContext;
 use Haida\FilamentNotify\Core\Support\Rendering\RenderedMessage;
@@ -61,7 +61,7 @@ class TelegramChannelDriver implements ChannelDriver
         }
 
         $baseUrl = rtrim(config('filament-notify-telegram.base_url'), '/');
-        $response = Http::post($baseUrl . '/bot' . $token . '/sendMessage', [
+        $response = Http::post($baseUrl.'/bot'.$token.'/sendMessage', [
             'chat_id' => $chatId,
             'text' => $message->body,
             'parse_mode' => $message->meta['parse_mode'] ?? 'HTML',
@@ -113,7 +113,7 @@ class TelegramChannelDriver implements ChannelDriver
         }
 
         $baseUrl = rtrim(config('filament-notify-telegram.base_url'), '/');
-        $response = Http::get($baseUrl . '/bot' . $token . '/getMe');
+        $response = Http::get($baseUrl.'/bot'.$token.'/getMe');
 
         if ($response->successful()) {
             return DeliveryResult::success($response->json());

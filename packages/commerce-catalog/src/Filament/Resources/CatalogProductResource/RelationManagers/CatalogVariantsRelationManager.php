@@ -47,7 +47,7 @@ class CatalogVariantsRelationManager extends RelationManager
                         ->with('product')
                         ->get()
                         ->mapWithKeys(fn (InventoryItem $item) => [
-                            $item->getKey() => trim(($item->sku ?: '') . ' ' . ($item->product?->name ?: '')),
+                            $item->getKey() => trim(($item->sku ?: '').' '.($item->product?->name ?: '')),
                         ])
                         ->toArray())
                     ->searchable()
@@ -70,6 +70,7 @@ class CatalogVariantsRelationManager extends RelationManager
                         }
 
                         $decoded = json_decode($state, true);
+
                         return is_array($decoded) ? $decoded : null;
                     }),
                 Textarea::make('metadata')
@@ -90,6 +91,7 @@ class CatalogVariantsRelationManager extends RelationManager
                         }
 
                         $decoded = json_decode($state, true);
+
                         return is_array($decoded) ? $decoded : null;
                     }),
             ])

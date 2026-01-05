@@ -21,7 +21,7 @@ class EditPluginRegistry extends EditRecord
 
     protected function ensureRegistryTableExists(): void
     {
-        $table = (new PluginRegistry())->getTable();
+        $table = (new PluginRegistry)->getTable();
         if (! Schema::hasTable($table)) {
             throw new ServiceUnavailableHttpException(null, 'جدول رجیستری افزونه‌ها ایجاد نشده است. ابتدا مهاجرت‌ها را اجرا کنید.');
         }

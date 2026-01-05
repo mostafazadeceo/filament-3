@@ -13,7 +13,7 @@ class MailtrapSendService
     ) {}
 
     /**
-     * @param array<string, mixed> $options
+     * @param  array<string, mixed>  $options
      */
     public function sendSimple(MailtrapConnection $connection, string $toEmail, string $subject, string $body, array $options = []): array
     {
@@ -58,7 +58,7 @@ class MailtrapSendService
     }
 
     /**
-     * @param array<string, mixed> $options
+     * @param  array<string, mixed>  $options
      */
     protected function sendSandbox(MailtrapConnection $connection, int $inboxId, string $toEmail, string $subject, string $body, array $options = []): array
     {

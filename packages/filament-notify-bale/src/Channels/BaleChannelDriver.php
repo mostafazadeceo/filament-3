@@ -2,8 +2,8 @@
 
 namespace Haida\FilamentNotify\Bale\Channels;
 
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Haida\FilamentNotify\Core\Contracts\ChannelDriver;
 use Haida\FilamentNotify\Core\Contracts\SupportsChatIdDiscovery;
 use Haida\FilamentNotify\Core\Support\Context\DeliveryContext;
@@ -61,7 +61,7 @@ class BaleChannelDriver implements ChannelDriver, SupportsChatIdDiscovery
         }
 
         $baseUrl = rtrim(config('filament-notify-bale.base_url'), '/');
-        $response = Http::post($baseUrl . '/bot' . $token . '/sendMessage', [
+        $response = Http::post($baseUrl.'/bot'.$token.'/sendMessage', [
             'chat_id' => $chatId,
             'text' => $message->body,
         ]);
@@ -104,7 +104,7 @@ class BaleChannelDriver implements ChannelDriver, SupportsChatIdDiscovery
         }
 
         $baseUrl = rtrim(config('filament-notify-bale.base_url'), '/');
-        $response = Http::get($baseUrl . '/bot' . $token . '/getMe');
+        $response = Http::get($baseUrl.'/bot'.$token.'/getMe');
 
         if ($response->successful()) {
             return DeliveryResult::success($response->json());
@@ -149,7 +149,7 @@ class BaleChannelDriver implements ChannelDriver, SupportsChatIdDiscovery
         }
 
         $baseUrl = rtrim(config('filament-notify-bale.base_url'), '/');
-        $response = Http::get($baseUrl . '/bot' . $token . '/getUpdates');
+        $response = Http::get($baseUrl.'/bot'.$token.'/getUpdates');
 
         if (! $response->successful()) {
             return DeliveryResult::failure('bale_chat_id_discovery_failed', [

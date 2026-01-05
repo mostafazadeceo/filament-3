@@ -10,7 +10,6 @@ use Haida\MailtrapCore\Clients\MailtrapSandboxSendClient;
 use Haida\MailtrapCore\Clients\MailtrapSendClient;
 use Haida\MailtrapCore\Models\MailtrapConnection;
 use Haida\MailtrapCore\Support\MailtrapRateLimiter;
-use Illuminate\Support\Arr;
 
 class MailtrapConnectionService
 {

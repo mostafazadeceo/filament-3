@@ -13,7 +13,5 @@ class EsimGoOrderReady
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public EsimGoOrder $order)
-    {
-    }
+    public function __construct(public EsimGoOrder $order) {}
 }

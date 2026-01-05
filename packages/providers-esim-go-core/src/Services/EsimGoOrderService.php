@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Haida\ProvidersEsimGoCore\Services;
 
 use Haida\ProvidersEsimGoCore\Clients\EsimGoClientFactory;
-use Haida\ProvidersEsimGoCore\Exceptions\EsimGoApiException;
 use Haida\ProvidersEsimGoCore\Events\EsimGoOrderReady;
+use Haida\ProvidersEsimGoCore\Exceptions\EsimGoApiException;
 use Haida\ProvidersEsimGoCore\Jobs\PollEsimGoAssignmentsJob;
 use Haida\ProvidersEsimGoCore\Models\EsimGoConnection;
 use Haida\ProvidersEsimGoCore\Models\EsimGoEsim;
 use Haida\ProvidersEsimGoCore\Models\EsimGoOrder;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\Arr;
 
 class EsimGoOrderService
 {

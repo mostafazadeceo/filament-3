@@ -2,8 +2,6 @@
 
 namespace Haida\FilamentPos\Http\Requests;
 
-use Illuminate\Validation\Rule;
-
 class SyncOutboxRequest extends BasePosRequest
 {
     public function authorize(): bool

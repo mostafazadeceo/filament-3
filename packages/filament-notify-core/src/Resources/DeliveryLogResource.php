@@ -3,9 +3,9 @@
 namespace Haida\FilamentNotify\Core\Resources;
 
 use Filament\Resources\Resource;
-use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Haida\FilamentNotify\Core\Models\DeliveryLog;
 use Haida\FilamentNotify\Core\Resources\DeliveryLogResource\Pages\ListDeliveryLogs;
 use Illuminate\Database\Eloquent\Builder;

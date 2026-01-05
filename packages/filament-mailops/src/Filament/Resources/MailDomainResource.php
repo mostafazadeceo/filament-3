@@ -7,15 +7,16 @@ namespace Haida\FilamentMailOps\Filament\Resources;
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
 use Filamat\IamSuite\Support\IamAuthorization;
-use Filament\Forms\Components\KeyValue;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Notifications\Notification;
-use Filament\Schemas\Schema;
+use Filamat\IamSuite\Support\TenantContext;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Haida\FilamentMailOps\Filament\Resources\MailDomainResource\Pages\CreateMailDomain;
@@ -24,7 +25,6 @@ use Haida\FilamentMailOps\Filament\Resources\MailDomainResource\Pages\ListMailDo
 use Haida\FilamentMailOps\Models\MailDomain;
 use Haida\FilamentMailOps\Services\MailuSyncService;
 use Haida\FilamentMailOps\Support\MailOpsLabels;
-use Filamat\IamSuite\Support\TenantContext;
 use Illuminate\Validation\Rules\Unique;
 
 class MailDomainResource extends IamResource

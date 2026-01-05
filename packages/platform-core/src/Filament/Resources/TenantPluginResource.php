@@ -48,7 +48,7 @@ class TenantPluginResource extends IamResource
                 Select::make('plugin_key')
                     ->label('افزونه')
                     ->options(function () {
-                        $table = (new PluginRegistry())->getTable();
+                        $table = (new PluginRegistry)->getTable();
                         if (! SchemaFacade::hasTable($table)) {
                             return [];
                         }
@@ -100,7 +100,7 @@ class TenantPluginResource extends IamResource
                 SelectFilter::make('plugin_key')
                     ->label('افزونه')
                     ->options(function () {
-                        $table = (new PluginRegistry())->getTable();
+                        $table = (new PluginRegistry)->getTable();
                         if (! SchemaFacade::hasTable($table)) {
                             return [];
                         }

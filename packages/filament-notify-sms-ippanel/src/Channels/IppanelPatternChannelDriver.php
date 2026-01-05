@@ -2,12 +2,12 @@
 
 namespace Haida\FilamentNotify\SmsIppanel\Channels;
 
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Haida\FilamentNotify\Core\Contracts\ChannelDriver;
 use Haida\FilamentNotify\Core\Support\Context\DeliveryContext;
-use Haida\FilamentNotify\Core\Support\Rendering\TemplateRenderer;
 use Haida\FilamentNotify\Core\Support\Rendering\RenderedMessage;
+use Haida\FilamentNotify\Core\Support\Rendering\TemplateRenderer;
 use Haida\FilamentNotify\Core\Support\Sending\DeliveryResult;
 use Haida\FilamentNotify\Core\Support\Testing\ChannelTestContextFactory;
 use Illuminate\Support\Facades\Http;
@@ -91,7 +91,7 @@ class IppanelPatternChannelDriver implements ChannelDriver
 
             $response = Http::withHeaders([
                 'Authorization' => $apiKey,
-            ])->post($baseUrl . '/api/send', [
+            ])->post($baseUrl.'/api/send', [
                 'sending_type' => 'pattern',
                 'from_number' => $fromNumber,
                 'code' => $patternCode,
@@ -133,7 +133,7 @@ class IppanelPatternChannelDriver implements ChannelDriver
 
         $response = Http::withHeaders([
             'Authorization' => $apiKey,
-        ])->post($baseUrl . '/api/send', $payload);
+        ])->post($baseUrl.'/api/send', $payload);
 
         if ($response->successful()) {
             return DeliveryResult::success($response->json());
@@ -187,7 +187,7 @@ class IppanelPatternChannelDriver implements ChannelDriver
 
         $response = Http::withHeaders([
             'Authorization' => $apiKey,
-        ])->post($baseUrl . '/api/acl/auth/check_token');
+        ])->post($baseUrl.'/api/acl/auth/check_token');
 
         if ($response->successful()) {
             return DeliveryResult::success($response->json());
@@ -233,7 +233,7 @@ class IppanelPatternChannelDriver implements ChannelDriver
 
             $paramMap = [];
             foreach ($params as $key => $value) {
-                $paramMap[$key] = 'test.' . $key;
+                $paramMap[$key] = 'test.'.$key;
             }
 
             $context['test'] = $params;
@@ -282,7 +282,7 @@ class IppanelPatternChannelDriver implements ChannelDriver
         $baseUrl = rtrim($baseUrl, '/');
 
         if (str_contains($baseUrl, 'edge.ippanel.com') && ! str_contains($baseUrl, '/v1')) {
-            return $baseUrl . '/v1';
+            return $baseUrl.'/v1';
         }
 
         return $baseUrl;
@@ -391,13 +391,13 @@ class IppanelPatternChannelDriver implements ChannelDriver
     {
         $paths = [
             $key,
-            'action.data.' . $key,
-            'action.context.' . $key,
-            'record.' . $key,
-            'record.metadata.' . $key,
-            'record.meta.' . $key,
-            'record.payload.' . $key,
-            'record.context.' . $key,
+            'action.data.'.$key,
+            'action.context.'.$key,
+            'record.'.$key,
+            'record.metadata.'.$key,
+            'record.meta.'.$key,
+            'record.payload.'.$key,
+            'record.context.'.$key,
         ];
 
         foreach ($paths as $path) {

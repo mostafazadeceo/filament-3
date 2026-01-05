@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Haida\MailtrapCore\Support;
 
 use Filamat\IamSuite\Contracts\CapabilityRegistryInterface;
+use Haida\MailtrapCore\Policies\MailtrapAudiencePolicy;
+use Haida\MailtrapCore\Policies\MailtrapCampaignPolicy;
 use Haida\MailtrapCore\Policies\MailtrapConnectionPolicy;
 use Haida\MailtrapCore\Policies\MailtrapInboxPolicy;
 use Haida\MailtrapCore\Policies\MailtrapMessagePolicy;
 use Haida\MailtrapCore\Policies\MailtrapOfferPolicy;
 use Haida\MailtrapCore\Policies\MailtrapSendingDomainPolicy;
-use Haida\MailtrapCore\Policies\MailtrapAudiencePolicy;
-use Haida\MailtrapCore\Policies\MailtrapCampaignPolicy;
 use Haida\MailtrapCore\Policies\MailtrapSingleSendPolicy;
 
 final class MailtrapCapabilities

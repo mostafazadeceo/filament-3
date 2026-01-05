@@ -6,6 +6,7 @@ namespace Haida\FilamentMailtrap\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
+use Filamat\IamSuite\Support\IamAuthorization;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -13,15 +14,14 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filamat\IamSuite\Support\IamAuthorization;
 use Haida\FilamentMailtrap\Resources\MailtrapCampaignResource\Pages\CreateMailtrapCampaign;
 use Haida\FilamentMailtrap\Resources\MailtrapCampaignResource\Pages\EditMailtrapCampaign;
 use Haida\FilamentMailtrap\Resources\MailtrapCampaignResource\Pages\ListMailtrapCampaigns;
@@ -157,6 +157,7 @@ class MailtrapCampaignResource extends IamResource
 
                         if ($result === 'no-audience') {
                             Notification::make()->title('لیست مخاطب انتخاب نشده است.')->danger()->send();
+
                             return;
                         }
 

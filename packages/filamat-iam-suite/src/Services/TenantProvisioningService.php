@@ -7,7 +7,6 @@ namespace Filamat\IamSuite\Services;
 use Filamat\IamSuite\Models\Organization;
 use Filamat\IamSuite\Models\Tenant;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class TenantProvisioningService

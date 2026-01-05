@@ -8,7 +8,7 @@ class ThemeRegistry
     private array $themes = [];
 
     /**
-     * @param array<string, array<string, mixed>> $definitions
+     * @param  array<string, array<string, mixed>>  $definitions
      */
     public function __construct(array $definitions = [])
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Haida\MailtrapCore\Services;
 
-use Haida\MailtrapCore\Clients\MailtrapClient;
 use Haida\MailtrapCore\Models\MailtrapConnection;
 use Haida\MailtrapCore\Models\MailtrapInbox;
 use Haida\MailtrapCore\Models\MailtrapMessage;

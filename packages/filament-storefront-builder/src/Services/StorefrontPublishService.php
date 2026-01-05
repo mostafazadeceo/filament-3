@@ -9,9 +9,7 @@ use Illuminate\Database\DatabaseManager;
 
 class StorefrontPublishService
 {
-    public function __construct(protected DatabaseManager $db)
-    {
-    }
+    public function __construct(protected DatabaseManager $db) {}
 
     public function publish(StorePage $page, ?Authenticatable $actor = null): StorePage
     {

@@ -22,8 +22,7 @@ class OrderWorkflowService
     public function __construct(
         protected DatabaseManager $db,
         protected AuditService $auditService
-    ) {
-    }
+    ) {}
 
     public function transition(Order $order, string $toStatus, ?string $note = null): Order
     {

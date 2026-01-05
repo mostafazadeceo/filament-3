@@ -15,8 +15,7 @@ class OrderReturnService
     public function __construct(
         protected DatabaseManager $db,
         protected AuditService $auditService
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<int, array<string, mixed>>  $items

@@ -2,19 +2,17 @@
 
 namespace Haida\CommerceCheckout\Http\Controllers\Api\V1;
 
+use Filamat\IamSuite\Support\TenantContext;
 use Haida\CommerceCheckout\Http\Requests\CheckoutRequest;
 use Haida\CommerceCheckout\Models\Cart;
 use Haida\CommerceCheckout\Services\CheckoutService;
 use Haida\CommerceOrders\Http\Resources\OrderResource;
-use Filamat\IamSuite\Support\TenantContext;
 use Haida\FeatureGates\Services\FeatureGateService;
 use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends ApiController
 {
-    public function __construct(protected CheckoutService $service)
-    {
-    }
+    public function __construct(protected CheckoutService $service) {}
 
     public function store(CheckoutRequest $request): OrderResource
     {

@@ -9,20 +9,20 @@ use Filamat\IamSuite\Filament\Resources\QuickActionResource\Pages\EditQuickActio
 use Filamat\IamSuite\Filament\Resources\QuickActionResource\Pages\ListQuickActions;
 use Filamat\IamSuite\Models\QuickAction;
 use Filamat\IamSuite\Support\TenantContext;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Navigation\NavigationItem;
-use Filament\Support\Icons\Heroicon;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\EditAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -35,7 +35,6 @@ use function Filament\Support\generate_icon_html;
 
 class QuickActionResource extends IamResource
 {
-
     protected static ?string $model = QuickAction::class;
 
     protected static ?string $permissionPrefix = 'quick_actions';
@@ -217,7 +216,7 @@ class QuickActionResource extends IamResource
      * @param  array<NavigationItem> | Arrayable  $items
      * @param  array<string, array{label: string, description: string|null, url: string, icon: string|null}>  $catalog
      */
-    protected static function collectNavigationItems(array | Arrayable $items, array &$catalog, string $prefix = ''): void
+    protected static function collectNavigationItems(array|Arrayable $items, array &$catalog, string $prefix = ''): void
     {
         foreach ($items as $item) {
             if (! $item instanceof NavigationItem) {

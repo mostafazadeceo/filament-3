@@ -17,8 +17,7 @@ class PosOutboxService
         protected DatabaseManager $db,
         protected PosCashierSessionService $sessionService,
         protected PosSaleService $saleService
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<int, array<string, mixed>>  $events
@@ -46,6 +45,7 @@ class PosOutboxService
                     'event_type' => null,
                     'reason' => 'missing_event_type',
                 ];
+
                 continue;
             }
 
@@ -61,6 +61,7 @@ class PosOutboxService
                         'status' => 'duplicate',
                         'outbox_id' => $existing->getKey(),
                     ];
+
                     continue;
                 }
             }

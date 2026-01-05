@@ -51,6 +51,7 @@ class SyncService
 
             if ($exists) {
                 $results[] = ['id' => $id, 'status' => 'accepted'];
+
                 continue;
             }
 
@@ -127,6 +128,7 @@ class SyncService
                 'title' => $task->title,
                 'status' => $task->status,
             ]);
+
             return;
         }
 
@@ -144,6 +146,7 @@ class SyncService
                 'status' => $record->status,
                 'clocked_at' => $record->clocked_at?->toISOString(),
             ]);
+
             return;
         }
 
@@ -163,6 +166,7 @@ class SyncService
                     'status' => $ticket->status,
                     'priority' => $ticket->priority,
                 ]);
+
                 return;
             }
 
@@ -187,22 +191,26 @@ class SyncService
                     'ticket_id' => $ticket->getKey(),
                     'type' => $message->type,
                 ]);
+
                 return;
             }
         }
 
         if ($module === 'pos') {
             $this->recordChange('pos', 'order', $recordId, 'upsert', $payload);
+
             return;
         }
 
         if ($module === 'meetings') {
             $this->recordChange('meetings', 'meeting', $recordId, 'upsert', $payload);
+
             return;
         }
 
         if ($module === 'support') {
             $this->recordChange('support', 'ticket', $recordId, 'upsert', $payload);
+
             return;
         }
 

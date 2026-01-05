@@ -40,6 +40,7 @@ class SendNotificationJob implements ShouldQueue
         $driver = $registry->get($channelKey);
         if (! $driver || ! $driver->isInstalled()) {
             $this->logFailure('channel_not_available');
+
             return;
         }
 
@@ -51,6 +52,7 @@ class SendNotificationJob implements ShouldQueue
 
         if ($driver->supportsTemplates() && ! $template) {
             $this->logFailure('missing_template');
+
             return;
         }
 

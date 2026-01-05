@@ -20,8 +20,7 @@ class SyncConnectorJob implements ShouldQueue
 
     public function __construct(
         protected MarketplaceSyncJob $syncJob
-    ) {
-    }
+    ) {}
 
     public function handle(MarketplaceConnectorRegistry $registry): void
     {

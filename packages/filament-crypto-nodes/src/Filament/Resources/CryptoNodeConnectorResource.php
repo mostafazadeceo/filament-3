@@ -6,11 +6,11 @@ namespace Haida\FilamentCryptoNodes\Filament\Resources;
 
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-use Filament\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;

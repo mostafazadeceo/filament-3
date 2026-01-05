@@ -9,12 +9,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class SiteDomain extends Model
 {
     public const STATUS_PENDING = 'pending';
+
     public const STATUS_VERIFIED = 'verified';
+
     public const STATUS_FAILED = 'failed';
 
     public const TLS_STATUS_NOT_REQUESTED = 'not_requested';
+
     public const TLS_STATUS_PENDING = 'pending';
+
     public const TLS_STATUS_ISSUED = 'issued';
+
     public const TLS_STATUS_FAILED = 'failed';
 
     protected $guarded = [];

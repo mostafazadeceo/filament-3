@@ -2,14 +2,13 @@
 
 namespace Haida\FilamentNotify\WebPush;
 
-use Haida\FilamentNotify\Core\Channels\ChannelRegistry;
-use Haida\FilamentNotify\Core\Models\ChannelSetting;
-use Haida\FilamentNotify\WebPush\Channels\WebPushChannelDriver;
 use Filament\Facades\Filament;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
-use Illuminate\Support\Facades\Route;
+use Haida\FilamentNotify\Core\Channels\ChannelRegistry;
+use Haida\FilamentNotify\WebPush\Channels\WebPushChannelDriver;
 use Haida\FilamentNotify\WebPush\Support\VapidKeyManager;
+use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -29,7 +28,7 @@ class FilamentNotifyWebPushServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        app(ChannelRegistry::class)->register(new WebPushChannelDriver());
+        app(ChannelRegistry::class)->register(new WebPushChannelDriver);
 
         Route::middleware(['web'])
             ->group(function (): void {

@@ -47,11 +47,11 @@ class EsimGoFakeResponse
                 }
 
                 return [
-                    'reference' => 'esim-' . $runId,
+                    'reference' => 'esim-'.$runId,
                     'esims' => [
                         [
-                            'iccid' => '890100000000' . $runId,
-                            'matchingId' => 'match-' . $runId,
+                            'iccid' => '890100000000'.$runId,
+                            'matchingId' => 'match-'.$runId,
                             'smdpAddress' => 'smdp.esim-go.com',
                             'state' => 'assigned',
                         ],
@@ -62,7 +62,7 @@ class EsimGoFakeResponse
             return [
                 'data' => [
                     [
-                        'reference' => 'esim-' . $runId,
+                        'reference' => 'esim-'.$runId,
                         'status' => 'assigned',
                     ],
                 ],
@@ -82,8 +82,8 @@ class EsimGoFakeResponse
             return [
                 'items' => [
                     [
-                        'iccid' => '890100000000' . $runId,
-                        'matchingId' => 'match-' . $runId,
+                        'iccid' => '890100000000'.$runId,
+                        'matchingId' => 'match-'.$runId,
                         'smdpAddress' => 'smdp.esim-go.com',
                         'state' => 'assigned',
                     ],

@@ -13,9 +13,7 @@ use Illuminate\Validation\ValidationException;
 
 class PosSaleService
 {
-    public function __construct(protected DatabaseManager $db)
-    {
-    }
+    public function __construct(protected DatabaseManager $db) {}
 
     /**
      * @param  array<string, mixed>  $payload

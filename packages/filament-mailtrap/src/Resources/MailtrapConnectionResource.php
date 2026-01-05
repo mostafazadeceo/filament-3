@@ -137,7 +137,7 @@ class MailtrapConnectionResource extends IamResource
                             $count = $service->sync($record, true);
                             Notification::make()
                                 ->title('Inboxها همگام شدند')
-                                ->body('تعداد: ' . $count)
+                                ->body('تعداد: '.$count)
                                 ->success()
                                 ->send();
                         } catch (\Throwable $exception) {
@@ -156,7 +156,7 @@ class MailtrapConnectionResource extends IamResource
                             $count = $service->sync($record, true);
                             Notification::make()
                                 ->title('دامنه‌ها همگام شدند')
-                                ->body('تعداد: ' . $count)
+                                ->body('تعداد: '.$count)
                                 ->success()
                                 ->send();
                         } catch (\Throwable $exception) {

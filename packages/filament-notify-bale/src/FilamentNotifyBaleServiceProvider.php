@@ -18,6 +18,6 @@ class FilamentNotifyBaleServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        app(ChannelRegistry::class)->register(new BaleChannelDriver());
+        app(ChannelRegistry::class)->register(new BaleChannelDriver);
     }
 }

@@ -14,8 +14,7 @@ use Illuminate\Support\Str;
 
 class MailtrapOfferService
 {
-    public function __construct()
-    {}
+    public function __construct() {}
 
     public function publishToCatalog(MailtrapOffer $offer, ?Site $site = null): ?CatalogProduct
     {
@@ -25,7 +24,7 @@ class MailtrapOfferService
         }
 
         $slug = $offer->slug ?: Str::slug($offer->name);
-        $slug = $slug ?: 'mailtrap-offer-' . $offer->getKey();
+        $slug = $slug ?: 'mailtrap-offer-'.$offer->getKey();
 
         $product = CatalogProduct::query()->updateOrCreate([
             'tenant_id' => $offer->tenant_id,
@@ -51,7 +50,7 @@ class MailtrapOfferService
         CatalogVariant::query()->updateOrCreate([
             'tenant_id' => $offer->tenant_id,
             'product_id' => $product->getKey(),
-            'sku' => 'MAILTRAP-' . $offer->getKey(),
+            'sku' => 'MAILTRAP-'.$offer->getKey(),
         ], [
             'name' => $offer->name,
             'currency' => $offer->currency,

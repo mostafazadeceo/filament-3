@@ -3,12 +3,12 @@
 namespace Haida\PlatformCore;
 
 use Filamat\IamSuite\Contracts\CapabilityRegistryInterface;
-use Haida\PlatformCore\Services\PluginLifecycleManager;
-use Haida\PlatformCore\Support\PlatformCoreCapabilities;
 use Haida\PlatformCore\Models\PluginRegistry;
 use Haida\PlatformCore\Models\TenantPlugin;
 use Haida\PlatformCore\Policies\PluginRegistryPolicy;
 use Haida\PlatformCore\Policies\TenantPluginPolicy;
+use Haida\PlatformCore\Services\PluginLifecycleManager;
+use Haida\PlatformCore\Support\PlatformCoreCapabilities;
 use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;

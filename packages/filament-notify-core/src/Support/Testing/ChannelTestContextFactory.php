@@ -19,7 +19,7 @@ class ChannelTestContextFactory
         array $recipient,
         array $context,
     ): DeliveryContext {
-        $rule = new NotificationRule();
+        $rule = new NotificationRule;
         $rule->id = 0;
         $rule->panel_id = $panelId;
         $rule->name = 'test';
@@ -27,7 +27,7 @@ class ChannelTestContextFactory
 
         return new DeliveryContext(
             panelId: $panelId,
-            triggerKey: 'test.' . $channelKey,
+            triggerKey: 'test.'.$channelKey,
             rule: $rule,
             channelKey: $channelKey,
             channelSettings: $channelSettings,

@@ -12,8 +12,7 @@ class PluginManifest
         public readonly string $version,
         public readonly string $createdAtJalali,
         public readonly array $meta = [],
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {

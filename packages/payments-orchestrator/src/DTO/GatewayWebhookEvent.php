@@ -13,6 +13,5 @@ class GatewayWebhookEvent
         public ?string $currency = null,
         public ?string $reference = null,
         public array $meta = []
-    ) {
-    }
+    ) {}
 }

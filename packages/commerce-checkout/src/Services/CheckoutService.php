@@ -6,7 +6,6 @@ use Filamat\IamSuite\Models\Tenant;
 use Filamat\IamSuite\Models\Wallet;
 use Filamat\IamSuite\Services\WalletService;
 use Haida\CommerceCheckout\Models\Cart;
-use Haida\CommerceCheckout\Services\OrderInventoryService;
 use Haida\CommerceOrders\Events\OrderPaid;
 use Haida\CommerceOrders\Events\OrderPlaced;
 use Haida\CommerceOrders\Models\Order;
@@ -24,8 +23,7 @@ class CheckoutService
         protected OrderNumberGenerator $numberGenerator,
         protected WalletService $walletService,
         protected OrderInventoryService $inventoryService
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string, mixed>  $payload

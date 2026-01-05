@@ -17,7 +17,6 @@ use Haida\FilamentCommerceCore\Filament\Resources\CommerceProductResource\Pages\
 use Haida\FilamentCommerceCore\Filament\Resources\CommerceProductResource\Pages\ListCommerceProducts;
 use Haida\FilamentCommerceCore\Filament\Resources\CommerceProductResource\RelationManagers\CommerceVariantsRelationManager;
 use Haida\FilamentCommerceCore\Models\CommerceBrand;
-use Haida\FilamentCommerceCore\Models\CommerceCategory;
 use Haida\FilamentCommerceCore\Models\CommerceProduct;
 use Haida\SiteBuilderCore\Models\Site;
 

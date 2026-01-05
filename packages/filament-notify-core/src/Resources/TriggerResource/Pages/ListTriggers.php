@@ -2,9 +2,9 @@
 
 namespace Haida\FilamentNotify\Core\Resources\TriggerResource\Pages;
 
+use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Filamat\IamSuite\Filament\Resources\Pages\ListRecordsWithCreate;
 use Haida\FilamentNotify\Core\Resources\TriggerResource;
 use Illuminate\Support\Facades\Artisan;
 

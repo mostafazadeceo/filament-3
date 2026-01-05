@@ -3,8 +3,8 @@
 namespace Haida\FilamentNotify\WebPush\Channels;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Fieldset;
 use Haida\FilamentNotify\Core\Contracts\ChannelDriver;

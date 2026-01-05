@@ -4,10 +4,10 @@ namespace Haida\ContentCms\Http\Controllers\Web;
 
 use Filamat\IamSuite\Support\TenantContext;
 use Haida\ContentCms\Models\CmsPage;
+use Haida\FeatureGates\Services\FeatureGateService;
 use Haida\SiteBuilderCore\Models\Site;
 use Haida\TenancyDomains\Support\SiteContext;
 use Haida\ThemeEngine\ThemeRegistry;
-use Haida\FeatureGates\Services\FeatureGateService;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

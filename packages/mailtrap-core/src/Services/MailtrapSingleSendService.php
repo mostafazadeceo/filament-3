@@ -15,7 +15,7 @@ class MailtrapSingleSendService
     ) {}
 
     /**
-     * @param array<string, mixed> $options
+     * @param  array<string, mixed>  $options
      */
     public function sendAndLog(MailtrapConnection $connection, string $toEmail, string $subject, string $body, array $options = []): MailtrapSingleSend
     {

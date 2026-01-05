@@ -3,8 +3,8 @@
 namespace Haida\FilamentNotify\Core\Resources;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
@@ -63,6 +63,7 @@ class TemplateResource extends Resource
                         }
 
                         $decoded = json_decode($state ?: '[]', true);
+
                         return is_array($decoded) ? $decoded : [];
                     })
                     ->formatStateUsing(static function ($state) {

@@ -97,7 +97,7 @@ class RoleTemplateService
     ): array {
         $permissions = array_values(array_unique(array_filter(Arr::wrap($templatePermissions))));
 
-        $includeModules = (bool) (config('filamat-iam.role_templates.include_module_permissions.' . $roleName) ?? false);
+        $includeModules = (bool) (config('filamat-iam.role_templates.include_module_permissions.'.$roleName) ?? false);
         if ($includeModules && $allowedPermissions !== []) {
             $permissions = array_values(array_unique(array_merge($permissions, $allowedPermissions)));
         }

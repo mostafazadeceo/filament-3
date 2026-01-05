@@ -10,14 +10,13 @@ use DOMXPath;
 class HtmlSanitizer
 {
     /**
-     * @param array<int, string> $allowedTags
-     * @param array<string, array<int, string>> $allowedAttributes
+     * @param  array<int, string>  $allowedTags
+     * @param  array<string, array<int, string>>  $allowedAttributes
      */
     public function __construct(
         private array $allowedTags = [],
         private array $allowedAttributes = [],
-    ) {
-    }
+    ) {}
 
     public function sanitize(?string $html): string
     {
@@ -25,7 +24,7 @@ class HtmlSanitizer
             return '';
         }
 
-        $document = new DOMDocument();
+        $document = new DOMDocument;
         libxml_use_internal_errors(true);
         $document->loadHTML('<?xml encoding="utf-8" ?>'.$html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         libxml_clear_errors();
@@ -46,6 +45,7 @@ class HtmlSanitizer
             $tag = strtolower($node->tagName);
             if (! in_array($tag, $this->allowedTags, true)) {
                 $this->replaceWithText($node);
+
                 continue;
             }
 
@@ -65,11 +65,13 @@ class HtmlSanitizer
                 $name = strtolower($attribute->name);
                 if (str_starts_with($name, 'on') || $name === 'style') {
                     $remove[] = $attribute->name;
+
                     continue;
                 }
 
                 if (! in_array($name, $allowed, true)) {
                     $remove[] = $attribute->name;
+
                     continue;
                 }
 

@@ -2,8 +2,8 @@
 
 namespace Haida\FilamentNotify\WhatsApp\Channels;
 
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Haida\FilamentNotify\Core\Contracts\ChannelDriver;
 use Haida\FilamentNotify\Core\Support\Context\DeliveryContext;
 use Haida\FilamentNotify\Core\Support\Rendering\RenderedMessage;
@@ -96,7 +96,7 @@ class WhatsAppChannelDriver implements ChannelDriver
 
         $baseUrl = rtrim(config('filament-notify-whatsapp.base_url'), '/');
         $response = Http::withToken($token)
-            ->post($baseUrl . '/' . $phoneNumberId . '/messages', $payload);
+            ->post($baseUrl.'/'.$phoneNumberId.'/messages', $payload);
 
         if ($response->successful()) {
             return DeliveryResult::success($response->json());
@@ -144,7 +144,7 @@ class WhatsAppChannelDriver implements ChannelDriver
         }
 
         $baseUrl = rtrim(config('filament-notify-whatsapp.base_url'), '/');
-        $response = Http::withToken($token)->get($baseUrl . '/' . $phoneNumberId, [
+        $response = Http::withToken($token)->get($baseUrl.'/'.$phoneNumberId, [
             'fields' => 'display_phone_number,verified_name',
         ]);
 

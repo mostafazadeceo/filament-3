@@ -14,8 +14,8 @@ use Filament\Tables\Table;
 use Haida\FilamentPos\Filament\Resources\PosCashMovementResource\Pages\CreatePosCashMovement;
 use Haida\FilamentPos\Filament\Resources\PosCashMovementResource\Pages\EditPosCashMovement;
 use Haida\FilamentPos\Filament\Resources\PosCashMovementResource\Pages\ListPosCashMovements;
-use Haida\FilamentPos\Models\PosCashMovement;
 use Haida\FilamentPos\Models\PosCashierSession;
+use Haida\FilamentPos\Models\PosCashMovement;
 use Illuminate\Database\Eloquent\Model;
 
 class PosCashMovementResource extends IamResource

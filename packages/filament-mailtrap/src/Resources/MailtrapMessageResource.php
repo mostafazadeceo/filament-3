@@ -64,6 +64,7 @@ class MailtrapMessageResource extends IamResource
                         $inbox = MailtrapInbox::query()->find($record->inbox_id);
                         if (! $connection || ! $inbox) {
                             Notification::make()->title('اتصال یا Inbox یافت نشد.')->danger()->send();
+
                             return;
                         }
                         $service->refreshMessageDetails($connection, $inbox, $record);

@@ -9,6 +9,5 @@ class FeatureGateDecision
         public readonly string $source,
         public readonly ?string $detail = null,
         public readonly ?array $limits = null,
-    ) {
-    }
+    ) {}
 }

@@ -14,8 +14,9 @@ use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Notifications\Notification;
@@ -23,7 +24,6 @@ use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Schemas\Schema;
@@ -77,7 +77,7 @@ class MegaAdminOnboarding extends Page
     public function form(Schema $schema): Schema
     {
         $userModel = config('auth.providers.users.model');
-        $userTable = (new $userModel())->getTable();
+        $userTable = (new $userModel)->getTable();
         $userCreateForm = [
             TextInput::make('name')
                 ->label('نام')
@@ -87,7 +87,7 @@ class MegaAdminOnboarding extends Page
                 ->label('ایمیل')
                 ->email()
                 ->maxLength(255)
-                ->rules(['unique:' . $userTable . ',email'])
+                ->rules(['unique:'.$userTable.',email'])
                 ->required(),
             TextInput::make('password')
                 ->label('رمز عبور')

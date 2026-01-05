@@ -33,6 +33,7 @@ class ListEsimGoProducts extends ListRecordsWithCreate
                             ->body('ابتدا یک اتصال پیش‌فرض ایجاد کنید.')
                             ->warning()
                             ->send();
+
                         return;
                     }
                     if ($connection->status !== 'active') {
@@ -66,6 +67,7 @@ class ListEsimGoProducts extends ListRecordsWithCreate
                             ->body('ابتدا یک اتصال پیش‌فرض ایجاد کنید.')
                             ->warning()
                             ->send();
+
                         return;
                     }
                     if ($connection->status !== 'active') {
@@ -88,6 +90,7 @@ class ListEsimGoProducts extends ListRecordsWithCreate
                             ->body('جزئیات خطا در لاگ‌های Provider قابل مشاهده است.')
                             ->danger()
                             ->send();
+
                         return;
                     }
 
@@ -98,6 +101,7 @@ class ListEsimGoProducts extends ListRecordsWithCreate
                             ->body($log->error_message ?: 'جزئیات خطا در لاگ‌های Provider قابل مشاهده است.')
                             ->danger()
                             ->send();
+
                         return;
                     }
 

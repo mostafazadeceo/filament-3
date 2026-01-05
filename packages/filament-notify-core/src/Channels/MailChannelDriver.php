@@ -3,16 +3,16 @@
 namespace Haida\FilamentNotify\Core\Channels;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Haida\FilamentNotify\Core\Contracts\ChannelDriver;
 use Haida\FilamentNotify\Core\Support\Context\DeliveryContext;
 use Haida\FilamentNotify\Core\Support\Mail\GenericNotificationMail;
 use Haida\FilamentNotify\Core\Support\Rendering\RenderedMessage;
 use Haida\FilamentNotify\Core\Support\Sending\DeliveryResult;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Symfony\Component\Mailer\Transport\Smtp\SmtpTransport;
 
 class MailChannelDriver implements ChannelDriver

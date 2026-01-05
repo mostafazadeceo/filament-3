@@ -8,7 +8,7 @@ class WebPushServiceWorkerController extends Controller
 {
     public function show()
     {
-        $path = __DIR__ . '/../../resources/js/filament-notify-sw.js';
+        $path = __DIR__.'/../../resources/js/filament-notify-sw.js';
         if (! file_exists($path)) {
             abort(404);
         }

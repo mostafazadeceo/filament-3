@@ -25,7 +25,7 @@ class WebhookSignature
             return false;
         }
 
-        $expected = hash_hmac('sha256', $timestampValue . '.' . $payload, $secret);
+        $expected = hash_hmac('sha256', $timestampValue.'.'.$payload, $secret);
 
         return hash_equals($expected, (string) $signature);
     }

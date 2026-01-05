@@ -3,11 +3,11 @@
 namespace Haida\CommerceOrders\Services;
 
 use Filamat\IamSuite\Services\AuditService;
-use Haida\FilamentCommerceCore\Services\CommerceComplianceService;
 use Haida\CommerceOrders\Models\Order;
 use Haida\CommerceOrders\Models\OrderPayment;
 use Haida\CommerceOrders\Models\OrderRefund;
 use Haida\CommerceOrders\Models\OrderReturn;
+use Haida\FilamentCommerceCore\Services\CommerceComplianceService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\DatabaseManager;
 
@@ -16,8 +16,7 @@ class OrderRefundService
     public function __construct(
         protected DatabaseManager $db,
         protected AuditService $auditService
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string, mixed>  $payload

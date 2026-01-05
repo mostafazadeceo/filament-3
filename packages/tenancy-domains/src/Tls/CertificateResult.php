@@ -14,8 +14,7 @@ final class CertificateResult
         public readonly ?CarbonInterface $issuedAt,
         public readonly ?CarbonInterface $expiresAt,
         public readonly ?string $error,
-    ) {
-    }
+    ) {}
 
     public static function issued(?CarbonInterface $issuedAt = null, ?CarbonInterface $expiresAt = null): self
     {

@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class CmsPageService
 {
-    public function __construct(private PageBuilderService $pageBuilder)
-    {
-    }
+    public function __construct(private PageBuilderService $pageBuilder) {}
 
     public function publish(CmsPage $page, ?int $actorUserId = null): CmsPage
     {
@@ -56,7 +54,7 @@ class CmsPageService
     }
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      */
     private function createRevision(
         CmsPage $page,

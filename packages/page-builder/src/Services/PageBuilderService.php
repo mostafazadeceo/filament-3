@@ -9,12 +9,10 @@ use InvalidArgumentException;
 
 class PageBuilderService
 {
-    public function __construct(private HtmlSanitizer $sanitizer)
-    {
-    }
+    public function __construct(private HtmlSanitizer $sanitizer) {}
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      * @return array<string, mixed>
      */
     public function sanitizePayload(array $payload): array
@@ -23,7 +21,7 @@ class PageBuilderService
     }
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      */
     public function validatePayload(array $payload): void
     {
@@ -97,7 +95,7 @@ class PageBuilderService
     }
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      */
     private function createRevision(
         PageTemplate $template,
@@ -123,7 +121,7 @@ class PageBuilderService
     }
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      * @return array<string, mixed>
      */
     private function sanitizeArray(array $payload): array
@@ -134,11 +132,13 @@ class PageBuilderService
         foreach ($payload as $key => $value) {
             if (is_array($value)) {
                 $result[$key] = $this->sanitizeArray($value);
+
                 continue;
             }
 
             if (is_string($value) && $this->shouldSanitizeKey((string) $key, $keys)) {
                 $result[$key] = $this->sanitizer->sanitize($value);
+
                 continue;
             }
 
@@ -157,7 +157,7 @@ class PageBuilderService
     }
 
     /**
-     * @param array<int, string> $keys
+     * @param  array<int, string>  $keys
      */
     private function shouldSanitizeKey(string $key, array $keys): bool
     {

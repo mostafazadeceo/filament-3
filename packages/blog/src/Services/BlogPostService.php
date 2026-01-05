@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class BlogPostService
 {
-    public function __construct(private HtmlSanitizer $sanitizer)
-    {
-    }
+    public function __construct(private HtmlSanitizer $sanitizer) {}
 
     public function publish(BlogPost $post, ?int $actorUserId = null): BlogPost
     {

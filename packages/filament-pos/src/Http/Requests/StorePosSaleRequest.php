@@ -3,7 +3,6 @@
 namespace Haida\FilamentPos\Http\Requests;
 
 use Haida\FilamentPos\Models\PosSale;
-use Illuminate\Validation\Rule;
 
 class StorePosSaleRequest extends BasePosRequest
 {

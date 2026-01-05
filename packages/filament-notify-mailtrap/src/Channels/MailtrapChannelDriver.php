@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Haida\FilamentNotify\Mailtrap\Channels;
 
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Haida\FilamentNotify\Core\Contracts\ChannelDriver;
 use Haida\FilamentNotify\Core\Support\Context\DeliveryContext;
@@ -99,7 +99,7 @@ class MailtrapChannelDriver implements ChannelDriver
             'category' => $category,
         ];
 
-        $response = $this->client($token)->post($this->baseUrl() . '/send', $payload);
+        $response = $this->client($token)->post($this->baseUrl().'/send', $payload);
 
         if ($response->successful() || $response->status() === 202) {
             return DeliveryResult::success($response->json());
