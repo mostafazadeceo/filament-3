@@ -62,9 +62,18 @@ class TenantPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->widgets([
-                AccountWidget::class,
+            ->navigationGroups([
+                'مدیریت سازمان',
+                'مدیریت دسترسی',
+                'اشتراک',
+                'کیف پول',
+                'اعلان‌ها',
+                'اتوماسیون',
+                'گزارش‌ها',
+                'تنظیمات',
+                'راهنما',
             ])
+            ->widgets([])
             ->plugins([
                 FilamentAiCorePlugin::make(),
                 FilamentWorkhubPlugin::make(),
@@ -100,6 +109,7 @@ class TenantPanelProvider extends PanelProvider
                     ->tenantPanels(['tenant']),
                 FilamentApiDocsBuilderPlugin::make(),
             ])
+            ->renderHook(\Filament\View\PanelsRenderHook::SIDEBAR_NAV_START, fn () => view('filamat-iam::components.sidebar-role'))
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

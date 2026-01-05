@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Filamat\IamSuite\Filament\Pages;
 
 use Filamat\IamSuite\Filament\Concerns\AuthorizesIam;
+use Filamat\IamSuite\Services\ModuleCatalog;
+use Filamat\IamSuite\Services\OrganizationEntitlementService;
 use Filamat\IamSuite\Support\AccessSettings;
 use Filamat\IamSuite\Support\TenantContext;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -17,6 +19,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
@@ -82,6 +85,26 @@ class TenantSettings extends Page
                 Section::make('ویژگی‌ها')
                     ->schema([
                         Textarea::make('settings.allowed_features')->label('ویژگی‌های مجاز')->nullable(),
+                    ]),
+                Section::make('ماژول‌ها')
+                    ->schema([
+                        CheckboxList::make('settings.access.modules')
+                            ->label('ماژول‌های فعال')
+                            ->options(function () {
+                                $tenant = TenantContext::getTenant();
+                                if (! $tenant) {
+                                    return [];
+                                }
+
+                                $options = app(ModuleCatalog::class)->moduleOptions();
+                                $allowed = app(OrganizationEntitlementService::class)->allowedModulesForTenant($tenant);
+                                $allowedMap = array_fill_keys($allowed, true);
+
+                                return array_intersect_key($options, $allowedMap);
+                            })
+                            ->columns(2)
+                            ->searchable()
+                            ->helperText('فقط ماژول‌های مجاز توسط سازمان نمایش داده می‌شوند.'),
                     ]),
                 Section::make('دسترسی‌ها')
                     ->schema([

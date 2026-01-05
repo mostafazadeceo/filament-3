@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Filamat\IamSuite\Filament\Resources\UserResource\RelationManagers;
 
 use Filamat\IamSuite\Services\AuditService;
+use Filamat\IamSuite\Services\ModuleCatalog;
+use Filamat\IamSuite\Services\OrganizationEntitlementService;
+use Filamat\IamSuite\Services\RoleTemplateService;
 use Filamat\IamSuite\Services\UserLifecycleService;
 use Filamat\IamSuite\Support\IamAuthorization;
 use Filamat\IamSuite\Support\TenantContext;
@@ -91,6 +94,14 @@ class UserTenantsRelationManager extends RelationManager
                             'status' => $data['status'] ?? 'active',
                             'reason' => $data['reason'] ?? null,
                         ]);
+
+                        if ($owner && $record) {
+                            $entitlements = app(OrganizationEntitlementService::class);
+                            $modules = $entitlements->allowedModulesForTenant($record);
+                            $permissions = app(ModuleCatalog::class)->permissionsForModules($modules);
+                            app(RoleTemplateService::class)->syncTemplatesForTenant($record, $permissions);
+                            app(RoleTemplateService::class)->assignRoleForPivot($record, $owner, (string) ($data['role'] ?? 'member'));
+                        }
                     }),
             ])
             ->actions([

@@ -7,20 +7,20 @@ namespace Haida\FilamentMailOps\Filament\Resources;
 use Filamat\IamSuite\Filament\Concerns\InteractsWithTenant;
 use Filamat\IamSuite\Filament\Resources\IamResource;
 use Filamat\IamSuite\Support\IamAuthorization;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Get;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Haida\FilamentMailOps\Filament\Resources\MailMailboxResource\Pages\CreateMailMailbox;
@@ -63,28 +63,21 @@ class MailMailboxResource extends IamResource
                         ->pluck('name', 'id')
                         ->toArray())
                     ->searchable()
-                    ->required(),
+                    ->required()
+                    ->reactive()
+                    ->afterStateUpdated(fn (Set $set, Get $get) => $set('email_preview', self::buildEmailPreview($get))),
                 TextInput::make('local_part')
                     ->label('نام کاربری')
                     ->required()
                     ->maxLength(255)
-                    ->helperText('بخش قبل از @'),
-                Placeholder::make('email_preview')
+                    ->helperText('بخش قبل از @')
+                    ->reactive()
+                    ->afterStateUpdated(fn (Set $set, Get $get) => $set('email_preview', self::buildEmailPreview($get))),
+                TextInput::make('email_preview')
                     ->label('آدرس کامل')
-                    ->content(function (Get $get): string {
-                        $domainId = $get('domain_id');
-                        $local = $get('local_part');
-                        if (! $domainId || ! $local) {
-                            return '-';
-                        }
-
-                        $domain = MailDomain::query()->find($domainId);
-                        if (! $domain) {
-                            return '-';
-                        }
-
-                        return $local.'@'.$domain->name;
-                    })
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->afterStateHydrated(fn (Set $set, Get $get) => $set('email_preview', self::buildEmailPreview($get)))
                     ->columnSpanFull(),
                 TextInput::make('password')
                     ->label('رمز عبور')
@@ -252,5 +245,21 @@ class MailMailboxResource extends IamResource
             'create' => CreateMailMailbox::route('/create'),
             'edit' => EditMailMailbox::route('/{record}/edit'),
         ];
+    }
+
+    protected static function buildEmailPreview(Get $get): string
+    {
+        $domainId = $get('domain_id');
+        $local = $get('local_part');
+        if (! $domainId || ! $local) {
+            return '-';
+        }
+
+        $domain = MailDomain::query()->find($domainId);
+        if (! $domain) {
+            return '-';
+        }
+
+        return $local.'@'.$domain->name;
     }
 }

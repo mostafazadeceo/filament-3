@@ -9,6 +9,10 @@ use Filamat\IamSuite\Filament\Resources\TenantResource\Pages\EditTenant;
 use Filamat\IamSuite\Filament\Resources\TenantResource\Pages\ListTenants;
 use Filamat\IamSuite\Models\Organization;
 use Filamat\IamSuite\Models\Tenant;
+use Filamat\IamSuite\Services\ModuleCatalog;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -30,6 +34,8 @@ class TenantResource extends IamResource
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-group';
 
     protected static string|\UnitEnum|null $navigationGroup = 'مدیریت کلان';
+
+    protected static ?int $navigationSort = 30;
 
     public static function form(Schema $schema): Schema
     {
@@ -61,6 +67,11 @@ class TenantResource extends IamResource
                     ->label('ویژگی‌های مجاز (جداشده با ویرگول)')
                     ->helperText('مثال فنی: wallet, subscriptions, notifications')
                     ->nullable(),
+                CheckboxList::make('settings.access.modules')
+                    ->label('ماژول‌های فعال')
+                    ->options(fn () => app(ModuleCatalog::class)->moduleOptions())
+                    ->columns(2)
+                    ->searchable(),
             ]);
     }
 
@@ -79,6 +90,10 @@ class TenantResource extends IamResource
                         default => $state,
                     }),
                 TextColumn::make('created_at')->label('ایجاد'),
+            ])
+            ->actions([
+                EditAction::make(),
+                DeleteAction::make(),
             ]);
     }
 

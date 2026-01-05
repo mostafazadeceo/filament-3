@@ -209,11 +209,24 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            ->navigationGroups([
+                'مگا سوپر ادمین',
+                'مدیریت کلان',
+                'مدیریت سازمان',
+                'مدیریت دسترسی',
+                'اشتراک',
+                'کیف پول',
+                'اعلان‌ها',
+                'اتوماسیون',
+                'گزارش‌ها',
+                'تنظیمات',
+                'راهنما',
+            ])
             ->widgets([
-                AccountWidget::class,
                 PanelInfoWidget::class,
             ])
             ->plugins($plugins)
+            ->renderHook(PanelsRenderHook::SIDEBAR_NAV_START, fn () => view('filamat-iam::components.sidebar-role'))
             ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_BEFORE, function () use ($resolveSettings) {
                 $settings = $resolveSettings();
                 if (! $settings?->topbar_date_enabled) {

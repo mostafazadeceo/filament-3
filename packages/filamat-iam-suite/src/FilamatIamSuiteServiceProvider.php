@@ -137,6 +137,7 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
                 '2025_01_01_000048_create_iam_ai_reports_table',
                 '2025_01_01_000049_create_iam_ai_action_proposals_table',
                 '2025_01_01_000050_expand_webhook_secret_column',
+                '2025_01_01_000051_create_iam_quick_actions_table',
             ])
             ->runsMigrations();
     }
@@ -150,6 +151,11 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
         $this->app->singleton(NotificationService::class);
         $this->app->singleton(SecurityEventService::class);
         $this->app->singleton(AuditService::class);
+        $this->app->singleton(\Filamat\IamSuite\Services\ModuleCatalog::class);
+        $this->app->singleton(\Filamat\IamSuite\Services\RoleTemplateService::class);
+        $this->app->singleton(\Filamat\IamSuite\Services\OrganizationEntitlementService::class);
+        $this->app->singleton(\Filamat\IamSuite\Services\TenantProvisioningService::class);
+        $this->app->singleton(\Filamat\IamSuite\Services\OrganizationProvisioningService::class);
         $this->app->singleton(WebhookService::class);
         $this->app->singleton(ImpersonationService::class);
         $this->app->singleton(AutomationRateLimiter::class);
@@ -188,6 +194,7 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
         $this->app->make(Router::class)->aliasMiddleware('filamat-iam.scope', \Filamat\IamSuite\Http\Middleware\ApiScope::class);
         $this->app->make(Router::class)->aliasMiddleware('filamat-iam.impersonation', \Filamat\IamSuite\Http\Middleware\ImpersonationGuard::class);
         $this->app->make(Router::class)->aliasMiddleware('filamat-iam.session', \Filamat\IamSuite\Http\Middleware\TrackUserSession::class);
+        $this->app->make(Router::class)->aliasMiddleware('filamat-iam.mega', \Filamat\IamSuite\Http\Middleware\EnsureMegaSuperAdmin::class);
 
         Gate::before(function ($user, string $ability) {
             if (method_exists($user, 'hasIamSuiteSuperAdmin') && $user->hasIamSuiteSuperAdmin()) {

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Filamat\IamSuite\Support;
 
 use Filamat\IamSuite\Contracts\CapabilityRegistryInterface;
+use Filamat\IamSuite\Services\ModuleCatalog;
+use Filamat\IamSuite\Services\OrganizationEntitlementService;
 use Filamat\IamSuite\Models\Tenant;
 use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Permission;
@@ -36,6 +38,15 @@ final class AccessSettings
         }
 
         $permissions = array_values(array_unique(array_filter($permissions)));
+
+        if ($tenant) {
+            $entitlementService = app(OrganizationEntitlementService::class);
+            $modules = $entitlementService->allowedModulesForTenant($tenant);
+            if ($modules !== []) {
+                $permissions = app(ModuleCatalog::class)->filterPermissionsByModules($permissions, $modules);
+            }
+        }
+
         sort($permissions);
 
         return self::groupPermissions($permissions);
@@ -249,6 +260,7 @@ final class AccessSettings
             'security' => 'امنیت',
             'audit' => 'ممیزی',
             'settings' => 'تنظیمات',
+            'quick_actions' => 'اقدامات سریع',
             'pam' => 'دسترسی ممتاز',
             'session' => 'نشست‌ها',
             'mfa' => 'احراز هویت دومرحله‌ای',

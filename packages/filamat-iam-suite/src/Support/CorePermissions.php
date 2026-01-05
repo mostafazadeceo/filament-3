@@ -85,6 +85,8 @@ final class CorePermissions
             'security.manage',
             'audit.view',
             'settings.manage',
+            'quick_actions.view',
+            'quick_actions.manage',
             'pam.view',
             'pam.manage',
             'pam.request',
@@ -165,6 +167,8 @@ final class CorePermissions
                 'iam.impersonate',
                 'iam.impersonate.write',
                 'settings.manage',
+                'quick_actions.view',
+                'quick_actions.manage',
             ],
             'tenant_admin' => [
                 'iam.view',
@@ -188,6 +192,15 @@ final class CorePermissions
                 'automation.view',
                 'automation.reports.view',
                 'automation.actions.view',
+                'quick_actions.view',
+                'quick_actions.manage',
+            ],
+            'tenant_member' => [
+                'iam.view',
+                'notification.view',
+                'api.view',
+                'quick_actions.view',
+                'quick_actions.manage',
             ],
             'finance_manager' => [
                 'wallet.view',
@@ -197,12 +210,16 @@ final class CorePermissions
                 'wallet.transfer',
                 'wallet.export',
                 'subscription.view',
+                'quick_actions.view',
+                'quick_actions.manage',
             ],
             'support' => [
                 'user.view',
                 'notification.view',
                 'security.view',
                 'audit.view',
+                'quick_actions.view',
+                'quick_actions.manage',
             ],
         ];
     }

@@ -18,8 +18,8 @@ use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -145,7 +145,7 @@ class WebhookResource extends IamResource
                 IconColumn::make('is_ai_auditor')
                     ->label('حسابرسی هوشمند')
                     ->boolean()
-                    ->visible(fn (Webhook $record) => $record->type === 'automation'),
+                    ->visible(fn (?Webhook $record) => $record?->type === 'automation'),
                 TextColumn::make('created_at')->label('ایجاد'),
             ])
             ->actions([

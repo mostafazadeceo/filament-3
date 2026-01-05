@@ -24,7 +24,7 @@ trait HasIamSuite
 {
     public function hasIamSuiteSuperAdmin(): bool
     {
-        return (bool) ($this->is_super_admin ?? false);
+        return MegaSuperAdmin::check($this);
     }
 
     public function tenants(): BelongsToMany

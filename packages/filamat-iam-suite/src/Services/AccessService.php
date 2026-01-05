@@ -18,6 +18,8 @@ use Spatie\Permission\PermissionRegistrar;
 
 class AccessService
 {
+    public function __construct(protected OrganizationEntitlementService $entitlementService) {}
+
     public function checkPermission(Authenticatable $user, Tenant $tenant, string $permissionKey): bool
     {
         $result = $this->explainPermission($user, $tenant, $permissionKey);
@@ -31,6 +33,13 @@ class AccessService
     public function explainPermission(Authenticatable $user, Tenant $tenant, string $permissionKey): array
     {
         $trace = [];
+
+        if (! $this->passesOrganizationEntitlements($tenant, $permissionKey, $trace)) {
+            return [
+                'allowed' => false,
+                'trace' => $trace,
+            ];
+        }
 
         if (! $this->passesTenantAccessPolicy($tenant, $permissionKey, $trace)) {
             return [
@@ -116,6 +125,11 @@ class AccessService
             'allowed' => false,
             'trace' => $trace,
         ];
+    }
+
+    protected function passesOrganizationEntitlements(Tenant $tenant, string $permissionKey, array &$trace): bool
+    {
+        return $this->entitlementService->allowsPermission($tenant, $permissionKey, $trace);
     }
 
     protected function passesSubscriptionGate(Authenticatable $user, Tenant $tenant, string $permissionKey, array &$trace): bool

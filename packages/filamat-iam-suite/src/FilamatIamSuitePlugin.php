@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Filamat\IamSuite;
 
 use Filamat\IamSuite\Filament\Pages\NotificationDashboard;
+use Filamat\IamSuite\Filament\Pages\MegaAdminGuide;
+use Filamat\IamSuite\Filament\Pages\MegaAdminOnboarding;
+use Filamat\IamSuite\Filament\Pages\OrganizationGuide;
 use Filamat\IamSuite\Filament\Pages\PermissionSimulator;
 use Filamat\IamSuite\Filament\Pages\SuperAdminDashboard;
 use Filamat\IamSuite\Filament\Pages\TenantDashboard;
@@ -18,6 +21,7 @@ use Filamat\IamSuite\Filament\Resources\ImpersonationSessionResource;
 use Filamat\IamSuite\Filament\Resources\MfaMethodResource;
 use Filamat\IamSuite\Filament\Resources\NotificationResource;
 use Filamat\IamSuite\Filament\Resources\OrganizationResource;
+use Filamat\IamSuite\Filament\Resources\OrganizationWorkspaceResource;
 use Filamat\IamSuite\Filament\Resources\PermissionOverrideResource;
 use Filamat\IamSuite\Filament\Resources\PermissionResource;
 use Filamat\IamSuite\Filament\Resources\PermissionTemplateResource;
@@ -25,6 +29,7 @@ use Filamat\IamSuite\Filament\Resources\PrivilegeActivationResource;
 use Filamat\IamSuite\Filament\Resources\PrivilegeEligibilityResource;
 use Filamat\IamSuite\Filament\Resources\PrivilegeRequestResource;
 use Filamat\IamSuite\Filament\Resources\RoleResource;
+use Filamat\IamSuite\Filament\Resources\QuickActionResource;
 use Filamat\IamSuite\Filament\Resources\SecurityEventResource;
 use Filamat\IamSuite\Filament\Resources\SubscriptionPlanResource;
 use Filamat\IamSuite\Filament\Resources\SubscriptionResource;
@@ -37,8 +42,14 @@ use Filamat\IamSuite\Filament\Resources\WalletResource;
 use Filamat\IamSuite\Filament\Resources\WalletTransactionResource;
 use Filamat\IamSuite\Filament\Resources\WebhookResource;
 use Filamat\IamSuite\Filament\Widgets\AutomationInsightStatsWidget;
+use Filamat\IamSuite\Filament\Widgets\MegaAdminDeliveryWidget;
+use Filamat\IamSuite\Filament\Widgets\MegaAdminOperationsWidget;
+use Filamat\IamSuite\Filament\Widgets\MegaAdminOverviewWidget;
+use Filamat\IamSuite\Filament\Widgets\NotificationChannelBreakdownWidget;
 use Filamat\IamSuite\Filament\Widgets\NotificationDeliveryChartWidget;
+use Filamat\IamSuite\Filament\Widgets\NotificationFailuresWidget;
 use Filamat\IamSuite\Filament\Widgets\NotificationStatsWidget;
+use Filamat\IamSuite\Filament\Widgets\NotificationStatusTimelineWidget;
 use Filamat\IamSuite\Filament\Widgets\QuickActionsWidget;
 use Filamat\IamSuite\Filament\Widgets\RecentAuditLogsWidget;
 use Filamat\IamSuite\Filament\Widgets\RecentNotificationsWidget;
@@ -49,6 +60,7 @@ use Filamat\IamSuite\Filament\Widgets\WalletVolumeChartWidget;
 use Filamat\IamSuite\Filament\Widgets\WebhookHealthChartWidget;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Filament\View\PanelsRenderHook;
 
 class FilamatIamSuitePlugin implements Plugin
 {
@@ -87,20 +99,30 @@ class FilamatIamSuitePlugin implements Plugin
         if ($this->isSuperAdminPanel($panelId)) {
             $panel
                 ->middleware([
+                    'filamat-iam.mega',
                     'filamat-iam.impersonation',
                     'filamat-iam.session',
                 ])
+                ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER, fn () => view('filamat-iam::components.topbar-account'))
                 ->pages([
                     SuperAdminDashboard::class,
+                    MegaAdminOnboarding::class,
+                    MegaAdminGuide::class,
                     NotificationDashboard::class,
                     PermissionSimulator::class,
                 ])
                 ->widgets([
+                    MegaAdminOverviewWidget::class,
+                    MegaAdminOperationsWidget::class,
+                    MegaAdminDeliveryWidget::class,
                     SuperAdminStatsWidget::class,
                     NotificationStatsWidget::class,
                     QuickActionsWidget::class,
                     WalletVolumeChartWidget::class,
                     NotificationDeliveryChartWidget::class,
+                    NotificationStatusTimelineWidget::class,
+                    NotificationChannelBreakdownWidget::class,
+                    NotificationFailuresWidget::class,
                     WebhookHealthChartWidget::class,
                     AutomationInsightStatsWidget::class,
                     RecentSecurityEventsWidget::class,
@@ -135,6 +157,7 @@ class FilamatIamSuitePlugin implements Plugin
                     AuditLogResource::class,
                     IamAiReportResource::class,
                     IamAiActionProposalResource::class,
+                    QuickActionResource::class,
                 ]);
 
             return;
@@ -146,8 +169,10 @@ class FilamatIamSuitePlugin implements Plugin
                     'filamat-iam.impersonation',
                     'filamat-iam.session',
                 ])
+                ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER, fn () => view('filamat-iam::components.topbar-account'))
                 ->pages([
                     TenantDashboard::class,
+                    OrganizationGuide::class,
                     NotificationDashboard::class,
                     PermissionSimulator::class,
                     TenantSettings::class,
@@ -158,6 +183,9 @@ class FilamatIamSuitePlugin implements Plugin
                     QuickActionsWidget::class,
                     WalletVolumeChartWidget::class,
                     NotificationDeliveryChartWidget::class,
+                    NotificationStatusTimelineWidget::class,
+                    NotificationChannelBreakdownWidget::class,
+                    NotificationFailuresWidget::class,
                     WebhookHealthChartWidget::class,
                     AutomationInsightStatsWidget::class,
                     RecentSecurityEventsWidget::class,
@@ -166,6 +194,7 @@ class FilamatIamSuitePlugin implements Plugin
                 ])
                 ->resources([
                     UserResource::class,
+                    OrganizationWorkspaceResource::class,
                     RoleResource::class,
                     PermissionResource::class,
                     GroupResource::class,
@@ -190,6 +219,7 @@ class FilamatIamSuitePlugin implements Plugin
                     AuditLogResource::class,
                     IamAiReportResource::class,
                     IamAiActionProposalResource::class,
+                    QuickActionResource::class,
                 ]);
         }
     }

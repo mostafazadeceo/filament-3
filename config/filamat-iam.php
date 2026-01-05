@@ -57,6 +57,29 @@ return [
     ],
 
     'super_admin_panels' => ['admin'],
+    'mega_super_admins' => [
+        'emails' => array_filter(array_map('trim', explode(',', env('FILAMAT_IAM_MEGA_SUPER_ADMINS', '')))),
+        'user_ids' => array_filter(array_map('intval', array_filter(explode(',', env('FILAMAT_IAM_MEGA_SUPER_ADMIN_IDS', ''))))),
+    ],
+    'organization_entitlements' => [
+        'exempt_permissions' => [
+            'iam.view',
+            'subscription.view',
+            'subscription.manage',
+            'user.view',
+        ],
+    ],
+    'role_templates' => [
+        'include_module_permissions' => [
+            'tenant_owner' => true,
+            'tenant_admin' => false,
+        ],
+    ],
+    'modules' => [
+        'labels' => [
+            'filamat-iam-suite' => 'IAM Suite',
+        ],
+    ],
 
     'api' => [
         'version' => 'v1',

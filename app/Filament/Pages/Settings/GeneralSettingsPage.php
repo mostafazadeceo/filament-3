@@ -3,6 +3,7 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Settings\GeneralSettings;
+use Filamat\IamSuite\Support\MegaSuperAdmin;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -19,15 +20,25 @@ class GeneralSettingsPage extends SettingsPage
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
 
-    protected static ?string $navigationLabel = 'تنظیمات کلی';
+    protected static ?string $navigationLabel = 'تنظیمات کلی مگا سوپرادمین';
 
     protected static ?string $title = 'تنظیمات کلی';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'تنظیمات';
+    protected static string|\UnitEnum|null $navigationGroup = 'مگا سوپر ادمین';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $slug = 'settings/general';
+
+    public static function canAccess(): bool
+    {
+        return MegaSuperAdmin::check(auth()->user()) && parent::canAccess();
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return MegaSuperAdmin::check(auth()->user());
+    }
 
     public function form(Schema $schema): Schema
     {

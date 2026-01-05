@@ -10,7 +10,7 @@ use Filamat\IamSuite\Support\IamAuthorization;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Haida\FilamentMailOps\Filament\Resources\MailInboundMessageResource\Pages\ListMailInboundMessages;

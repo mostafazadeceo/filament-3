@@ -87,6 +87,8 @@ final class PermissionLabels
             'security.manage' => 'مدیریت امنیت',
             'audit.view' => 'مشاهده ممیزی',
             'settings.manage' => 'مدیریت تنظیمات',
+            'quick_actions.view' => 'مشاهده اقدامات سریع',
+            'quick_actions.manage' => 'مدیریت اقدامات سریع',
             'pam.view' => 'مشاهده دسترسی ممتاز',
             'pam.manage' => 'مدیریت دسترسی ممتاز',
             'pam.request' => 'درخواست دسترسی ممتاز',

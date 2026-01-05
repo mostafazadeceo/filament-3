@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Filamat\IamSuite\Filament\Pages;
 
 use Filamat\IamSuite\Filament\Concerns\AuthorizesIam;
-use Filamat\IamSuite\Filament\Widgets\NotificationDeliveryChartWidget;
+use Filamat\IamSuite\Filament\Widgets\NotificationChannelBreakdownWidget;
+use Filamat\IamSuite\Filament\Widgets\NotificationFailuresWidget;
 use Filamat\IamSuite\Filament\Widgets\NotificationStatsWidget;
-use Filamat\IamSuite\Filament\Widgets\RecentNotificationsWidget;
+use Filamat\IamSuite\Filament\Widgets\NotificationStatusTimelineWidget;
 use Filamat\IamSuite\Filament\Widgets\WebhookHealthChartWidget;
 use Filament\Pages\Dashboard;
 
@@ -37,9 +38,10 @@ class NotificationDashboard extends Dashboard
     protected function getFooterWidgets(): array
     {
         return [
-            NotificationDeliveryChartWidget::class,
+            NotificationStatusTimelineWidget::class,
+            NotificationChannelBreakdownWidget::class,
             WebhookHealthChartWidget::class,
-            RecentNotificationsWidget::class,
+            NotificationFailuresWidget::class,
         ];
     }
 }

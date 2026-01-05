@@ -21,7 +21,10 @@ class InviteUserService
     public function __construct(
         protected AuditService $auditService,
         protected NotificationService $notificationService,
-        protected SecurityEventService $securityEventService
+        protected SecurityEventService $securityEventService,
+        protected RoleTemplateService $roleTemplateService,
+        protected OrganizationEntitlementService $entitlementService,
+        protected ModuleCatalog $moduleCatalog
     ) {}
 
     /**
@@ -39,6 +42,10 @@ class InviteUserService
         ?string $reason = null,
         ?\DateTimeInterface $expiresAt = null
     ): array {
+        if (! $this->entitlementService->canInviteUser($tenant)) {
+            throw new \RuntimeException('سقف کاربران مجاز برای این سازمان تکمیل شده است.');
+        }
+
         $userModel = config('auth.providers.users.model');
         $user = $userModel::query()->firstOrCreate(
             ['email' => $email],
@@ -48,10 +55,11 @@ class InviteUserService
             ]
         );
 
+        $pivotRole = $this->resolvePivotRole($roles);
         if (method_exists($user, 'tenants')) {
             $user->tenants()->syncWithoutDetaching([
                 $tenant->getKey() => [
-                    'role' => $roles[0] ?? 'member',
+                    'role' => $pivotRole,
                     'status' => 'invited',
                     'joined_at' => now(),
                     'invited_at' => now(),
@@ -75,6 +83,11 @@ class InviteUserService
         ]);
 
         $this->applyDefaults($tenant, $user, $permissions, $roles);
+        if ($roles === []) {
+            $modulePermissions = $this->resolveAllowedPermissions($tenant);
+            $this->roleTemplateService->syncTemplatesForTenant($tenant, $modulePermissions);
+            $this->roleTemplateService->assignRoleForPivot($tenant, $user, $pivotRole);
+        }
 
         event(new UserInvited($user, $tenant));
 
@@ -222,5 +235,31 @@ class InviteUserService
                 $user->assignRole($role);
             }
         }
+    }
+
+    /**
+     * @param  array<int, string>  $roles
+     */
+    protected function resolvePivotRole(array $roles): string
+    {
+        if (in_array('tenant_owner', $roles, true)) {
+            return 'owner';
+        }
+
+        if (in_array('tenant_admin', $roles, true)) {
+            return 'admin';
+        }
+
+        return 'member';
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function resolveAllowedPermissions(Tenant $tenant): array
+    {
+        $modules = $this->entitlementService->allowedModulesForTenant($tenant);
+
+        return $this->moduleCatalog->permissionsForModules($modules);
     }
 }

@@ -70,6 +70,12 @@ class TenantContext
         $panelId = Filament::getCurrentPanel()?->getId();
         $superPanels = (array) config('filamat-iam.super_admin_panels', ['admin']);
 
-        return $panelId !== null && in_array($panelId, $superPanels, true);
+        if ($panelId === null || ! in_array($panelId, $superPanels, true)) {
+            return false;
+        }
+
+        $user = function_exists('auth') ? auth()->user() : null;
+
+        return MegaSuperAdmin::check($user);
     }
 }

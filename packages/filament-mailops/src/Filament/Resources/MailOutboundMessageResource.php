@@ -12,7 +12,7 @@ use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Haida\FilamentMailOps\Filament\Resources\MailOutboundMessageResource\Pages\CreateMailOutboundMessage;
@@ -111,7 +111,27 @@ class MailOutboundMessageResource extends IamResource
                     ->sortable(),
                 TextColumn::make('to_emails')
                     ->label('گیرندگان')
-                    ->formatStateUsing(fn (?array $state) => $state ? implode(', ', $state) : '-')
+                    ->formatStateUsing(function (mixed $state): string {
+                        if (is_array($state)) {
+                            return $state !== [] ? implode(', ', $state) : '-';
+                        }
+
+                        if (is_string($state)) {
+                            $state = trim($state);
+                            if ($state === '') {
+                                return '-';
+                            }
+
+                            $decoded = json_decode($state, true);
+                            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                                return $decoded !== [] ? implode(', ', $decoded) : '-';
+                            }
+
+                            return $state;
+                        }
+
+                        return '-';
+                    })
                     ->wrap(),
                 TextColumn::make('subject')
                     ->label('عنوان')
