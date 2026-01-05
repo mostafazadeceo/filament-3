@@ -1,7 +1,7 @@
 # N8N Intelligence Connector نصب و راه‌اندازی
 
 ## پیش‌نیازها
-- PHP 8.2+, Laravel 11.28+, Filament v4
+- PHP 8.4+, Laravel 12+, Filament v4
 - فعال بودن IAM Suite در پروژه
 
 ## نصب (Package-first)

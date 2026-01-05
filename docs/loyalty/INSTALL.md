@@ -1,8 +1,8 @@
 # Loyalty Club Installation
 
 ## Prerequisites
-- PHP 8.2+
-- Laravel 11.28+
+- PHP 8.4+
+- Laravel 12+
 - Filament v4
 - Filamat IAM Suite (tenancy + permissions)
 

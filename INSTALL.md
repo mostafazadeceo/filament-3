@@ -4,7 +4,7 @@ This is a production-oriented quick install guide for the Haida Filament Platfor
 
 ## 1) Environment
 
-- PHP 8.2+
+- PHP 8.4+
 - Composer
 - Node.js 18+
 - MySQL/PostgreSQL

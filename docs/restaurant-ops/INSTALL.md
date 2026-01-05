@@ -1,8 +1,8 @@
 # نصب Restaurant Ops
 
 ## پیش‌نیازها
-- PHP 8.2+
-- Laravel 11+
+- PHP 8.4+
+- Laravel 12+
 - Filament v4
 - فعال بودن IAM Suite
 

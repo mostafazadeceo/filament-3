@@ -1,10 +1,10 @@
 # Haida Filament Platform
 
-A Laravel 12 + Filament v4 platform with a modular notification system (email, SMS, Telegram, WhatsApp, Bale, WebPush) and admin tooling.
+A Laravel 12 + Filament v4 multi-tenant platform with IAM, modular capabilities, and a notification system (email, SMS, Telegram, WhatsApp, Bale, WebPush).
 
 ## Requirements
 
-- PHP 8.2+
+- PHP 8.4+
 - Composer
 - Node.js 18+ / npm
 - MySQL or PostgreSQL
@@ -21,6 +21,15 @@ npm run build
 ```
 
 If this is production, set the correct `APP_ENV`, `APP_KEY`, and database credentials in `.env` before migrating.
+
+## Panels
+
+- Admin panel: `/admin`
+- Tenant panel: `/tenant`
+
+## Docs
+
+Module and platform docs live under `docs/` (each module has `SPEC.md`, `INSTALL.md`, `API.md`).
 
 ## Filament Notify (Core + Add-ons)
 
@@ -50,8 +59,4 @@ bash scripts/install.sh
 ## License
 
 This project is proprietary and licensed for commercial use only.
-
-- Annual license: USD 1200
-- Owner: Mohammad Mostafazadeh (09120120997)
-
 See `LICENSE` for details.

@@ -6,7 +6,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "ariaieboy/filament-jalali": "^2.1",
         "barryvdh/laravel-dompdf": "*",
         "diogogpinto/filament-auth-ui-enhancer": "^2.0",

@@ -1,7 +1,7 @@
 # نصب ماژول تنخواه
 
 ## پیش‌نیازها
-- Laravel 11+
+- Laravel 12+
 - Filament v4
 - filamat/filamat-iam-suite
 - vendor/filament-accounting-ir

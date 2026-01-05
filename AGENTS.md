@@ -10,7 +10,7 @@ Build production-grade, extensible Filament v4 modules and plugins for this mult
 - Keep modules isolated; do not modify other packages/modules unless required for integration.
 
 ## Hard constraints
-- PHP 8.2+ / Laravel 11.28+ / Filament v4.
+- PHP 8.4+ / Laravel 12+ / Filament v4.
 - Multi-panel and multi-tenant safe; enforce tenant scoping everywhere.
 - Authorization required for all UI (Filament) and API endpoints.
 - Prefer package/plugin architecture; avoid editing host app unless explicitly requested.
@@ -24,12 +24,14 @@ Build production-grade, extensible Filament v4 modules and plugins for this mult
 - Notifications: `haida/filament-notify-core` and channel packages (telegram, whatsapp, webpush, sms, bale).
 - API docs: `zpmlabs/filament-api-docs-builder` is installed and used.
 - Localization: Jalali/Hijri packages are present; date rendering uses Jalali where applicable.
-- Active core modules (packages):
+- Active core modules (packages; non-exhaustive, see `packages/` for full list):
   - `packages/filament-accounting-ir`
   - `packages/filament-restaurant-ops`
   - `packages/filament-petty-cash-ir`
   - `packages/filament-payroll-attendance-ir`
   - `packages/filament-workhub`
+  - `packages/filament-commerce-*`
+  - `packages/filament-crypto-*`
   - `packages/filament-notify-*` (notification stack)
 
 ## Localization

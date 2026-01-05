@@ -1,8 +1,8 @@
 # INSTALL — Workhub AI
 
 ## پیش‌نیازها
-- Laravel 11.28+
-- PHP 8.2+
+- Laravel 12+
+- PHP 8.4+
 - Filament v4
 - IAM Suite فعال (tenancy + permissions)
 

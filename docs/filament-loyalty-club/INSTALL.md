@@ -1,8 +1,8 @@
 # INSTALL — filament-loyalty-club
 
 ## پیش‌نیازها
-- PHP 8.2+
-- Laravel 11.28+ / Filament v4 (طبق استاندارد پروژه)
+- PHP 8.4+
+- Laravel 12+ / Filament v4 (طبق استاندارد پروژه)
 - فعال بودن IAM Suite و tenant resolution
 
 ## نصب

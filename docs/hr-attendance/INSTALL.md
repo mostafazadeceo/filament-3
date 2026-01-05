@@ -1,8 +1,8 @@
 # نصب ماژول HR Attendance
 
 ## پیش‌نیازها
-- PHP 8.2+
-- Laravel 11+
+- PHP 8.4+
+- Laravel 12+
 - Filament v4
 - filamat/filamat-iam-suite
 - vendor/filament-accounting-ir

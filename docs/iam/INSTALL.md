@@ -1,7 +1,7 @@
 # IAM Suite Install / Upgrade
 
 ## Prereqs
-- PHP 8.2+ / Laravel 11.28+ / Filament v4
+- PHP 8.4+ / Laravel 12+ / Filament v4
 - `filamat-iam-suite` package installed via path repository
 - `spatie/laravel-permission` with teams enabled (`tenant_id`)
 - Queue worker for notifications and capability sync

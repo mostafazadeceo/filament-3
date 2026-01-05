@@ -1,7 +1,7 @@
 # نصب و راه‌اندازی — پلتفرم کیف‌پول و درگاه رمزارز
 
 ## پیش‌نیازها
-- PHP 8.2+ ، Laravel 11.28+ ، Filament v4
+- PHP 8.4+ ، Laravel 12+ ، Filament v4
 - صف فعال (Queue Worker) و Scheduler
 - دسترسی به دیتابیس و اجرای مهاجرت‌ها
 
