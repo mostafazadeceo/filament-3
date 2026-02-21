@@ -8,6 +8,7 @@ Build production-grade, extensible Filament v4 modules and plugins for this mult
 - Each new chat is a new module request unless stated otherwise.
 - Every module must follow the core project structure and integrate with existing IAM, roles/permissions, notifications, and API docs.
 - Keep modules isolated; do not modify other packages/modules unless required for integration.
+- Canonical upstream repository for this project: `https://github.com/mostafazadeceo/filament-3`.
 
 ## Hard constraints
 - PHP 8.4+ / Laravel 12+ / Filament v4.
