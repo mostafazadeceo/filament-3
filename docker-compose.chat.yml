@@ -1,0 +1,55 @@
+version: "3.9"
+
+networks:
+  chat_net:
+    driver: bridge
+
+volumes:
+  chat_mongo:
+
+services:
+  mongo:
+    image: mongo:7.0
+    restart: unless-stopped
+    command: ["mongod", "--oplogSize", "128", "--replSet", "rs0", "--storageEngine", "wiredTiger"]
+    volumes:
+      - chat_mongo:/data/db
+    networks:
+      - chat_net
+
+  mongo-init-replica:
+    image: mongo:7.0
+    restart: "no"
+    depends_on:
+      - mongo
+    entrypoint: ["bash", "-c"]
+    command: >
+      for i in {1..30}; do
+        mongo --host mongo:27017 --eval 'rs.initiate({_id:"rs0", members:[{_id:0, host:"mongo:27017"}]})' && exit 0;
+        echo "Waiting for mongo to be ready...";
+        sleep 1;
+      done; exit 1
+    networks:
+      - chat_net
+
+  rocketchat:
+    image: registry.rocket.chat/rocketchat/rocket.chat:latest
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - mongo-init-replica
+    environment:
+      MONGO_URL: mongodb://mongo:27017/rocketchat?replicaSet=rs0
+      MONGO_OPLOG_URL: mongodb://mongo:27017/local?replicaSet=rs0
+      ROOT_URL: https://chat.abrak.org
+      OVERWRITE_SETTING_Site_Url: https://chat.abrak.org
+      OVERWRITE_SETTING_Force_SSL: "true"
+      PORT: 3000
+      DEPLOY_METHOD: docker
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: ChangeMe123!
+      ADMIN_EMAIL: admin@example.com
+    ports:
+      - "3100:3000"
+    networks:
+      - chat_net

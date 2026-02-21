@@ -39,7 +39,7 @@ class ProvidersCoreServiceProvider extends PackageServiceProvider
     {
         Gate::policy(ProviderJobLog::class, ProviderJobLogPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             ProvidersCoreCapabilities::register($registry);
         }

@@ -31,6 +31,8 @@ class ThreeCxInstanceResource extends Resource
 {
     protected static ?string $model = ThreeCxInstance::class;
 
+    protected static ?string $tenantOwnershipRelationshipName = 'tenant';
+
     protected static ?string $modelLabel = 'اتصال 3CX';
 
     protected static ?string $pluralModelLabel = 'اتصال‌های 3CX';

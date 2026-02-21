@@ -4,6 +4,7 @@ namespace Haida\TenancyDomains;
 
 use Filamat\IamSuite\Contracts\CapabilityRegistryInterface;
 use Haida\TenancyDomains\Console\RenewCertificatesCommand;
+use Haida\TenancyDomains\Middleware\RequireService;
 use Haida\TenancyDomains\Middleware\ResolveTenantFromHost;
 use Haida\TenancyDomains\Models\SiteDomain;
 use Haida\TenancyDomains\Policies\SiteDomainPolicy;
@@ -44,10 +45,11 @@ class TenancyDomainsServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         Route::aliasMiddleware('resolve.site', ResolveTenantFromHost::class);
+        Route::aliasMiddleware('require.service', RequireService::class);
 
         Gate::policy(SiteDomain::class, SiteDomainPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             TenancyDomainsCapabilities::register($registry);
         }

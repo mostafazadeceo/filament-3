@@ -163,7 +163,7 @@ class FilamentAccountingIrServiceProvider extends PackageServiceProvider
         JournalLine::observe(JournalLineObserver::class);
         Event::subscribe(AccountingEventSubscriber::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             AccountingCapabilities::register($registry);
         }

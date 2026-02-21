@@ -32,7 +32,11 @@ class CreateMailOutboundMessage extends CreateRecord
         if ($record->status === 'sent') {
             Notification::make()->title('ایمیل ارسال شد.')->success()->send();
         } else {
-            Notification::make()->title('ارسال ایمیل ناموفق بود.')->danger()->send();
+            Notification::make()
+                ->title('ارسال ایمیل ناموفق بود.')
+                ->body((string) ($record->error_message ?: 'علت خطا در لاگ ثبت شد.'))
+                ->danger()
+                ->send();
         }
 
         return $record;

@@ -41,7 +41,7 @@ class FilamentAppApiServiceProvider extends PackageServiceProvider
     {
         Gate::define('app.view', fn () => IamAuthorization::allows('app.view'));
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             AppApiCapabilities::register($registry);
         }

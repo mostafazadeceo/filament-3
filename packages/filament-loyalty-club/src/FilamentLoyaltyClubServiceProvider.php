@@ -112,7 +112,7 @@ class FilamentLoyaltyClubServiceProvider extends PackageServiceProvider
         Gate::policy(LoyaltyAuditEvent::class, LoyaltyAuditEventPolicy::class);
         Gate::policy(LoyaltyEvent::class, LoyaltyEventPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             LoyaltyCapabilities::register($registry);
         }

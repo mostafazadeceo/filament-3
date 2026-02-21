@@ -19,6 +19,7 @@ return [
         'host' => env('MAILOPS_SMTP_HOST', 'mail.abrak.org'),
         'port' => env('MAILOPS_SMTP_PORT', 587),
         'encryption' => env('MAILOPS_SMTP_ENCRYPTION', 'tls'),
+        'verify_tls' => env('MAILOPS_SMTP_VERIFY_TLS', true),
         'ehlo_domain' => env('MAILOPS_SMTP_EHLO_DOMAIN'),
     ],
     'imap' => [
@@ -26,6 +27,16 @@ return [
         'port' => env('MAILOPS_IMAP_PORT', 993),
         'encryption' => env('MAILOPS_IMAP_ENCRYPTION', 'ssl'),
         'verify_tls' => env('MAILOPS_IMAP_VERIFY_TLS', true),
+    ],
+    'pop' => [
+        'host' => env('MAILOPS_POP_HOST', env('MAILOPS_IMAP_HOST', 'mail.abrak.org')),
+        'port' => env('MAILOPS_POP_PORT', 995),
+        'encryption' => env('MAILOPS_POP_ENCRYPTION', 'ssl'),
+        'verify_tls' => env('MAILOPS_POP_VERIFY_TLS', true),
+    ],
+    'mailbox_defaults' => [
+        'enable_imap' => env('MAILOPS_MAILBOX_ENABLE_IMAP', true),
+        'enable_pop' => env('MAILOPS_MAILBOX_ENABLE_POP', true),
     ],
     'from' => [
         'address' => env('MAILOPS_DEFAULT_FROM_ADDRESS'),

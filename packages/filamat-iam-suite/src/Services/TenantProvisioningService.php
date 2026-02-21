@@ -6,7 +6,9 @@ namespace Filamat\IamSuite\Services;
 
 use Filamat\IamSuite\Models\Organization;
 use Filamat\IamSuite\Models\Tenant;
+use Illuminate\Database\QueryException;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class TenantProvisioningService
@@ -29,16 +31,63 @@ class TenantProvisioningService
         ?Authenticatable $actor = null
     ): Tenant {
         return DB::transaction(function () use ($organization, $data, $owner, $modules, $actor): Tenant {
-            $tenant = Tenant::query()->create([
-                'name' => $data['name'] ?? 'Tenant',
-                'slug' => $data['slug'] ?? null,
-                'organization_id' => $organization->getKey(),
-                'owner_user_id' => $owner->getAuthIdentifier(),
-                'status' => $data['status'] ?? 'active',
-                'locale' => $data['locale'] ?? null,
-                'timezone' => $data['timezone'] ?? null,
-                'settings' => $data['settings'] ?? [],
-            ]);
+            $name = trim((string) ($data['name'] ?? 'Tenant'));
+
+            // `tenants.slug` is NOT NULL + UNIQUE. The wizard may not provide it, so we must generate one.
+            $baseSlug = trim((string) ($data['slug'] ?? ''));
+            if ($baseSlug === '') {
+                $baseSlug = Str::slug($name);
+            }
+            if ($baseSlug === '') {
+                $baseSlug = 'tenant';
+            }
+
+            $slug = $baseSlug;
+
+            // Pre-check to get a human-friendly suffix when the slug already exists.
+            if (Tenant::query()->where('slug', $slug)->exists()) {
+                for ($i = 2; $i <= 20; $i++) {
+                    $candidate = "{$baseSlug}-{$i}";
+                    if (! Tenant::query()->where('slug', $candidate)->exists()) {
+                        $slug = $candidate;
+                        break;
+                    }
+                }
+
+                if (Tenant::query()->where('slug', $slug)->exists()) {
+                    $slug = "{$baseSlug}-" . Str::lower(Str::random(6));
+                }
+            }
+
+            // Race-safe: retry on unique constraint violation.
+            $tenant = null;
+            for ($attempt = 0; $attempt < 5; $attempt++) {
+                try {
+                    $tenant = Tenant::query()->create([
+                        'name' => $name,
+                        'slug' => $slug,
+                        'organization_id' => $organization->getKey(),
+                        'owner_user_id' => $owner->getAuthIdentifier(),
+                        'status' => $data['status'] ?? 'active',
+                        'locale' => $data['locale'] ?? null,
+                        'timezone' => $data['timezone'] ?? null,
+                        'settings' => $data['settings'] ?? [],
+                    ]);
+                    break;
+                } catch (QueryException $e) {
+                    // PostgreSQL unique violation: 23505.
+                    if (($e->errorInfo[0] ?? null) !== '23505') {
+                        throw $e;
+                    }
+
+                    // Next attempt: random suffix to guarantee uniqueness.
+                    $slug = "{$baseSlug}-" . Str::lower(Str::random(8));
+                }
+            }
+
+            if (! $tenant instanceof Tenant) {
+                throw new \RuntimeException('Failed to create tenant after slug retries.');
+            }
 
             $this->finalizeTenant($tenant, $owner, $modules, $actor);
 

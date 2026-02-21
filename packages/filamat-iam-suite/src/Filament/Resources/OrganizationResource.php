@@ -103,6 +103,11 @@ class OrganizationResource extends IamResource
         return MegaSuperAdmin::check(auth()->user()) && parent::canCreate();
     }
 
+    public static function canAccess(): bool
+    {
+        return MegaSuperAdmin::check(auth()->user()) && parent::canAccess();
+    }
+
     public static function getPages(): array
     {
         return [

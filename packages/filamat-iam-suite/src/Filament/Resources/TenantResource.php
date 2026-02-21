@@ -10,6 +10,7 @@ use Filamat\IamSuite\Filament\Resources\TenantResource\Pages\ListTenants;
 use Filamat\IamSuite\Models\Organization;
 use Filamat\IamSuite\Models\Tenant;
 use Filamat\IamSuite\Services\ModuleCatalog;
+use Filamat\IamSuite\Support\MegaSuperAdmin;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\CheckboxList;
@@ -36,6 +37,11 @@ class TenantResource extends IamResource
     protected static string|\UnitEnum|null $navigationGroup = 'مدیریت کلان';
 
     protected static ?int $navigationSort = 30;
+
+    public static function canAccess(): bool
+    {
+        return MegaSuperAdmin::check(auth()->user()) && parent::canAccess();
+    }
 
     public static function form(Schema $schema): Schema
     {

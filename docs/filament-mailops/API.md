@@ -12,6 +12,19 @@ Middleware: `ApiKeyAuth`, `ApiAuth`, `ResolveTenant`, `filamat-iam.scope`.
 - `PATCH /domains/{id}` — ویرایش دامنه (`mailops.domain.manage`)
 - `DELETE /domains/{id}` — حذف دامنه (`mailops.domain.manage`)
 
+### Domain validation (v2)
+- `name`: دامنه معتبر (FQDN)، یکتا در سطح tenant.
+- `status`: یکی از `active|inactive|pending|failed`.
+- `dkim_selector`: حداکثر 63 کاراکتر (`a-z0-9._-`).
+- `dkim_public_key`: حداکثر 12000 کاراکتر.
+- `comment`: حداکثر 5000 کاراکتر.
+
+### Domain computed fields
+- `dns_health_status`: `healthy|warning|critical|unknown`
+- `dns_health_score`: امتیاز 0..100
+- `dns_last_checked_at`: زمان آخرین ممیزی DNS
+- `dns_issues`: لیست خطاهای مهم DNS
+
 - `GET /mailboxes` — لیست صندوق‌ها (`mailops.mailbox.view`)
 - `POST /mailboxes` — ایجاد صندوق (`mailops.mailbox.manage`)
 - `GET /mailboxes/{id}` — مشاهده صندوق (`mailops.mailbox.view`)
@@ -33,4 +46,3 @@ Middleware: `ApiKeyAuth`, `ApiAuth`, `ResolveTenant`, `filamat-iam.scope`.
 - `POST /inbound-messages/sync` — همگام‌سازی IMAP (`mailops.inbound.sync`)
 
 - `GET /openapi` — دریافت سند OpenAPI
-

@@ -26,6 +26,13 @@ class InboundMessageController extends BaseController
 
     public function sync(Request $request, ImapInboxReader $reader): \Illuminate\Http\Response
     {
+        if (! $reader->isAvailable()) {
+            return response([
+                'message' => 'IMAP sync is unavailable on this server.',
+                'error' => 'php_imap_extension_missing',
+            ], 503);
+        }
+
         $mailboxesTable = config('filament-mailops.tables.mailboxes', 'mailops_mailboxes');
 
         $mailboxRule = Rule::exists($mailboxesTable, 'id');
@@ -39,7 +46,14 @@ class InboundMessageController extends BaseController
         ]);
 
         $mailbox = MailMailbox::query()->findOrFail($data['mailbox_id']);
-        $count = $reader->sync($mailbox, $data['limit'] ?? null);
+        try {
+            $count = $reader->sync($mailbox, $data['limit'] ?? null);
+        } catch (\Throwable $exception) {
+            return response([
+                'message' => 'IMAP sync failed.',
+                'error' => $exception->getMessage(),
+            ], 422);
+        }
 
         return response(['synced' => $count], 200);
     }

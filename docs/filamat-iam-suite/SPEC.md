@@ -22,6 +22,8 @@
 - MfaMethod.php
 - Notification.php
 - Organization.php
+- OidcAuthCode.php
+- OidcRefreshToken.php
 - OtpCode.php
 - PermissionOverride.php
 - PermissionSnapshot.php
@@ -93,6 +95,7 @@
 - Api/V1/ScimController.php
 - Api/V1/SessionController.php
 - Api/V1/SsoController.php
+- OIDC/OidcController.php
 - Api/V1/SubscriptionController.php
 - Api/V1/SubscriptionPlanController.php
 - Api/V1/TenantController.php
@@ -195,6 +198,8 @@
 - model_has_permissions
 - model_has_roles
 - organizations
+- iam_oidc_auth_codes
+- iam_oidc_refresh_tokens
 - otp_codes
 - permission_overrides
 - permission_snapshots
@@ -232,6 +237,9 @@
 - FILAMAT_IAM_N8N_INBOUND_TOKEN
 - FILAMAT_IAM_NOTIFICATION_WEBHOOK_SECRET
 - FILAMAT_IAM_PAYMENT_WEBHOOK_SECRET
+- FILAMAT_IAM_SSO_ENABLED
+- FILAMAT_IAM_FEATURE_SSO
+- FILAMAT_IAM_OIDC_ISSUER
 
 ## استقرار در پنل‌ها
 - Admin Panel: ثبت شده در AdminPanelProvider

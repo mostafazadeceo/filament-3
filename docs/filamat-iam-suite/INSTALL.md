@@ -28,5 +28,14 @@
 - packages/filamat-iam-suite/config/filamat-iam.php
 - انتشار تنظیمات (در صورت نیاز):
   - `php artisan vendor:publish --tag=filamat-iam-suite-config`
+
+## فعال‌سازی OIDC (اختیاری)
+برای فعال‌سازی SSO داخلی:
+```
+FILAMAT_IAM_SSO_ENABLED=true
+FILAMAT_IAM_FEATURE_SSO=true
+FILAMAT_IAM_OIDC_ISSUER=https://hub.example.com
+FILAMAT_IAM_OIDC_LOGIN_URL=/tenant/{tenant}/login
+```
 ## تست/اعتبارسنجی
 - سناریوی عمیق: `php scripts/deep_scenario_runner.php`

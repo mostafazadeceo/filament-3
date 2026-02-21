@@ -48,7 +48,7 @@ class CommerceOrdersServiceProvider extends PackageServiceProvider
         Gate::policy(OrderReturn::class, OrderReturnPolicy::class);
         Gate::policy(OrderRefund::class, OrderRefundPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             OrderCapabilities::register($registry);
         }

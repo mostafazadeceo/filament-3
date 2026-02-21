@@ -75,7 +75,7 @@ class FilamentCommerceCoreServiceProvider extends PackageServiceProvider
         Gate::policy(CommerceFraudRule::class, CommerceFraudRulePolicy::class);
         Gate::policy(CommerceComplianceDigest::class, CommerceComplianceDigestPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             CommerceCoreCapabilities::register($registry);
         }

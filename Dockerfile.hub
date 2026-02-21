@@ -1,0 +1,36 @@
+FROM php:8.4-fpm-bookworm
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libzip-dev \
+    libpq-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    libicu-dev \
+    libc-client2007e-dev \
+    libkrb5-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) pdo pdo_pgsql pdo_mysql zip gd bcmath intl
+
+# IMAP extension (PHP 8.4 on Debian bookworm via PECL)
+RUN printf "\n\n" | pecl install -f imap \
+    && docker-php-ext-enable imap
+
+# Redis extension
+RUN pecl install redis && docker-php-ext-enable redis
+
+# Install Composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+WORKDIR /var/www/html
+
+CMD ["php-fpm"]

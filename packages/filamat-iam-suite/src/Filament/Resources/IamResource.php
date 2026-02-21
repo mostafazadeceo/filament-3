@@ -10,7 +10,36 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class IamResource extends Resource
 {
+    /**
+     * We intentionally disable Filament's built-in tenancy scoping.
+     *
+     * Reason: This codebase mixes tenancy strategies:
+     * - Many IAM models are tenant-scoped via `tenant_id` + `TenantScope`.
+     * - Some resources (e.g. Spatie Role/Permission) are scoped manually using `tenant_id`.
+     * - Some models (e.g. User) relate to tenants via `tenants()` (many-to-many), not `tenant()`.
+     *
+     * Filament's tenancy scoping assumes a single, consistent relationship name across all models,
+     * which doesn't hold here and causes runtime `LogicException`s.
+     */
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $permissionPrefix = null;
+
+    public static function isScopedToTenant(): bool
+    {
+        return false;
+    }
+
+    public static function registerTenancyModelGlobalScope(\Filament\Panel $panel): void
+    {
+        // IAM resources handle tenancy manually via TenantContext + tenant_id.
+        // Avoid Filament's automatic tenancy scope to prevent relationship errors.
+    }
+
+    public static function observeTenancyModelCreation(\Filament\Panel $panel): void
+    {
+        // IAM resources handle tenancy manually.
+    }
 
     /**
      * @return array<string, string>

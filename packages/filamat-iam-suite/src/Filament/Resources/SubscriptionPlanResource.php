@@ -9,11 +9,13 @@ use Filamat\IamSuite\Filament\Resources\SubscriptionPlanResource\Pages\CreateSub
 use Filamat\IamSuite\Filament\Resources\SubscriptionPlanResource\Pages\EditSubscriptionPlan;
 use Filamat\IamSuite\Filament\Resources\SubscriptionPlanResource\Pages\ListSubscriptionPlans;
 use Filamat\IamSuite\Models\SubscriptionPlan;
+use Filamat\IamSuite\Services\ModuleCatalog;
 use Filamat\IamSuite\Support\AccessSettings;
 use Filamat\IamSuite\Support\TenantContext;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -67,13 +69,35 @@ class SubscriptionPlanResource extends IamResource
                 TextInput::make('seat_limit')->label('حداکثر صندلی')->numeric()->nullable(),
                 TextInput::make('storage_limit')->label('حداکثر فضا (مگابایت)')->numeric()->nullable(),
                 TextInput::make('module_limit')->label('حداکثر ماژول')->numeric()->nullable(),
+                Select::make('features.modules')
+                    ->label('ماژول‌های پلن')
+                    ->multiple()
+                    ->searchable()
+                    ->options(fn () => app(ModuleCatalog::class)->moduleOptions())
+                    ->helperText('ماژول‌های فعال در این پلن. در ویزارد سازمان قابل شخصی‌سازی هستند.'),
                 Select::make('features.permissions')
                     ->label('مجوزهای مجاز')
                     ->multiple()
                     ->searchable()
                     ->options(fn () => AccessSettings::permissionOptions(TenantContext::getTenant())),
+                Toggle::make('features.flags.chat.tenant_owner_manage')
+                    ->label('اجازه مدیریت چت برای سوپرادمین سازمان')
+                    ->default(true)
+                    ->helperText('در صورت غیرفعال بودن، فقط مگا سوپرادمین می‌تواند مدیریت اتصال/کاربران چت را انجام دهد.'),
                 KeyValue::make('features.flags')->label('ویژگی‌ها')->nullable(),
-                KeyValue::make('features.quotas')->label('کوتاها')->nullable(),
+                KeyValue::make('features.quotas.chat.plan')
+                    ->label('سهمیه چت (پلن)')
+                    ->keyLabel('کلید')
+                    ->valueLabel('مقدار')
+                    ->helperText('نمونه: max_users, max_channels, max_private_rooms'),
+                KeyValue::make('features.quotas.chat.trial')
+                    ->label('سهمیه چت (آزمایشی)')
+                    ->keyLabel('کلید')
+                    ->valueLabel('مقدار'),
+                KeyValue::make('features.quotas')
+                    ->label('سهمیه سایر ماژول‌ها')
+                    ->helperText('ساختار پیشنهادی: module => {plan:{...}, trial:{...}}')
+                    ->nullable(),
             ]);
     }
 

@@ -38,7 +38,7 @@ class FilamentMarketplaceConnectorsServiceProvider extends PackageServiceProvide
         Gate::policy(MarketplaceConnector::class, MarketplaceConnectorPolicy::class);
         Gate::policy(MarketplaceSyncJob::class, MarketplaceSyncJobPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             MarketplaceCapabilities::register($registry);
         }

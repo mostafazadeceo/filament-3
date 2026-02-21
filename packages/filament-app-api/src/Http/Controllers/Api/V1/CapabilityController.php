@@ -15,7 +15,7 @@ class CapabilityController
 {
     public function index(Request $request)
     {
-        if (! class_exists(CapabilityRegistryInterface::class)) {
+        if (! interface_exists(CapabilityRegistryInterface::class)) {
             return response()->json(['permissions' => [], 'navigation' => [], 'feature_flags' => []]);
         }
 

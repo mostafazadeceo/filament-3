@@ -39,7 +39,9 @@ class PanelInfoWidget extends Widget
 
         $versionText = $settings->panel_info_version_text;
         if (! filled($versionText)) {
-            $versionText = \Composer\InstalledVersions::getPrettyVersion('filament/filament');
+            $versionText = (string) (config('app.version')
+                ?? env('APP_VERSION')
+                ?? 'v0.1.0');
         }
 
         return [

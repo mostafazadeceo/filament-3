@@ -77,7 +77,7 @@ class MailtrapCoreServiceProvider extends PackageServiceProvider
         $this->app->singleton(MailtrapAudienceService::class);
         $this->app->singleton(MailtrapCampaignService::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             MailtrapCapabilities::register($registry);
         }

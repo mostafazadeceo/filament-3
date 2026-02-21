@@ -11,9 +11,14 @@ use RuntimeException;
 
 class ImapInboxReader
 {
+    public function isAvailable(): bool
+    {
+        return function_exists('imap_open');
+    }
+
     public function sync(MailMailbox $mailbox, ?int $limit = null): int
     {
-        if (! function_exists('imap_open')) {
+        if (! $this->isAvailable()) {
             throw new RuntimeException('PHP IMAP extension is not installed.');
         }
 
@@ -39,6 +44,15 @@ class ImapInboxReader
         $imap = @imap_open($mailboxString, $mailbox->email, $mailbox->password);
         if (! $imap) {
             $error = imap_last_error() ?: 'IMAP connection failed.';
+
+            // Prevent IMAP extension buffered warnings from surfacing on shutdown.
+            if (function_exists('imap_errors')) {
+                imap_errors();
+            }
+            if (function_exists('imap_alerts')) {
+                imap_alerts();
+            }
+
             throw new RuntimeException($error);
         }
 

@@ -43,7 +43,7 @@ class PageBuilderServiceProvider extends PackageServiceProvider
     {
         Gate::policy(PageTemplate::class, PageTemplatePolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             PageBuilderCapabilities::register($registry);
         }

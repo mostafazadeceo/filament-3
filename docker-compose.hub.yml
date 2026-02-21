@@ -1,0 +1,65 @@
+version: "3.9"
+
+networks:
+  hub_net:
+    driver: bridge
+
+volumes:
+  hub_dbdata:
+  hub_redisdata:
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.hub
+    restart: unless-stopped
+    env_file:
+      - .env.hub
+    extra_hosts:
+      - "chat.abrak.org:213.176.31.122"
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+      - redis
+    networks:
+      - hub_net
+
+  web:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "8088:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/hub/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - hub_net
+
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hub
+      POSTGRES_USER: hub
+      POSTGRES_PASSWORD: hubpass
+    ports:
+      - "5434:5432"
+    volumes:
+      - hub_dbdata:/var/lib/postgresql/data
+    networks:
+      - hub_net
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6389:6379"
+    volumes:
+      - hub_redisdata:/data
+    networks:
+      - hub_net

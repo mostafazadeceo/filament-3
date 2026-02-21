@@ -77,6 +77,11 @@ class WebPushChannelDriver implements ChannelDriver
                         ->label('تاخیر نمایش (ثانیه)')
                         ->numeric()
                         ->default(2),
+                    TextInput::make('prompt_auto_dismiss_seconds')
+                        ->label('بستن خودکار پاپ‌آپ (ثانیه)')
+                        ->numeric()
+                        ->helperText('۰ یعنی پاپ‌آپ تا زمانی که کاربر تصمیم بگیرد نمایش داده شود.')
+                        ->default(15),
                     TextInput::make('prompt_title')
                         ->label('عنوان پاپ‌آپ'),
                     Textarea::make('prompt_body')

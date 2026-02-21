@@ -42,7 +42,7 @@ class BlogServiceProvider extends PackageServiceProvider
         Gate::policy(BlogCategory::class, BlogCategoryPolicy::class);
         Gate::policy(BlogTag::class, BlogTagPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             BlogCapabilities::register($registry);
         }

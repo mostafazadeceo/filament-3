@@ -40,7 +40,7 @@ class PaymentsOrchestratorServiceProvider extends PackageServiceProvider
     {
         Gate::policy(PaymentIntent::class, PaymentIntentPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             PaymentCapabilities::register($registry);
         }

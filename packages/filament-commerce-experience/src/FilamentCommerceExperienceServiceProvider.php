@@ -46,7 +46,7 @@ class FilamentCommerceExperienceServiceProvider extends PackageServiceProvider
         Gate::policy(ExperienceCsatSurvey::class, ExperienceCsatSurveyPolicy::class);
         Gate::policy(ExperienceBuyNowPreference::class, ExperienceBuyNowPreferencePolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             ExperienceCapabilities::register($registry);
         }

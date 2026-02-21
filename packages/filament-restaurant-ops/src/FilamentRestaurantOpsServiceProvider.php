@@ -65,7 +65,7 @@ class FilamentRestaurantOpsServiceProvider extends PackageServiceProvider
         Gate::policy(RestaurantMenuItem::class, RestaurantMenuItemPolicy::class);
         Gate::policy(RestaurantMenuSale::class, RestaurantMenuSalePolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             RestaurantOpsCapabilities::register($registry);
         }

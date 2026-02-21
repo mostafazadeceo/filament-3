@@ -5,3 +5,480 @@
 @source '../../../../vendor/diogogpinto/filament-auth-ui-enhancer/resources/**/*.blade.php';
 @source '../../../../vendor/mohamedsabil83/filament-hijri-picker/resources/**/*.blade.php';
 @source '../../../../vendor/zpmlabs/filament-api-docs-builder/resources/views/filament/**/*';
+
+/*
+|---------------------------------------------------------------------
+| Abrak Filament Theme
+|---------------------------------------------------------------------
+| Design goals:
+| - Matches abrak.org: dark-first, aurora accents, calm surfaces.
+| - Fast: mostly CSS tokens + light overrides (no heavy JS).
+| - Works for RTL/LTR (dir is set by Filament per locale).
+*/
+
+@layer base {
+    :root {
+        color-scheme: light;
+
+        /* Core tokens */
+        --abrak-bg: #f7f5f0;
+        --abrak-fg: #0b1220;
+        --abrak-soft: #45506a;
+        --abrak-border: rgba(30, 41, 59, 0.18);
+
+        /* Surfaces */
+        --abrak-surface: rgba(255, 255, 255, 0.78);
+        --abrak-surface-solid: #ffffff;
+
+        /* Brand accents (abrak.org) */
+        --abrak-aurora: #6ee7ff;
+        --abrak-pulse: #8b5cf6;
+        --abrak-ember: #f4b26b;
+
+        /* Effects */
+        --abrak-radius: 1.25rem;
+        --abrak-shadow: 0 18px 60px rgba(2, 6, 23, 0.12);
+    }
+
+    html.dark {
+        color-scheme: dark;
+
+        --abrak-bg: #07080d;
+        --abrak-fg: #f4f6fb;
+        --abrak-soft: #9aa6c0;
+        --abrak-border: rgba(148, 163, 184, 0.16);
+
+        --abrak-surface: rgba(16, 18, 28, 0.62);
+        --abrak-surface-solid: #0b0d14;
+
+        --abrak-shadow: 0 24px 90px rgba(0, 0, 0, 0.55);
+    }
+
+    /* Global background (subtle aurora + noise) */
+    .fi-body {
+        background: var(--abrak-bg) !important;
+        color: var(--abrak-fg);
+        font-family: var(--font-family), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+            'Apple Color Emoji', 'Segoe UI Emoji';
+        text-rendering: geometricPrecision;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .fi-body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background:
+            radial-gradient(900px 600px at 10% 10%, rgba(110, 231, 255, 0.18), transparent 55%),
+            radial-gradient(900px 600px at 90% 0%, rgba(139, 92, 246, 0.14), transparent 55%),
+            radial-gradient(900px 600px at 60% 100%, rgba(244, 178, 107, 0.10), transparent 55%);
+        opacity: 1;
+    }
+
+    html.dark .fi-body::before {
+        background:
+            radial-gradient(900px 600px at 10% 10%, rgba(110, 231, 255, 0.10), transparent 55%),
+            radial-gradient(900px 600px at 90% 0%, rgba(139, 92, 246, 0.10), transparent 55%),
+            radial-gradient(900px 600px at 60% 100%, rgba(244, 178, 107, 0.07), transparent 55%);
+    }
+
+    .fi-body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.07;
+        background-image:
+            repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.9) 0 1px, transparent 1px 2px),
+            repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.65) 0 1px, transparent 1px 2px);
+        mix-blend-mode: overlay;
+        transform: translateZ(0);
+    }
+
+    html.dark .fi-body::after {
+        opacity: 0.04;
+        background-image:
+            repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.7) 0 1px, transparent 1px 3px),
+            repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.55) 0 1px, transparent 1px 3px);
+    }
+}
+
+@layer components {
+    /* Keep app content above background layers */
+    .fi-layout,
+    .fi-topbar-ctn,
+    .fi-sidebar,
+    .fi-main-ctn {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Topbar + sidebar surfaces */
+    .fi-topbar-ctn {
+        backdrop-filter: blur(10px);
+    }
+
+    .fi-topbar {
+        border-bottom: 1px solid var(--abrak-border);
+        background: var(--abrak-surface);
+    }
+
+    .fi-sidebar {
+        border-right: 1px solid var(--abrak-border);
+        background: var(--abrak-surface);
+        backdrop-filter: blur(10px);
+    }
+
+    /* Sections (cards) */
+    .fi-section,
+    .fi-modal,
+    .fi-ta-ctn,
+    .fi-fo-ctn {
+        border-radius: var(--abrak-radius);
+    }
+
+    .fi-section {
+        border: 1px solid var(--abrak-border);
+        background: var(--abrak-surface-solid);
+        box-shadow: var(--abrak-shadow);
+    }
+
+    html.dark .fi-section {
+        background: rgba(11, 13, 20, 0.72);
+    }
+
+    /* Navigation hover/active accents */
+    .fi-sidebar-item-btn:hover {
+        background: rgba(110, 231, 255, 0.10);
+    }
+
+    html.dark .fi-sidebar-item-btn:hover {
+        background: rgba(110, 231, 255, 0.06);
+    }
+
+    .fi-sidebar-item-active > .fi-sidebar-item-btn {
+        background: rgba(110, 231, 255, 0.16);
+    }
+
+    html.dark .fi-sidebar-item-active > .fi-sidebar-item-btn {
+        background: rgba(110, 231, 255, 0.10);
+    }
+
+    /*
+    |-------------------------------------------------------------
+    | Odoo-Style Launcher Layout
+    |-------------------------------------------------------------
+    | When the App Launcher widget is present, give it full width
+    | by hiding the sidebar. Uses :has() and gracefully falls back
+    | to the normal layout on older browsers.
+    */
+    html.abrak-has-launcher .fi-sidebar {
+        display: none;
+    }
+
+    .fi-layout:has(.fi-abrak-app-launcher) .fi-sidebar {
+        display: none;
+    }
+
+    html.abrak-has-launcher .fi-dashboard-widgets > :not(.fi-abrak-app-launcher) {
+        display: none;
+    }
+
+    .fi-layout:has(.fi-abrak-app-launcher) .fi-dashboard-widgets > :not(.fi-abrak-app-launcher) {
+        display: none;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-shell {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-header {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        padding: 1.5rem 1.75rem;
+        border-radius: calc(var(--abrak-radius) + 0.25rem);
+        background: linear-gradient(135deg, rgba(110, 231, 255, 0.16), rgba(139, 92, 246, 0.08));
+        border: 1px solid rgba(110, 231, 255, 0.28);
+        box-shadow: var(--abrak-shadow);
+    }
+
+    html.dark .fi-abrak-app-launcher .abrak-app-header {
+        background: linear-gradient(135deg, rgba(110, 231, 255, 0.12), rgba(139, 92, 246, 0.08));
+        border-color: rgba(110, 231, 255, 0.18);
+    }
+
+    .fi-abrak-app-launcher .abrak-app-title {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-mark {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(110, 231, 255, 0.4);
+        background: rgba(255, 255, 255, 0.7);
+        padding: 0.5rem;
+    }
+
+    html.dark .fi-abrak-app-launcher .abrak-app-mark {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(110, 231, 255, 0.18);
+    }
+
+    .fi-abrak-app-launcher .abrak-app-heading {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--abrak-fg);
+    }
+
+    .fi-abrak-app-launcher .abrak-app-subtitle {
+        margin-top: 0.25rem;
+        color: var(--abrak-soft);
+        font-size: 0.95rem;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-search {
+        max-width: 22rem;
+        width: 100%;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-search-input {
+        width: 100%;
+        border-radius: 999px;
+        border: 1px solid rgba(110, 231, 255, 0.4);
+        background: rgba(255, 255, 255, 0.85);
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
+        outline: none;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-search-input:focus {
+        box-shadow: 0 0 0 3px rgba(110, 231, 255, 0.2);
+        border-color: rgba(110, 231, 255, 0.7);
+    }
+
+    html.dark .fi-abrak-app-launcher .abrak-app-search-input {
+        background: rgba(10, 12, 18, 0.7);
+        border-color: rgba(110, 231, 255, 0.2);
+        color: var(--abrak-fg);
+    }
+
+    html.dark .fi-abrak-app-launcher .abrak-app-search-input:focus {
+        box-shadow: 0 0 0 3px rgba(110, 231, 255, 0.12);
+    }
+
+    .fi-abrak-app-launcher .abrak-app-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 1rem;
+    }
+
+    .fi-abrak-app-launcher .abrak-favorites,
+    .fi-abrak-app-launcher .abrak-module-section {
+        border: 1px solid var(--abrak-border);
+        border-radius: var(--abrak-radius);
+        background: var(--abrak-surface-solid);
+        box-shadow: var(--abrak-shadow);
+        padding: 1rem 1.1rem 1.15rem;
+    }
+
+    html.dark .fi-abrak-app-launcher .abrak-favorites,
+    html.dark .fi-abrak-app-launcher .abrak-module-section {
+        background: rgba(11, 13, 20, 0.72);
+    }
+
+    .fi-abrak-app-launcher .abrak-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .fi-abrak-app-launcher .abrak-section-header h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--abrak-fg);
+    }
+
+    .fi-abrak-app-launcher .abrak-section-header p {
+        margin: 0;
+        font-size: 0.8rem;
+        color: var(--abrak-soft);
+        white-space: nowrap;
+    }
+
+    .fi-abrak-app-launcher .abrak-section-title-wrap {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        min-width: 0;
+    }
+
+    .fi-abrak-app-launcher .abrak-drag-handle {
+        width: 1.6rem;
+        height: 1.6rem;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(255, 255, 255, 0.75);
+        color: var(--abrak-soft);
+        border-radius: 0.45rem;
+        font-size: 0.85rem;
+        line-height: 1;
+        cursor: grab;
+    }
+
+    html.dark .fi-abrak-app-launcher .abrak-drag-handle {
+        background: rgba(15, 23, 42, 0.45);
+    }
+
+    .fi-abrak-app-launcher .abrak-section-title-input {
+        border: 1px solid rgba(110, 231, 255, 0.45);
+        border-radius: 0.55rem;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--abrak-fg);
+        font-size: 0.95rem;
+        padding: 0.25rem 0.6rem;
+        outline: none;
+        min-width: 12rem;
+    }
+
+    html.dark .fi-abrak-app-launcher .abrak-section-title-input {
+        background: rgba(15, 23, 42, 0.5);
+        color: var(--abrak-fg);
+    }
+
+    .fi-abrak-app-launcher .abrak-section-divider {
+        height: 1px;
+        width: 100%;
+        margin-bottom: 1rem;
+        background: linear-gradient(90deg, rgba(110, 231, 255, 0.36), rgba(139, 92, 246, 0.24), rgba(148, 163, 184, 0.2));
+    }
+
+    .fi-abrak-app-launcher .abrak-app-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem;
+        border-radius: calc(var(--abrak-radius) - 0.25rem);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        background: rgba(255, 255, 255, 0.85);
+        color: var(--abrak-fg);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        overflow: hidden;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(120px 120px at top left, rgba(110, 231, 255, 0.24), transparent 70%);
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-card::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(180px 120px at bottom right, rgba(139, 92, 246, 0.18), transparent 75%);
+        opacity: 0.7;
+        pointer-events: none;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(110, 231, 255, 0.55);
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+    }
+
+    html.dark .fi-abrak-app-launcher .abrak-app-card {
+        background: rgba(11, 13, 20, 0.75);
+        border-color: rgba(148, 163, 184, 0.2);
+    }
+
+    html.dark .fi-abrak-app-launcher .abrak-app-card:hover {
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+    }
+
+    .fi-abrak-app-launcher .abrak-app-card.is-active {
+        border-color: rgba(110, 231, 255, 0.85);
+        box-shadow: 0 18px 50px rgba(15, 23, 42, 0.2);
+    }
+
+    .fi-abrak-app-launcher .abrak-app-card__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(110, 231, 255, 0.55);
+        background: rgba(255, 255, 255, 0.8);
+        color: #0f172a;
+        z-index: 1;
+        font-size: 0.8rem;
+        font-weight: 800;
+    }
+
+    html.dark .fi-abrak-app-launcher .abrak-app-card__icon {
+        background: rgba(10, 12, 18, 0.6);
+        color: #dbeafe;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-card__body {
+        z-index: 1;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-card__title {
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-card__desc {
+        margin-top: 0.3rem;
+        font-size: 0.85rem;
+        color: var(--abrak-soft);
+        line-height: 1.45;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .fi-abrak-app-launcher .abrak-app-card[draggable='true'] {
+        cursor: grab;
+    }
+
+    @media (min-width: 768px) {
+        .fi-abrak-app-launcher .abrak-app-header {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .fi-abrak-app-launcher .abrak-section-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+}

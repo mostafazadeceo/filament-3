@@ -26,8 +26,10 @@
         "haida/filament-petty-cash-ir": "^1.0",
         "haida/filament-relograde": "^1.0",
         "haida/filament-restaurant-ops": "^1.0",
+        "haida/filament-sms-bulk": "^1.0",
         "haida/filament-threecx": "^1.0",
         "haida/filament-workhub": "^1.0",
+        "haida/filament-chat": "^1.0",
         "haida/filament-loyalty-club": "^1.0",
         "haida/content-cms": "^1.0",
         "haida/feature-gates": "^1.0",
@@ -89,6 +91,7 @@
             "Haida\\FilamentCryptoCore\\": "packages/filament-crypto-core/src/",
             "Haida\\FilamentCryptoGateway\\": "packages/filament-crypto-gateway/src/",
             "Haida\\FilamentCryptoNodes\\": "packages/filament-crypto-nodes/src/",
+            "Haida\\SmsBulk\\": "packages/filament-sms-bulk/src/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
@@ -96,7 +99,8 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
-            "Haida\\FilamentThreeCx\\Tests\\": "packages/filament-threecx/tests/"
+            "Haida\\FilamentThreeCx\\Tests\\": "packages/filament-threecx/tests/",
+            "Haida\\SmsBulk\\Tests\\": "packages/filament-sms-bulk/tests/"
         }
     },
     "scripts": {
@@ -200,7 +204,21 @@
         },
         {
             "type": "path",
+            "url": "packages/filament-chat",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "packages/filament-relograde",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "packages/filament-sms-bulk",
             "options": {
                 "symlink": true
             }

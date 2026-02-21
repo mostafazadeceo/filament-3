@@ -42,30 +42,5 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-try {
-  importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
-  if (self.workbox && workbox.backgroundSync) {
-    const queue = new workbox.backgroundSync.Queue('app-sync-queue', {
-      maxRetentionTime: 24 * 60
-    });
-
-    self.addEventListener('fetch', (event) => {
-      const { request } = event;
-      if (request.method === 'POST' && request.url.includes('/api/v1/app/sync/push')) {
-        event.respondWith(
-          fetch(request.clone()).catch(() => {
-            return queue.pushRequest({ request });
-          })
-        );
-      }
-    });
-
-    self.addEventListener('sync', (event) => {
-      if (event.tag === 'app-sync') {
-        event.waitUntil(queue.replayRequests());
-      }
-    });
-  }
-} catch (error) {
-  // Workbox unavailable; fallback to in-app online sync.
-}
+// No external CDN dependency: Workbox import removed intentionally.
+// If background sync is needed, add a local implementation.

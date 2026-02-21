@@ -15,6 +15,7 @@ use Haida\FilamentMailOps\Policies\MailDomainPolicy;
 use Haida\FilamentMailOps\Policies\MailInboundMessagePolicy;
 use Haida\FilamentMailOps\Policies\MailMailboxPolicy;
 use Haida\FilamentMailOps\Policies\MailOutboundMessagePolicy;
+use Haida\FilamentMailOps\Services\DomainDnsAuditService;
 use Haida\FilamentMailOps\Services\ImapInboxReader;
 use Haida\FilamentMailOps\Services\MailSender;
 use Haida\FilamentMailOps\Services\MailuClient;
@@ -39,6 +40,7 @@ class FilamentMailOpsServiceProvider extends PackageServiceProvider
                 '2026_02_10_000003_create_mailops_aliases_table',
                 '2026_02_10_000004_create_mailops_outbound_messages_table',
                 '2026_02_10_000005_create_mailops_inbound_messages_table',
+                '2026_02_20_000006_add_dns_audit_columns_to_mailops_domains_table',
             ])
             ->runsMigrations();
     }
@@ -46,6 +48,7 @@ class FilamentMailOpsServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->singleton(MailuClient::class);
+        $this->app->singleton(DomainDnsAuditService::class);
         $this->app->singleton(MailuSyncService::class);
         $this->app->singleton(MailSender::class);
         $this->app->singleton(ImapInboxReader::class);
@@ -59,7 +62,7 @@ class FilamentMailOpsServiceProvider extends PackageServiceProvider
         Gate::policy(MailOutboundMessage::class, MailOutboundMessagePolicy::class);
         Gate::policy(MailInboundMessage::class, MailInboundMessagePolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             MailOpsCapabilities::register($registry);
         }

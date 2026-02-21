@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Filamat\IamSuite\Filament\Pages;
 
 use Filamat\IamSuite\Filament\Concerns\AuthorizesIam;
+use Filamat\IamSuite\Models\SubscriptionPlan;
 use Filamat\IamSuite\Services\ModuleCatalog;
 use Filamat\IamSuite\Services\OrganizationProvisioningService;
 use Filamat\IamSuite\Support\MegaSuperAdmin;
@@ -28,6 +29,7 @@ use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class MegaAdminOnboarding extends Page
@@ -71,6 +73,7 @@ class MegaAdminOnboarding extends Page
             'tenant_owner_id' => null,
             'modules_config' => $this->defaultModulesConfig(),
             'tenant_owner_same_as_org' => true,
+            'plan_template_id' => null,
         ]);
     }
 
@@ -137,7 +140,15 @@ class MegaAdminOnboarding extends Page
                                 ->required(),
                         ]),
                     Step::make('ماژول‌ها')
-                        ->schema($moduleSections),
+                        ->schema(array_merge([
+                            Select::make('plan_template_id')
+                                ->label('پلن آماده (اختیاری)')
+                                ->options(fn () => $this->planTemplateOptions())
+                                ->searchable()
+                                ->live()
+                                ->helperText('انتخاب پلن آماده، ماژول‌ها و سهمیه‌ها را پر می‌کند و قابل ویرایش باقی می‌ماند.')
+                                ->afterStateUpdated(fn ($state, Set $set) => $this->applyPlanTemplate($state, $set)),
+                        ], $moduleSections)),
                     Step::make('اشتراک')
                         ->schema([
                             TextInput::make('plan_name')->label('عنوان پلن')->nullable(),
@@ -264,6 +275,7 @@ class MegaAdminOnboarding extends Page
             'tenant_owner_id' => null,
             'modules_config' => $this->defaultModulesConfig(),
             'tenant_owner_same_as_org' => true,
+            'plan_template_id' => null,
         ]);
     }
 
@@ -276,6 +288,8 @@ class MegaAdminOnboarding extends Page
         $defaults = [];
 
         foreach ($modules as $moduleKey => $module) {
+            $quotaDefaults = $this->quotaDefaultsFromDefinition((array) ($module['quotas'] ?? []));
+            $hasQuotaDefaults = ($quotaDefaults['plan'] !== [] || $quotaDefaults['trial'] !== []);
             $flags = [];
             foreach ((array) ($module['feature_flags'] ?? []) as $flagKey => $flagValue) {
                 if (is_int($flagKey)) {
@@ -290,15 +304,173 @@ class MegaAdminOnboarding extends Page
                 'access_mode' => 'full',
                 'permissions' => [],
                 'feature_flags' => $flags,
-                'quotas_enabled' => false,
-                'quotas' => [
-                    'plan' => [],
-                    'trial' => [],
-                ],
+                'quotas_enabled' => $hasQuotaDefaults,
+                'quotas' => $quotaDefaults,
             ];
         }
 
         return $defaults;
+    }
+
+    /**
+     * @return array<int|string, string>
+     */
+    private function planTemplateOptions(): array
+    {
+        return SubscriptionPlan::query()
+            ->orderBy('name')
+            ->get(['id', 'name', 'code'])
+            ->mapWithKeys(fn (SubscriptionPlan $plan): array => [
+                $plan->getKey() => trim($plan->name.' ('.$plan->code.')'),
+            ])
+            ->all();
+    }
+
+    private function applyPlanTemplate(mixed $planId, Set $set): void
+    {
+        if (! is_numeric($planId)) {
+            return;
+        }
+
+        $plan = SubscriptionPlan::query()->find((int) $planId);
+        if (! $plan) {
+            return;
+        }
+
+        $set('modules_config', $this->resolveModulesConfigFromPlan($plan));
+        $set('plan_name', $plan->name);
+        $set('plan_status', (int) ($plan->trial_days ?? 0) > 0 ? 'trial' : 'active');
+
+        $startsAt = Carbon::now();
+        $set('plan_starts_at', $startsAt->toDateTimeString());
+        $set('plan_ends_at', (int) ($plan->period_days ?? 0) > 0
+            ? $startsAt->copy()->addDays((int) $plan->period_days)->toDateTimeString()
+            : null);
+        $set('trial_ends_at', (int) ($plan->trial_days ?? 0) > 0
+            ? $startsAt->copy()->addDays((int) $plan->trial_days)->toDateTimeString()
+            : null);
+
+        $chatPlanUsers = data_get($plan->features, 'quotas.chat.plan.max_users');
+        $set('max_users', $plan->seat_limit ?? (is_numeric($chatPlanUsers) ? (int) $chatPlanUsers : null));
+        $set('max_tenants', $plan->module_limit);
+        $set('plan_notes', 'برگرفته از پلن آماده: '.$plan->name.' ('.$plan->code.')');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function resolveModulesConfigFromPlan(SubscriptionPlan $plan): array
+    {
+        $defaults = $this->defaultModulesConfig();
+        $catalog = app(ModuleCatalog::class)->modules();
+        $features = (array) ($plan->features ?? []);
+
+        $modules = array_values(array_filter(array_map('strval', Arr::wrap($features['modules'] ?? []))));
+        $permissions = array_values(array_filter(array_map('strval', Arr::wrap($features['permissions'] ?? []))));
+        $moduleFlags = (array) ($features['flags'] ?? []);
+        $moduleQuotas = (array) ($features['quotas'] ?? []);
+
+        $legacyChat = $this->normalizeQuotaValues((array) ($features['chat'] ?? []));
+        if ($legacyChat !== [] && ! isset($moduleQuotas['chat'])) {
+            $moduleQuotas['chat'] = [
+                'plan' => $legacyChat,
+                'trial' => [],
+            ];
+        }
+
+        $permissionsByModule = [];
+        $moduleCatalog = app(ModuleCatalog::class);
+        foreach ($permissions as $permission) {
+            $moduleKey = $moduleCatalog->moduleForPermission($permission);
+            if (! $moduleKey) {
+                continue;
+            }
+
+            $permissionsByModule[$moduleKey] ??= [];
+            $permissionsByModule[$moduleKey][] = $permission;
+            $modules[] = $moduleKey;
+        }
+
+        $modules = array_values(array_unique($modules));
+
+        foreach ($defaults as $moduleKey => &$moduleConfig) {
+            $enabled = in_array($moduleKey, $modules, true)
+                || isset($permissionsByModule[$moduleKey])
+                || isset($moduleFlags[$moduleKey])
+                || isset($moduleQuotas[$moduleKey]);
+
+            $moduleConfig['enabled'] = $enabled;
+            if (! $enabled) {
+                $moduleConfig['access_mode'] = 'full';
+                $moduleConfig['permissions'] = [];
+                $moduleConfig['quotas_enabled'] = false;
+                $moduleConfig['quotas']['plan'] = [];
+                $moduleConfig['quotas']['trial'] = [];
+                continue;
+            }
+
+            $allPermissions = Arr::wrap($catalog[$moduleKey]['permissions'] ?? []);
+            $selectedPermissions = array_values(array_unique(array_filter(Arr::wrap($permissionsByModule[$moduleKey] ?? []))));
+            sort($allPermissions);
+            sort($selectedPermissions);
+
+            if ($selectedPermissions !== [] && $selectedPermissions !== $allPermissions) {
+                $moduleConfig['access_mode'] = 'custom';
+                $moduleConfig['permissions'] = $selectedPermissions;
+            } else {
+                $moduleConfig['access_mode'] = 'full';
+                $moduleConfig['permissions'] = [];
+            }
+
+            if (array_key_exists($moduleKey, $moduleFlags)) {
+                $moduleConfig['feature_flags'] = $this->normalizeModuleFlagsFromPlan(
+                    $moduleFlags[$moduleKey],
+                    (array) ($moduleConfig['feature_flags'] ?? [])
+                );
+            }
+
+            $planQuotas = $this->normalizeQuotaValues((array) data_get($moduleQuotas, $moduleKey.'.plan', []));
+            $trialQuotas = $this->normalizeQuotaValues((array) data_get($moduleQuotas, $moduleKey.'.trial', []));
+
+            $moduleConfig['quotas']['plan'] = $planQuotas;
+            $moduleConfig['quotas']['trial'] = $trialQuotas;
+            $moduleConfig['quotas_enabled'] = ($planQuotas !== [] || $trialQuotas !== []);
+        }
+        unset($moduleConfig);
+
+        return $defaults;
+    }
+
+    /**
+     * @param  array<string, bool>  $defaults
+     * @return array<string, bool>
+     */
+    private function normalizeModuleFlagsFromPlan(mixed $value, array $defaults): array
+    {
+        $normalized = $defaults;
+
+        if (! is_array($value)) {
+            return $normalized;
+        }
+
+        if (Arr::isAssoc($value)) {
+            foreach ($value as $flag => $enabled) {
+                $normalized[(string) $flag] = (bool) $enabled;
+            }
+
+            return $normalized;
+        }
+
+        $enabledFlags = array_values(array_filter(array_map('strval', $value)));
+        foreach ($normalized as $flag => $enabled) {
+            $normalized[$flag] = in_array($flag, $enabledFlags, true);
+        }
+
+        foreach ($enabledFlags as $flag) {
+            $normalized[$flag] = true;
+        }
+
+        return $normalized;
     }
 
     /**
@@ -374,6 +546,7 @@ class MegaAdminOnboarding extends Page
                 ->label('ظرفیت‌های پلن')
                 ->keyLabel('کلید ظرفیت')
                 ->valueLabel('سقف')
+                ->helperText($moduleKey === 'chat' ? 'کلیدهای پیشنهادی چت: max_users، max_channels، max_private_rooms' : null)
                 ->columnSpanFull()
                 ->visible(fn (Get $get): bool => (bool) $get("modules_config.{$moduleKey}.enabled")
                     && (bool) $get("modules_config.{$moduleKey}.quotas_enabled"));
@@ -382,6 +555,7 @@ class MegaAdminOnboarding extends Page
                 ->label('ظرفیت‌های دوره آزمایشی')
                 ->keyLabel('کلید ظرفیت')
                 ->valueLabel('سقف')
+                ->helperText($moduleKey === 'chat' ? 'کلیدهای پیشنهادی چت: max_users، max_channels، max_private_rooms' : null)
                 ->columnSpanFull()
                 ->visible(fn (Get $get): bool => (bool) $get("modules_config.{$moduleKey}.enabled")
                     && (bool) $get("modules_config.{$moduleKey}.quotas_enabled"));
@@ -498,5 +672,51 @@ class MegaAdminOnboarding extends Page
         }
 
         return $normalized;
+    }
+
+    /**
+     * @param  array<string, mixed>  $definition
+     * @return array{plan: array<string, string|int|float>, trial: array<string, string|int|float>}
+     */
+    private function quotaDefaultsFromDefinition(array $definition): array
+    {
+        $plan = [];
+        $trial = [];
+
+        if (array_key_exists('plan', $definition) || array_key_exists('trial', $definition)) {
+            $plan = $this->formatQuotaDefaults((array) ($definition['plan'] ?? []));
+            $trial = $this->formatQuotaDefaults((array) ($definition['trial'] ?? []));
+        } else {
+            $plan = $this->formatQuotaDefaults($definition);
+        }
+
+        return [
+            'plan' => $plan,
+            'trial' => $trial,
+        ];
+    }
+
+    /**
+     * @param  array<int|string, mixed>  $values
+     * @return array<string, string|int|float>
+     */
+    private function formatQuotaDefaults(array $values): array
+    {
+        $formatted = [];
+
+        foreach ($values as $key => $value) {
+            $quotaKey = is_int($key) ? (string) $value : (string) $key;
+            if ($quotaKey === '') {
+                continue;
+            }
+
+            if (is_numeric($value)) {
+                $formatted[$quotaKey] = $value + 0;
+            } else {
+                $formatted[$quotaKey] = '';
+            }
+        }
+
+        return $formatted;
     }
 }

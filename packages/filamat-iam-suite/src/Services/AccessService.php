@@ -12,6 +12,7 @@ use Filamat\IamSuite\Models\Tenant;
 use Filamat\IamSuite\Support\AccessSettings;
 use Haida\FeatureGates\Services\FeatureGateService;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
@@ -292,15 +293,21 @@ class AccessService
 
     protected function roleHasPermission(Authenticatable $user, Tenant $tenant, string $permissionKey): bool
     {
+        $registrar = app(PermissionRegistrar::class);
+
         if (method_exists($user, 'hasPermissionTo')) {
             try {
-                app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
+                $registrar->setPermissionsTeamId($tenant->getKey());
 
-                return $user->hasPermissionTo($permissionKey);
+                if ($user->hasPermissionTo($permissionKey)) {
+                    return true;
+                }
             } catch (\Throwable) {
                 // Fallback to manual checks.
             }
         }
+
+        $registrar->setPermissionsTeamId($tenant->getKey());
 
         $permission = Permission::query()
             ->where('name', $permissionKey)
@@ -312,11 +319,20 @@ class AccessService
             return false;
         }
 
+        $modelType = method_exists($user, 'getMorphClass') ? $user->getMorphClass() : $user::class;
+        $roleIds = DB::table(config('permission.table_names.model_has_roles'))
+            ->where('model_type', $modelType)
+            ->where('model_id', $user->getAuthIdentifier())
+            ->where('tenant_id', $tenant->getKey())
+            ->pluck('role_id')
+            ->all();
+
+        if ($roleIds === []) {
+            return false;
+        }
+
         $roles = Role::query()
-            ->whereHas('users', function ($query) use ($user, $tenant) {
-                $query->where('model_id', $user->getAuthIdentifier())
-                    ->where('tenant_id', $tenant->getKey());
-            })
+            ->whereIn('id', $roleIds)
             ->with('permissions')
             ->get();
 

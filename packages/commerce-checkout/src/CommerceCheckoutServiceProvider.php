@@ -41,7 +41,7 @@ class CommerceCheckoutServiceProvider extends PackageServiceProvider
         Gate::policy(Cart::class, CartPolicy::class);
         Gate::policy(CartItem::class, CartItemPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             CheckoutCapabilities::register($registry);
         }

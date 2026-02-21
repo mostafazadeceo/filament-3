@@ -62,7 +62,7 @@ class FilamentThreeCxServiceProvider extends PackageServiceProvider
         Gate::policy(ThreeCxContact::class, ThreeCxContactPolicy::class);
         Gate::policy(ThreeCxApiAuditLog::class, ThreeCxApiAuditLogPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             ThreeCxCapabilities::register($registry);
         }

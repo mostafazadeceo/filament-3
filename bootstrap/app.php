@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Haida\TenancyDomains\Models\SiteDomain;
 use Illuminate\Support\Facades\Schema;
+use App\Http\Middleware\SetAppLocale;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
+
         $middleware->trustHosts(function (): array {
             $hosts = [];
 
@@ -65,6 +70,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 is_numeric($trustedHeaders) ? (int) $trustedHeaders : null
             );
         }
+
+        // Apply user-selected locale from session (for web requests only).
+        $middleware->web(append: SetAppLocale::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -154,6 +154,21 @@ use Haida\ProvidersEsimGoCore\Models\EsimGoProduct;
 use Haida\ProvidersEsimGoCore\Services\EsimGoCatalogueService;
 use Haida\ProvidersEsimGoCore\Support\EsimGoFakeResponse;
 use Haida\SiteBuilderCore\Models\Site;
+use Haida\SmsBulk\Jobs\ApplyOptOutJob;
+use Haida\SmsBulk\Jobs\EnqueueCampaignJob;
+use Haida\SmsBulk\Jobs\SyncReportsJob;
+use Haida\SmsBulk\Models\SmsBulkCampaign;
+use Haida\SmsBulk\Models\SmsBulkContact;
+use Haida\SmsBulk\Models\SmsBulkDraftGroup;
+use Haida\SmsBulk\Models\SmsBulkDraftMessage;
+use Haida\SmsBulk\Models\SmsBulkPatternTemplate;
+use Haida\SmsBulk\Models\SmsBulkPhonebook;
+use Haida\SmsBulk\Models\SmsBulkProviderConnection;
+use Haida\SmsBulk\Models\SmsBulkQuietHoursProfile;
+use Haida\SmsBulk\Models\SmsBulkQuotaPolicy;
+use Haida\SmsBulk\Services\Campaign\CampaignBuilderService;
+use Haida\SmsBulk\Services\ProviderClientFactory;
+use Haida\SmsBulk\Services\SuppressionService;
 use Haida\TenancyDomains\Models\SiteDomain;
 use Haida\TenancyDomains\Services\SiteDomainService;
 use Illuminate\Http\Request;
@@ -246,6 +261,10 @@ $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 $app->register(FilamentThreeCxServiceProvider::class);
 
 Artisan::call('migrate', ['--force' => true]);
+Artisan::call('migrate', [
+    '--path' => 'packages/filament-sms-bulk/database/migrations',
+    '--force' => true,
+]);
 config(['queue.default' => 'sync']);
 config(['filamat-iam.capability_sync.queue' => false]);
 config(['providers-esim-go-core.fake' => true]);
@@ -3279,6 +3298,177 @@ foreach ($tenants as $tenant) {
             assertTrue(! $exists, 'Meeting leaked across tenants');
         }
     }
+}
+
+if ($tenants !== []) {
+    $smsTenant = $tenants[0];
+    TenantContext::setTenant($smsTenant);
+
+    logLine('sms-bulk scenario start: '.$smsTenant->slug);
+
+    Http::fake([
+        'https://edge.ippanel.com/*' => function ($request) {
+            $url = $request->url();
+
+            if (str_contains($url, '/api/payment/my-credit')) {
+                return Http::response(['data' => ['credit' => 123456], 'meta' => ['status' => true]], 200);
+            }
+
+            if (str_contains($url, '/api/send/calculate-price')) {
+                return Http::response(['data' => ['mci_price' => 1000, 'other_price' => 1200, 'parts' => 1], 'meta' => ['status' => true]], 200);
+            }
+
+            if (str_contains($url, '/api/send/')) {
+                return Http::response(['data' => ['id' => 'msg-'.Str::random(8), 'bulk_id' => 'bulk-'.Str::random(6), 'price' => 1200], 'meta' => ['status' => true]], 200);
+            }
+
+            if (str_contains($url, '/api/report/bulk-recipient/')) {
+                return Http::response([
+                    'data' => [
+                        'items' => [
+                            ['recipient' => '09120000001', 'status' => 'delivered'],
+                            ['recipient' => '09120000002', 'status' => 'failed', 'error_code' => '300', 'error_message' => 'mock error'],
+                        ],
+                    ],
+                    'meta' => ['status' => true],
+                ], 200);
+            }
+
+            return Http::response(['data' => [], 'meta' => ['status' => true]], 200);
+        },
+    ]);
+    Http::preventStrayRequests();
+
+    $connection = SmsBulkProviderConnection::query()->firstOrCreate(
+        [
+            'tenant_id' => $smsTenant->getKey(),
+            'provider' => 'ippanel_edge',
+            'display_name' => 'Edge Mock',
+        ],
+        [
+            'base_url_override' => 'https://edge.ippanel.com/v1',
+            'encrypted_token' => '__PUT_EDGE_TOKEN_HERE__',
+            'default_sender' => '__PUT_SENDER_NUMBER_HERE__',
+            'status' => 'active',
+        ],
+    );
+
+    $phonebook = SmsBulkPhonebook::query()->firstOrCreate(
+        ['tenant_id' => $smsTenant->getKey(), 'name' => 'sms-bulk-demo-phonebook'],
+        ['description' => 'scenario phonebook']
+    );
+
+    SmsBulkContact::query()->updateOrCreate(
+        ['tenant_id' => $smsTenant->getKey(), 'phonebook_id' => $phonebook->getKey(), 'msisdn' => '09120000001'],
+        ['full_name' => 'Contact One']
+    );
+    SmsBulkContact::query()->updateOrCreate(
+        ['tenant_id' => $smsTenant->getKey(), 'phonebook_id' => $phonebook->getKey(), 'msisdn' => '09120000002'],
+        ['full_name' => 'Contact Two']
+    );
+
+    SmsBulkPatternTemplate::query()->firstOrCreate(
+        ['tenant_id' => $smsTenant->getKey(), 'provider_connection_id' => $connection->getKey(), 'pattern_code' => 'demo_pattern'],
+        ['status' => 'approved', 'title_translations' => ['fa' => 'الگوی دمو'], 'variables_schema' => ['code' => 'string']]
+    );
+
+    $draftGroup = SmsBulkDraftGroup::query()->firstOrCreate(
+        ['tenant_id' => $smsTenant->getKey(), 'name_translations->fa' => 'گروه دمو'],
+        ['name_translations' => ['fa' => 'گروه دمو'], 'description_translations' => ['fa' => 'توضیح']]
+    );
+    SmsBulkDraftMessage::query()->firstOrCreate(
+        ['tenant_id' => $smsTenant->getKey(), 'draft_group_id' => $draftGroup->getKey(), 'language' => 'fa'],
+        ['title_translations' => ['fa' => 'پیش‌فرض'], 'body_translations' => ['fa' => 'پیام نمونه']]
+    );
+
+    $quiet = SmsBulkQuietHoursProfile::query()->firstOrCreate(
+        ['tenant_id' => $smsTenant->getKey(), 'name' => '24x7'],
+        ['timezone' => 'Asia/Tehran', 'allowed_days' => [0, 1, 2, 3, 4, 5, 6], 'start_time' => '00:00', 'end_time' => '23:59']
+    );
+
+    SmsBulkQuotaPolicy::query()->updateOrCreate(
+        ['tenant_id' => $smsTenant->getKey()],
+        [
+            'max_daily_recipients' => 10000,
+            'max_monthly_recipients' => 50000,
+            'max_daily_spend' => 50000000,
+            'max_monthly_spend' => 200000000,
+            'requires_approval_over_amount' => 1000000,
+        ]
+    );
+
+    $builder = app(CampaignBuilderService::class);
+
+    $campaignStandard = $builder->createDraft($connection, [
+        'name' => 'scenario-standard',
+        'mode' => 'standard',
+        'language' => 'fa',
+        'sender' => '__PUT_SENDER_NUMBER_HERE__',
+        'message' => 'متن استاندارد',
+        'recipients' => ['09120000001', '09120000002'],
+        'idempotency_key' => 'scenario-standard-'.$runId,
+        'quiet_hours_profile_id' => $quiet->getKey(),
+    ], 2);
+    EnqueueCampaignJob::dispatchSync($smsTenant->getKey(), $campaignStandard->getKey());
+
+    $campaignPattern = $builder->createDraft($connection, [
+        'name' => 'scenario-pattern',
+        'mode' => 'pattern',
+        'language' => 'fa',
+        'sender' => '__PUT_SENDER_NUMBER_HERE__',
+        'pattern_code' => 'demo_pattern',
+        'pattern_values' => ['code' => '1234'],
+        'message' => 'کد تایید',
+        'recipients' => ['09120000001'],
+        'idempotency_key' => 'scenario-pattern-'.$runId,
+    ], 1);
+    EnqueueCampaignJob::dispatchSync($smsTenant->getKey(), $campaignPattern->getKey());
+
+    $campaignPhonebook = $builder->createDraft($connection, [
+        'name' => 'scenario-phonebook',
+        'mode' => 'phonebook',
+        'language' => 'fa',
+        'sender' => '__PUT_SENDER_NUMBER_HERE__',
+        'message' => 'ارسال گروهی دفترچه',
+        'phonebook_id' => $phonebook->getKey(),
+        'recipients' => ['09120000001', '09120000002'],
+        'idempotency_key' => 'scenario-phonebook-'.$runId,
+    ], 2);
+    EnqueueCampaignJob::dispatchSync($smsTenant->getKey(), $campaignPhonebook->getKey());
+
+    $campaignScheduled = $builder->createDraft($connection, [
+        'name' => 'scenario-scheduled',
+        'mode' => 'standard',
+        'language' => 'fa',
+        'sender' => '__PUT_SENDER_NUMBER_HERE__',
+        'message' => 'ارسال زمان‌بندی',
+        'schedule_at' => now()->addMinutes(30)->toDateTimeString(),
+        'recipients' => ['09120000001'],
+        'idempotency_key' => 'scenario-scheduled-'.$runId,
+    ], 1);
+
+    $providerClient = app(ProviderClientFactory::class)->make($connection);
+    try {
+        $providerClient->cancelScheduled(['campaign_id' => $campaignScheduled->getKey()]);
+    } catch (\Throwable $exception) {
+        logLine('sms cancel-scheduled warning: '.$exception->getMessage());
+    }
+
+    $campaignStandard->update(['meta' => ['bulk_id' => 'bulk-demo-'.$runId]]);
+    try {
+        SyncReportsJob::dispatchSync($smsTenant->getKey(), $campaignStandard->getKey());
+    } catch (\Throwable $exception) {
+        logLine('sms sync-reports warning: '.$exception->getMessage());
+    }
+
+    ApplyOptOutJob::dispatchSync($smsTenant->getKey(), '09120000002', 'keyword');
+
+    $filtered = app(SuppressionService::class)->filterRecipients($smsTenant->getKey(), ['09120000001', '09120000002']);
+    assertTrue(in_array('09120000002', $filtered['blocked'], true), 'Opt-out flow did not block recipient');
+
+    assertTrue(SmsBulkCampaign::query()->where('tenant_id', $smsTenant->getKey())->count() >= 4, 'SMS campaign scenarios missing');
+
+    logLine('sms-bulk scenario ok: '.$smsTenant->slug);
 }
 
 TenantContext::setTenant(null);

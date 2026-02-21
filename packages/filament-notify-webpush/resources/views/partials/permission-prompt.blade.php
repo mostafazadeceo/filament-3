@@ -5,6 +5,8 @@
     $position = $settings['prompt_position'] ?? 'bottom-left';
     $repeatMinutes = (int) ($settings['prompt_repeat_minutes'] ?? 1440);
     $delaySeconds = (int) ($settings['prompt_delay_seconds'] ?? 2);
+    // Auto hide the prompt after a few seconds (0 disables).
+    $autoDismissSeconds = (int) ($settings['prompt_auto_dismiss_seconds'] ?? 15);
     $title = $settings['prompt_title'] ?? 'دریافت اعلان‌ها';
     $body = $settings['prompt_body'] ?? 'برای دریافت اطلاع‌رسانی‌های مهم، اجازه ارسال اعلان را فعال کنید.';
     $allowLabel = $settings['prompt_allow_label'] ?? 'فعال‌سازی';
@@ -21,7 +23,7 @@
     class="hidden fixed z-50 {{ $position === 'bottom-right' ? 'bottom-6 right-6' : '' }}{{ $position === 'bottom-left' ? 'bottom-6 left-6' : '' }}{{ $position === 'top-right' ? 'top-6 right-6' : '' }}{{ $position === 'top-left' ? 'top-6 left-6' : '' }}"
     style="max-width: 360px"
 >
-    <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-lg">
+    <div class="rounded-2xl border border-sky-200 bg-sky-50 p-4 shadow-lg" style="background:#f0f9ff;border-color:#bae6fd;">
         @if ($imageUrl)
             <div class="mb-3">
                 <img src="{{ $imageUrl }}" alt="{{ $imageAlt ?? '' }}" class="w-full rounded-lg">
@@ -40,6 +42,15 @@
 
         <div id="fn-webpush-status" class="mt-2 text-xs text-gray-500"></div>
 
+        <div id="fn-webpush-timer" class="mt-2 hidden">
+            <div class="flex items-center justify-between text-[11px] text-sky-700">
+                <span>این پیام تا <span id="fn-webpush-timer-seconds"></span> ثانیه دیگر بسته می‌شود</span>
+            </div>
+            <div class="mt-1 h-1 w-full overflow-hidden rounded-full bg-sky-100" style="background:#e0f2fe;">
+                <div id="fn-webpush-timer-bar" class="h-1 w-full rounded-full bg-sky-400" style="width: 100%;background:#38bdf8;"></div>
+            </div>
+        </div>
+
         <div class="mt-3 flex items-center gap-2">
             <button type="button" id="fn-webpush-allow" class="rounded-lg bg-primary-600 px-3 py-2 text-xs font-semibold text-white">
                 {{ $allowLabel }}
@@ -57,12 +68,16 @@
         const allowButton = document.getElementById('fn-webpush-allow');
         const dismissButton = document.getElementById('fn-webpush-dismiss');
         const statusEl = document.getElementById('fn-webpush-status');
+        const timerEl = document.getElementById('fn-webpush-timer');
+        const timerSecondsEl = document.getElementById('fn-webpush-timer-seconds');
+        const timerBarEl = document.getElementById('fn-webpush-timer-bar');
 
         const config = {
             enabled: @json($promptEnabled),
             autoSubscribe: @json($autoSubscribe),
             repeatMinutes: @json($repeatMinutes),
             delaySeconds: @json($delaySeconds),
+            autoDismissSeconds: @json(max(0, $autoDismissSeconds)),
             vapidKey: @json($vapidPublicKey ?? null),
             subscribeEndpoint: @json($subscribeEndpoint ?? null),
             serviceWorkerPath: @json($serviceWorkerPath ?? null),
@@ -91,6 +106,7 @@
         };
 
         const hidePrompt = () => {
+            stopAutoDismiss();
             if (promptEl) {
                 promptEl.classList.add('hidden');
             }
@@ -99,7 +115,64 @@
         const showPrompt = () => {
             if (promptEl) {
                 promptEl.classList.remove('hidden');
+                startAutoDismiss();
             }
+        };
+
+        let autoDismissIntervalId = null;
+        let autoDismissEndAt = null;
+        let autoDismissTotalMs = null;
+
+        const stopAutoDismiss = () => {
+            if (autoDismissIntervalId) {
+                clearInterval(autoDismissIntervalId);
+            }
+            autoDismissIntervalId = null;
+            autoDismissEndAt = null;
+            autoDismissTotalMs = null;
+
+            if (timerEl) {
+                timerEl.classList.add('hidden');
+            }
+        };
+
+        const dismissPrompt = () => {
+            try {
+                localStorage.setItem(storageKey, Date.now().toString());
+            } catch (error) {}
+            hidePrompt();
+        };
+
+        const startAutoDismiss = () => {
+            stopAutoDismiss();
+
+            if (!config.autoDismissSeconds || config.autoDismissSeconds <= 0) {
+                return;
+            }
+
+            if (!timerEl || !timerSecondsEl || !timerBarEl) {
+                return;
+            }
+
+            timerEl.classList.remove('hidden');
+            autoDismissTotalMs = config.autoDismissSeconds * 1000;
+            autoDismissEndAt = Date.now() + autoDismissTotalMs;
+
+            const tick = () => {
+                const remainingMs = Math.max(0, autoDismissEndAt - Date.now());
+                const remainingSeconds = Math.ceil(remainingMs / 1000);
+                timerSecondsEl.textContent = String(remainingSeconds);
+
+                const pct = autoDismissTotalMs > 0 ? (remainingMs / autoDismissTotalMs) : 0;
+                timerBarEl.style.width = (Math.max(0, Math.min(1, pct)) * 100).toFixed(1) + '%';
+
+                if (remainingMs <= 0) {
+                    dismissPrompt();
+                }
+            };
+
+            tick();
+            autoDismissIntervalId = setInterval(tick, 250);
         };
 
         const shouldShowPrompt = () => {
@@ -129,6 +202,39 @@
             }
 
             return true;
+        };
+
+        const bindPromptButtons = () => {
+            if (!hasPrompt) {
+                return;
+            }
+
+            if (!supportsWebPush) {
+                setStatus(statusEl, 'مرورگر شما از وب‌پوش پشتیبانی نمی‌کند.');
+                allowButton.disabled = true;
+            }
+
+            if (!allowButton.dataset.bound) {
+                allowButton.dataset.bound = '1';
+                allowButton.addEventListener('click', async () => {
+                    stopAutoDismiss();
+                    allowButton.disabled = true;
+                    dismissButton.disabled = true;
+                    try {
+                        await requestPermissionAndSubscribe(statusEl);
+                    } finally {
+                        allowButton.disabled = false;
+                        dismissButton.disabled = false;
+                    }
+                });
+            }
+
+            if (!dismissButton.dataset.bound) {
+                dismissButton.dataset.bound = '1';
+                dismissButton.addEventListener('click', () => {
+                    dismissPrompt();
+                });
+            }
         };
 
         const saveSubscription = async (subscription) => {
@@ -205,6 +311,8 @@
                 return;
             }
 
+            bindPromptButtons();
+
             if (Notification.permission === 'denied') {
                 setStatus(statusEl, 'دسترسی اعلان در مرورگر رد شده است.');
             }
@@ -256,6 +364,8 @@
         };
 
         const initAll = async () => {
+            bindPromptButtons();
+
             if (supportsWebPush) {
                 await initPrompt();
             } else if (hasPrompt) {

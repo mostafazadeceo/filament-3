@@ -248,6 +248,7 @@ final class AccessSettings
             'wallet_hold' => 'هولدها',
             'subscription' => 'اشتراک',
             'subscription_plan' => 'پلن‌ها',
+            'chat' => 'چت',
             'notification' => 'اعلان',
             'webhook' => 'وبهوک',
             'ai' => 'هوش مصنوعی',

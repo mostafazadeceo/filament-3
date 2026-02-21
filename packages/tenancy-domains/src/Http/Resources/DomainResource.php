@@ -14,6 +14,7 @@ class DomainResource extends JsonResource
             'site_id' => $this->site_id,
             'host' => $this->host,
             'type' => $this->type,
+            'service' => $this->service,
             'status' => $this->status,
             'verification_method' => $this->verification_method,
             'dns_token' => $this->dns_token,

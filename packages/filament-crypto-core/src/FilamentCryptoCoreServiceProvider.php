@@ -70,7 +70,7 @@ class FilamentCryptoCoreServiceProvider extends PackageServiceProvider
         Gate::policy(CryptoFeePolicy::class, CryptoFeePolicyPolicy::class);
         Gate::policy(CryptoAuditEvent::class, CryptoAuditLogPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             CryptoCoreCapabilities::register($registry);
         }

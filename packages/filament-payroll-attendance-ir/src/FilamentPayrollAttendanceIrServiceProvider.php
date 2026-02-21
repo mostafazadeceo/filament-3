@@ -117,7 +117,7 @@ class FilamentPayrollAttendanceIrServiceProvider extends PackageServiceProvider
         Gate::policy(SensitiveAccessLog::class, SensitiveAccessLogPolicy::class);
         Gate::policy(PayrollAiLog::class, PayrollAiLogPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             PayrollAttendanceCapabilities::register($registry);
         }

@@ -24,6 +24,8 @@ class ThreeCxContactResource extends Resource
 {
     protected static ?string $model = ThreeCxContact::class;
 
+    protected static ?string $tenantOwnershipRelationshipName = 'tenant';
+
     protected static ?string $modelLabel = 'مخاطب';
 
     protected static ?string $pluralModelLabel = 'مخاطبین';

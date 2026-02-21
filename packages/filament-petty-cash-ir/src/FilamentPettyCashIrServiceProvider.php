@@ -74,7 +74,7 @@ class FilamentPettyCashIrServiceProvider extends PackageServiceProvider
         Gate::policy(PettyCashCashCount::class, PettyCashCashCountPolicy::class);
         Gate::policy(PettyCashReconciliation::class, PettyCashReconciliationPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             PettyCashCapabilities::register($registry);
         }

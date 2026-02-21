@@ -10,11 +10,14 @@ class SiteContext
 
     private static ?string $host = null;
 
-    public static function set(?int $tenantId, ?int $siteId, ?string $host): void
+    private static ?string $service = null;
+
+    public static function set(?int $tenantId, ?int $siteId, ?string $host, ?string $service = null): void
     {
         self::$tenantId = $tenantId;
         self::$siteId = $siteId;
         self::$host = $host;
+        self::$service = $service;
     }
 
     public static function getTenantId(): ?int
@@ -32,10 +35,16 @@ class SiteContext
         return self::$host;
     }
 
+    public static function getService(): ?string
+    {
+        return self::$service;
+    }
+
     public static function clear(): void
     {
         self::$tenantId = null;
         self::$siteId = null;
         self::$host = null;
+        self::$service = null;
     }
 }

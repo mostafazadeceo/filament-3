@@ -3,18 +3,27 @@
 namespace Haida\FilamentStorefrontBuilder\Http\Controllers\Web;
 
 use Haida\FilamentStorefrontBuilder\Models\StorePage;
+use Haida\TenancyDomains\Support\SiteContext;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class SitemapController
 {
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
+        $siteId = SiteContext::getSiteId();
+        $siteIdParam = $request->query('site_id');
+        if (is_numeric($siteIdParam)) {
+            $siteId = (int) $siteIdParam;
+        }
+
         $pages = StorePage::query()
             ->where('status', 'published')
             ->where(function ($query) {
                 $query->whereNull('published_at')
                     ->orWhere('published_at', '<=', now());
             })
+            ->when($siteId, fn ($query) => $query->where('site_id', $siteId))
             ->get();
 
         $urls = $pages->map(function (StorePage $page) {

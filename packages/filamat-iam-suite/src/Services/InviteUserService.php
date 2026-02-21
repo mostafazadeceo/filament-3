@@ -154,6 +154,8 @@ class InviteUserService
             'invitation_id' => $invitation->getKey(),
         ]);
 
+        $this->syncChatOnActivate($tenant, $user);
+
         return $invitation;
     }
 
@@ -182,6 +184,10 @@ class InviteUserService
         $this->securityEventService->record('user.invite_revoked', 'warning', $actor, $tenant, [
             'invitation_id' => $invitation->getKey(),
         ]);
+
+        if ($tenant && $user) {
+            $this->syncChatOnSuspend($tenant, $user);
+        }
 
         return $invitation;
     }
@@ -261,5 +267,61 @@ class InviteUserService
         $modules = $this->entitlementService->allowedModulesForTenant($tenant);
 
         return $this->moduleCatalog->permissionsForModules($modules);
+    }
+
+    protected function syncChatOnActivate(Tenant $tenant, Authenticatable $user): void
+    {
+        if (! config('filament-chat.auto_sync', false)) {
+            return;
+        }
+
+        if (! class_exists(\Haida\FilamentChat\Models\ChatConnection::class)) {
+            return;
+        }
+
+        try {
+            $connection = \Haida\FilamentChat\Models\ChatConnection::query()
+                ->where('tenant_id', $tenant->getKey())
+                ->default()
+                ->first();
+
+            if (! $connection) {
+                return;
+            }
+
+            if (class_exists(\Haida\FilamentChat\Services\ChatConnectionService::class)) {
+                app(\Haida\FilamentChat\Services\ChatConnectionService::class)->syncUser($connection, $user);
+            }
+        } catch (\Throwable) {
+            // swallow to avoid invite failures
+        }
+    }
+
+    protected function syncChatOnSuspend(Tenant $tenant, Authenticatable $user): void
+    {
+        if (! config('filament-chat.auto_deactivate', false)) {
+            return;
+        }
+
+        if (! class_exists(\Haida\FilamentChat\Models\ChatConnection::class)) {
+            return;
+        }
+
+        try {
+            $connection = \Haida\FilamentChat\Models\ChatConnection::query()
+                ->where('tenant_id', $tenant->getKey())
+                ->default()
+                ->first();
+
+            if (! $connection) {
+                return;
+            }
+
+            if (class_exists(\Haida\FilamentChat\Services\ChatConnectionService::class)) {
+                app(\Haida\FilamentChat\Services\ChatConnectionService::class)->deactivateUser($connection, $user);
+            }
+        } catch (\Throwable) {
+            // swallow to avoid invite failures
+        }
     }
 }

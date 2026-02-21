@@ -143,7 +143,7 @@ class ModuleCatalog
     protected function resolveLabel(RegisteredCapability $capability): string
     {
         $label = (string) (config('filamat-iam.modules.labels.'.$capability->module) ?? '');
-        if ($label !== '') {
+        if (trim($label) !== '') {
             return $label;
         }
 

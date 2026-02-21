@@ -47,7 +47,7 @@ class FilamentStorefrontBuilderServiceProvider extends PackageServiceProvider
         Gate::policy(StoreTheme::class, StoreThemePolicy::class);
         Gate::policy(StoreRedirect::class, StoreRedirectPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             StorefrontCapabilities::register($registry);
         }

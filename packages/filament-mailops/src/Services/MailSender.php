@@ -53,29 +53,47 @@ class MailSender
     {
         $settings = $mailbox->settings ?? [];
 
-        $host = $settings['smtp_host'] ?? config('filament-mailops.smtp.host');
+        $host = trim((string) ($settings['smtp_host'] ?? config('filament-mailops.smtp.host')));
         $port = (int) ($settings['smtp_port'] ?? config('filament-mailops.smtp.port', 587));
         $encryption = $settings['smtp_encryption'] ?? config('filament-mailops.smtp.encryption', 'tls');
+        $verifyTls = array_key_exists('smtp_verify_tls', $settings)
+            ? (bool) $settings['smtp_verify_tls']
+            : (bool) config('filament-mailops.smtp.verify_tls', true);
         $ehloDomain = $settings['smtp_ehlo_domain'] ?? config('filament-mailops.smtp.ehlo_domain');
+
+        if ($host === '') {
+            throw new \RuntimeException('SMTP host is not configured.');
+        }
+
         if ($encryption === 'none') {
             $encryption = null;
         }
+
         if (! $ehloDomain) {
             $ehloDomain = $this->resolveEmailDomain($mailbox->email);
         }
 
+        $mailerConfig = [
+            'transport' => 'smtp',
+            'host' => $host,
+            'port' => $port,
+            'encryption' => $encryption,
+            'username' => $mailbox->email,
+            'password' => $mailbox->password,
+            'local_domain' => $ehloDomain ?: config('mail.mailers.smtp.local_domain'),
+            'timeout' => 15,
+        ];
+
+        if (! $verifyTls) {
+            // Laravel 12 + Symfony Mailer expects verify_peer as DSN option.
+            $mailerConfig['verify_peer'] = false;
+        }
+
         config([
-            'mail.mailers.mailops' => [
-                'transport' => 'smtp',
-                'host' => $host,
-                'port' => $port,
-                'encryption' => $encryption,
-                'username' => $mailbox->email,
-                'password' => $mailbox->password,
-                'local_domain' => $ehloDomain ?: config('mail.mailers.smtp.local_domain'),
-                'timeout' => 15,
-            ],
+            'mail.mailers.mailops' => $mailerConfig,
         ]);
+
+        Mail::purge('mailops');
 
         $to = $this->normalizeEmails($data['to_emails'] ?? []);
         if ($to === []) {

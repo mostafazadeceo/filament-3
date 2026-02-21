@@ -7,7 +7,19 @@ return [
     ],
     'public' => [
         'home_slug' => 'home',
-        'reserved_slugs' => ['blog', 'filament-notify-sw.js'],
+        'reserved_slugs' => [
+            'api',
+            'blog',
+            'storefront',
+            'chat',
+            'storage',
+            'admin',
+            'auth',
+            'login',
+            'logout',
+            'ttt',
+            'filament-notify-sw.js',
+        ],
     ],
     'api' => [
         'rate_limit' => '60,1',

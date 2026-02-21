@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <title>داشبورد پژوهشی KYC Defense</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Fonts (No CDN) -->
+  <link rel="stylesheet" href="{{ asset('fonts/vazirmatn/vazirmatn.css') }}" />
   <style>
     :root {
       --bg: #f7f2ea;
@@ -90,7 +89,7 @@
     }
 
     h1 {
-      font-family: "Lalezar", "Vazirmatn", sans-serif;
+      font-family: "Vazirmatn", "Tahoma", sans-serif;
       font-size: 2.5rem;
       margin: 16px 0 10px;
       letter-spacing: 0.5px;

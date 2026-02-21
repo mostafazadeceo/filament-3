@@ -38,6 +38,8 @@ class UserResource extends IamResource
 
     protected static ?string $model = null;
 
+    protected static ?string $tenantOwnershipRelationshipName = 'tenants';
+
     protected static ?string $navigationLabel = 'کاربران';
 
     protected static ?string $pluralModelLabel = 'کاربران';

@@ -15,9 +15,11 @@ use Haida\FilamentProvidersEsimGo\ProvidersEsimGoPlugin;
 use Haida\FilamentMailtrap\MailtrapPlugin;
 use Haida\FilamentMailOps\MailOpsPlugin;
 use Haida\FilamentRestaurantOps\FilamentRestaurantOpsPlugin;
+use Haida\SmsBulk\FilamentSmsBulkPlugin;
 use Haida\FilamentThreeCx\Filament\FilamentThreeCxPlugin;
 use Haida\FilamentWorkhub\FilamentWorkhubPlugin;
 use Haida\FilamentLoyaltyClub\FilamentLoyaltyClubPlugin;
+use Haida\FilamentChat\FilamentChatPlugin;
 use Haida\ContentCms\ContentCmsPlugin;
 use Haida\Blog\BlogPlugin;
 use Haida\CommerceCatalog\CommerceCatalogPlugin;
@@ -43,8 +45,10 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationBuilder;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Enums\ThemeMode;
 use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
 use App\Filament\Widgets\PanelInfoWidget;
@@ -57,6 +61,9 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use ZPMLabs\FilamentApiDocsBuilder\FilamentApiDocsBuilderPlugin;
+use App\Support\Navigation\AppNavigationBuilder as AbrakAppNavigationBuilder;
+use App\Http\Controllers\Filament\AppSwitchController;
+use Illuminate\Support\Facades\Route;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -105,12 +112,14 @@ class AdminPanelProvider extends PanelProvider
 
             $imagePath = $settings->auth_ui_empty_panel_background_image_path ?? null;
             if (filled($imagePath)) {
-                $imageUrl = (str_starts_with($imagePath, 'http://')
+                // No external assets (CDN) allowed. Accept only local storage paths.
+                if (! (str_starts_with($imagePath, 'http://')
                     || str_starts_with($imagePath, 'https://')
-                    || str_starts_with($imagePath, '//'))
-                    ? $imagePath
-                    : asset('storage/' . ltrim($imagePath, '/'));
-                $authUiEnhancer->emptyPanelBackgroundImageUrl($imageUrl);
+                    || str_starts_with($imagePath, '//'))) {
+                    $authUiEnhancer->emptyPanelBackgroundImageUrl(
+                        asset('storage/' . ltrim($imagePath, '/')),
+                    );
+                }
             }
 
             $plugins[] = $authUiEnhancer;
@@ -121,6 +130,9 @@ class AdminPanelProvider extends PanelProvider
         $plugins[] = CurrencyRatesPlugin::make();
         $plugins[] = RelogradePlugin::make();
         $plugins[] = FilamentWorkhubPlugin::make();
+        if (class_exists(FilamentChatPlugin::class)) {
+            $plugins[] = FilamentChatPlugin::make();
+        }
         if (class_exists(FilamentLoyaltyClubPlugin::class)) {
             $plugins[] = FilamentLoyaltyClubPlugin::make();
         }
@@ -170,6 +182,9 @@ class AdminPanelProvider extends PanelProvider
         $plugins[] = FilamentAccountingIrPlugin::make();
         $plugins[] = FilamentPayrollAttendanceIrPlugin::make();
         $plugins[] = FilamentRestaurantOpsPlugin::make();
+        if (class_exists(FilamentSmsBulkPlugin::class)) {
+            $plugins[] = FilamentSmsBulkPlugin::make();
+        }
         if (class_exists(FilamentThreeCxPlugin::class)) {
             $plugins[] = FilamentThreeCxPlugin::make();
         }
@@ -179,20 +194,20 @@ class AdminPanelProvider extends PanelProvider
             ->tenantPanels(['tenant']);
         $plugins[] = FilamentApiDocsBuilderPlugin::make();
 
-        $fontFamily = null;
-        $fontUrl = null;
-        $fontProvider = null;
+        // Always use a local font (no CDN). Default to our bundled Vazirmatn.
+        $fontFamily = $settings?->font_family ?: 'Vazirmatn';
+        $fontUrl = asset('fonts/vazirmatn/vazirmatn.css');
+        $fontProvider = LocalFontProvider::class;
 
         if ($settings?->enable_custom_font) {
+            // Never use Bunny (CDN). If a local font CSS is provided, use it; otherwise keep
+            // our bundled local font.
             $fontFamily = $settings->font_family ?: 'Vazirmatn';
-            $fontSource = $settings->font_source ?? 'bunny';
+            $fontProvider = LocalFontProvider::class;
 
-            if ($fontSource === 'url' && filled($settings->font_url)) {
-                $fontUrl = $settings->font_url;
-                $fontProvider = LocalFontProvider::class;
-            } elseif (in_array($fontSource, ['upload_css', 'upload_file'], true) && filled($settings->font_upload_css_path)) {
+            $fontSource = $settings->font_source ?? null;
+            if (in_array($fontSource, ['upload_css', 'upload_file'], true) && filled($settings->font_upload_css_path)) {
                 $fontUrl = asset('storage/' . ltrim($settings->font_upload_css_path, '/'));
-                $fontProvider = LocalFontProvider::class;
             }
         }
 
@@ -201,11 +216,22 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->authenticatedTenantRoutes(function (): void {
+                Route::get('/app/{key?}', AppSwitchController::class)->name('app.switch');
+            })
             ->viteTheme('resources/css/filament/admin/theme.css')
+            ->defaultThemeMode(ThemeMode::Dark)
+            ->brandName('Abrak')
+            ->brandLogo(asset('brand/abrak-mark.svg'))
+            ->darkModeBrandLogo(asset('brand/abrak-mark.svg'))
+            ->favicon(asset('brand/abrak-mark.svg'))
             ->font($fontFamily, $fontUrl, $fontProvider)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Cyan,
             ])
+            ->navigation(fn (): NavigationBuilder => app(NavigationBuilder::class)->groups(
+                AbrakAppNavigationBuilder::build()
+            ))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
@@ -227,6 +253,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins($plugins)
             ->renderHook(PanelsRenderHook::SIDEBAR_NAV_START, fn () => view('filamat-iam::components.sidebar-role'))
+            ->renderHook(PanelsRenderHook::TOPBAR_END, fn () => view('filament.components.topbar-tools'))
             ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_BEFORE, function () use ($resolveSettings) {
                 $settings = $resolveSettings();
                 if (! $settings?->topbar_date_enabled) {
@@ -274,6 +301,7 @@ class AdminPanelProvider extends PanelProvider
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
+                \App\Http\Middleware\SetLocale::class,
                 StartSession::class,
                 AuthenticateSession::class,
                 ShareErrorsFromSession::class,
@@ -284,6 +312,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                \App\Http\Middleware\RedirectNonMegaFromAdmin::class,
             ]);
     }
 }

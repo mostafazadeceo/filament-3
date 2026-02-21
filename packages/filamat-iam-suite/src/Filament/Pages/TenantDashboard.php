@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace Filamat\IamSuite\Filament\Pages;
 
+use App\Filament\Widgets\AppLauncherWidget;
+use App\Support\Navigation\AppContext;
 use Filamat\IamSuite\Filament\Concerns\AuthorizesIam;
-use Filamat\IamSuite\Filament\Widgets\NotificationDeliveryChartWidget;
-use Filamat\IamSuite\Filament\Widgets\NotificationStatsWidget;
-use Filamat\IamSuite\Filament\Widgets\QuickActionsWidget;
-use Filamat\IamSuite\Filament\Widgets\RecentAuditLogsWidget;
-use Filamat\IamSuite\Filament\Widgets\RecentSecurityEventsWidget;
-use Filamat\IamSuite\Filament\Widgets\TenantStatsWidget;
-use Filamat\IamSuite\Filament\Widgets\WalletVolumeChartWidget;
 use Filament\Pages\Dashboard;
 
 class TenantDashboard extends Dashboard
 {
     use AuthorizesIam;
 
-    protected static ?string $permission = 'iam.view';
-
-    protected static ?string $slug = 'dashboard';
+    // Dashboard should always be reachable for authenticated tenant members.
+    // Access to each module is enforced by navigation/resource permissions.
+    protected static ?string $permission = null;
 
     protected static ?string $navigationLabel = 'داشبورد';
 
@@ -30,22 +25,16 @@ class TenantDashboard extends Dashboard
 
     protected static string|\UnitEnum|null $navigationGroup = 'گزارش‌ها';
 
-    protected function getHeaderWidgets(): array
+    public function mount(): void
     {
-        return [
-            TenantStatsWidget::class,
-            NotificationStatsWidget::class,
-        ];
+        // Landing here should always show the app launcher (Odoo-style).
+        AppContext::set(null);
     }
 
-    protected function getFooterWidgets(): array
+    public function getWidgets(): array
     {
         return [
-            QuickActionsWidget::class,
-            WalletVolumeChartWidget::class,
-            NotificationDeliveryChartWidget::class,
-            RecentSecurityEventsWidget::class,
-            RecentAuditLogsWidget::class,
+            AppLauncherWidget::class,
         ];
     }
 }

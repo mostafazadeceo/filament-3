@@ -70,7 +70,7 @@ class ProvidersEsimGoCoreServiceProvider extends PackageServiceProvider
             $registry->register('esim-go', EsimGoProviderAdapter::class);
         }
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             EsimGoCapabilities::register($registry);
         }

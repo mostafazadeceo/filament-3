@@ -10,6 +10,7 @@ use Filamat\IamSuite\Support\IamAuthorization;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
@@ -104,10 +105,10 @@ class MailMailboxResource extends IamResource
                     ->schema([
                         Toggle::make('settings.enable_imap')
                             ->label('فعال‌سازی IMAP')
-                            ->default(true),
+                            ->default((bool) config('filament-mailops.mailbox_defaults.enable_imap', true)),
                         Toggle::make('settings.enable_pop')
                             ->label('فعال‌سازی POP3')
-                            ->default(false),
+                            ->default((bool) config('filament-mailops.mailbox_defaults.enable_pop', true)),
                         Toggle::make('settings.allow_spoofing')
                             ->label('اجازه جعل فرستنده')
                             ->default(false),
@@ -136,16 +137,22 @@ class MailMailboxResource extends IamResource
                     ])
                     ->columns(2)
                     ->collapsed(),
-                Section::make('اتصال SMTP/IMAP')
+                Section::make('اتصال SMTP/IMAP/POP3')
                     ->schema([
+                        Placeholder::make('credentials_hint')
+                            ->label('ورود سرویس‌ها')
+                            ->content(fn (Get $get): string => 'نام کاربری: '.self::buildEmailPreview($get).' | رمز عبور: همان رمز صندوق ایمیل')
+                            ->columnSpanFull(),
                         TextInput::make('settings.smtp_host')
                             ->label('SMTP Host')
-                            ->helperText('اگر خالی باشد از تنظیمات سراسری استفاده می‌شود.')
-                            ->dehydrateStateUsing(fn ($state) => filled($state) ? $state : null),
+                            ->default(fn () => (string) config('filament-mailops.smtp.host', 'mail.abrak.org'))
+                            ->helperText('اگر خالی باشد از تنظیمات سراسری یا mail.<domain> استفاده می‌شود.')
+                            ->dehydrateStateUsing(fn ($state) => filled($state) ? trim((string) $state) : null),
                         TextInput::make('settings.smtp_port')
                             ->label('SMTP Port')
                             ->numeric()
-                            ->helperText('اگر خالی باشد از تنظیمات سراسری استفاده می‌شود.')
+                            ->default(fn () => (int) config('filament-mailops.smtp.port', 587))
+                            ->helperText('پیش‌فرض 587')
                             ->dehydrateStateUsing(fn ($state) => filled($state) ? (int) $state : null),
                         Select::make('settings.smtp_encryption')
                             ->label('SMTP Encryption')
@@ -154,16 +161,20 @@ class MailMailboxResource extends IamResource
                                 'ssl' => 'SSL',
                                 'none' => 'بدون رمزنگاری',
                             ])
-                            ->helperText('اگر خالی باشد از تنظیمات سراسری استفاده می‌شود.')
-                            ->dehydrateStateUsing(fn ($state) => filled($state) ? $state : null),
+                            ->default(fn () => (string) config('filament-mailops.smtp.encryption', 'tls'))
+                            ->dehydrateStateUsing(fn ($state) => filled($state) ? (string) $state : null),
+                        Toggle::make('settings.smtp_verify_tls')
+                            ->label('اعتبارسنجی TLS برای SMTP')
+                            ->default((bool) config('filament-mailops.smtp.verify_tls', true)),
                         TextInput::make('settings.imap_host')
                             ->label('IMAP Host')
-                            ->helperText('اگر خالی باشد از تنظیمات سراسری استفاده می‌شود.')
-                            ->dehydrateStateUsing(fn ($state) => filled($state) ? $state : null),
+                            ->default(fn () => (string) config('filament-mailops.imap.host', 'mail.abrak.org'))
+                            ->helperText('پیش‌فرض از تنظیمات سراسری')
+                            ->dehydrateStateUsing(fn ($state) => filled($state) ? trim((string) $state) : null),
                         TextInput::make('settings.imap_port')
                             ->label('IMAP Port')
                             ->numeric()
-                            ->helperText('اگر خالی باشد از تنظیمات سراسری استفاده می‌شود.')
+                            ->default(fn () => (int) config('filament-mailops.imap.port', 993))
                             ->dehydrateStateUsing(fn ($state) => filled($state) ? (int) $state : null),
                         Select::make('settings.imap_encryption')
                             ->label('IMAP Encryption')
@@ -172,11 +183,32 @@ class MailMailboxResource extends IamResource
                                 'tls' => 'TLS',
                                 'none' => 'بدون رمزنگاری',
                             ])
-                            ->helperText('اگر خالی باشد از تنظیمات سراسری استفاده می‌شود.')
-                            ->dehydrateStateUsing(fn ($state) => filled($state) ? $state : null),
+                            ->default(fn () => (string) config('filament-mailops.imap.encryption', 'ssl'))
+                            ->dehydrateStateUsing(fn ($state) => filled($state) ? (string) $state : null),
                         Toggle::make('settings.imap_verify_tls')
                             ->label('اعتبارسنجی TLS برای IMAP')
-                            ->default(true),
+                            ->default((bool) config('filament-mailops.imap.verify_tls', true)),
+                        TextInput::make('settings.pop_host')
+                            ->label('POP3 Host')
+                            ->default(fn () => (string) config('filament-mailops.pop.host', 'mail.abrak.org'))
+                            ->dehydrateStateUsing(fn ($state) => filled($state) ? trim((string) $state) : null),
+                        TextInput::make('settings.pop_port')
+                            ->label('POP3 Port')
+                            ->numeric()
+                            ->default(fn () => (int) config('filament-mailops.pop.port', 995))
+                            ->dehydrateStateUsing(fn ($state) => filled($state) ? (int) $state : null),
+                        Select::make('settings.pop_encryption')
+                            ->label('POP3 Encryption')
+                            ->options([
+                                'ssl' => 'SSL',
+                                'tls' => 'TLS',
+                                'none' => 'بدون رمزنگاری',
+                            ])
+                            ->default(fn () => (string) config('filament-mailops.pop.encryption', 'ssl'))
+                            ->dehydrateStateUsing(fn ($state) => filled($state) ? (string) $state : null),
+                        Toggle::make('settings.pop_verify_tls')
+                            ->label('اعتبارسنجی TLS برای POP3')
+                            ->default((bool) config('filament-mailops.pop.verify_tls', true)),
                     ])
                     ->columns(2)
                     ->collapsed(),
@@ -229,8 +261,26 @@ class MailMailboxResource extends IamResource
                     ->icon('heroicon-o-inbox-arrow-down')
                     ->visible(fn (MailMailbox $record) => IamAuthorization::allows('mailops.inbound.sync', IamAuthorization::resolveTenantFromRecord($record)))
                     ->action(function (MailMailbox $record, ImapInboxReader $reader): void {
-                        $count = $reader->sync($record);
-                        Notification::make()->title("{$count} پیام همگام شد.")->success()->send();
+                        if (! $reader->isAvailable()) {
+                            Notification::make()
+                                ->title('همگام‌سازی IMAP در دسترس نیست.')
+                                ->body('افزونه PHP IMAP روی سرور نصب نشده است.')
+                                ->warning()
+                                ->send();
+
+                            return;
+                        }
+
+                        try {
+                            $count = $reader->sync($record);
+                            Notification::make()->title("{$count} پیام همگام شد.")->success()->send();
+                        } catch (\Throwable $exception) {
+                            Notification::make()
+                                ->title('همگام‌سازی اینباکس ناموفق بود.')
+                                ->body($exception->getMessage())
+                                ->danger()
+                                ->send();
+                        }
                     }),
                 EditAction::make(),
                 DeleteAction::make(),

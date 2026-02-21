@@ -73,6 +73,11 @@ class SiteDomainResource extends IamResource
                     ])
                     ->default('custom')
                     ->required(),
+                Select::make('service')
+                    ->label('سرویس')
+                    ->options(SiteDomain::serviceOptions())
+                    ->default(SiteDomain::SERVICE_ALL)
+                    ->required(),
                 Select::make('verification_method')
                     ->label('روش تایید')
                     ->options([
@@ -139,6 +144,7 @@ class SiteDomainResource extends IamResource
             ->columns([
                 TextColumn::make('host')->label('دامنه')->searchable(),
                 TextColumn::make('type')->label('نوع'),
+                TextColumn::make('service')->label('سرویس')->badge(),
                 TextColumn::make('status')->label('وضعیت')->badge(),
                 IconColumn::make('is_primary')->label('اصلی')->boolean(),
                 TextColumn::make('verified_at')->label('تایید')->jalaliDateTime(),

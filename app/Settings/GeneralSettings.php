@@ -15,7 +15,7 @@ class GeneralSettings extends Settings
     public bool $auth_ui_show_empty_panel_on_mobile = true;
     public bool $enable_custom_font = true;
     public string $font_family = 'Vazirmatn';
-    public string $font_source = 'bunny';
+    public string $font_source = 'local';
     public ?string $font_url = null;
     public ?string $font_upload_css_path = null;
     public ?string $font_upload_file_path = null;
@@ -30,15 +30,15 @@ class GeneralSettings extends Settings
     public bool $panel_info_widget_enabled = true;
     public ?string $panel_info_title = null;
     public ?string $panel_info_logo_path = null;
-    public ?string $panel_info_logo_link = 'https://filamentphp.com';
+    public ?string $panel_info_logo_link = null;
     public bool $panel_info_show_version = true;
     public ?string $panel_info_version_text = null;
-    public bool $panel_info_first_link_enabled = true;
+    public bool $panel_info_first_link_enabled = false;
     public string $panel_info_first_link_label = 'مستندات';
-    public ?string $panel_info_first_link_url = 'https://filamentphp.com/docs';
-    public bool $panel_info_second_link_enabled = true;
+    public ?string $panel_info_first_link_url = null;
+    public bool $panel_info_second_link_enabled = false;
     public string $panel_info_second_link_label = 'گیت‌هاب';
-    public ?string $panel_info_second_link_url = 'https://github.com/filamentphp/filament';
+    public ?string $panel_info_second_link_url = null;
 
     public static function group(): string
     {

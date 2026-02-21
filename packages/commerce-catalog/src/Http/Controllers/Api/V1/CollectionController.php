@@ -12,7 +12,12 @@ class CollectionController extends ApiController
 {
     public function __construct()
     {
-        $this->authorizeResource(CatalogCollection::class, 'collection');
+        // API keys are used for server-to-server sync (no user session). For those requests
+        // we rely on `filamat-iam.scope:*` middleware instead of per-user policies.
+        $apiKeyHeader = (string) config('filamat-iam.api.api_key_header', 'X-Api-Key');
+        if (! request()->header($apiKeyHeader)) {
+            $this->authorizeResource(CatalogCollection::class, 'collection');
+        }
     }
 
     public function index(): AnonymousResourceCollection

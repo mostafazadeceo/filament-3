@@ -7,7 +7,20 @@ return [
     ],
     'public' => [
         'home_slug' => 'home',
-        'reserved_slugs' => ['blog', 'ttt', 'login', 'admin', 'filament-notify-sw.js'],
+        // Reserved routes that should never be captured by the CMS catch-all "{slug}" page route.
+        'reserved_slugs' => [
+            'api',
+            'blog',
+            'ttt',
+            'login',
+            'logout',
+            'auth',
+            'admin',
+            'storefront',
+            'chat',
+            'storage',
+            'filament-notify-sw.js',
+        ],
     ],
     'api' => [
         'rate_limit' => '60,1',

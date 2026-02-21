@@ -55,7 +55,7 @@ class FilamentPaymentsServiceProvider extends PackageServiceProvider
         Gate::policy(PaymentReconciliation::class, PaymentReconciliationPolicy::class);
         Gate::policy(PaymentWebhookEvent::class, PaymentWebhookEventPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             PaymentCapabilities::register($registry);
         }

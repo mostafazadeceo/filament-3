@@ -4,16 +4,9 @@ declare(strict_types=1);
 
 namespace Filamat\IamSuite\Filament\Pages;
 
+use App\Filament\Widgets\AppLauncherWidget;
+use App\Support\Navigation\AppContext;
 use Filamat\IamSuite\Filament\Concerns\AuthorizesIam;
-use Filamat\IamSuite\Filament\Widgets\MegaAdminDeliveryWidget;
-use Filamat\IamSuite\Filament\Widgets\MegaAdminOperationsWidget;
-use Filamat\IamSuite\Filament\Widgets\MegaAdminOverviewWidget;
-use Filamat\IamSuite\Filament\Widgets\NotificationDeliveryChartWidget;
-use Filamat\IamSuite\Filament\Widgets\QuickActionsWidget;
-use Filamat\IamSuite\Filament\Widgets\RecentAuditLogsWidget;
-use Filamat\IamSuite\Filament\Widgets\RecentNotificationsWidget;
-use Filamat\IamSuite\Filament\Widgets\RecentSecurityEventsWidget;
-use Filamat\IamSuite\Filament\Widgets\WalletVolumeChartWidget;
 use Filament\Pages\Dashboard;
 
 class SuperAdminDashboard extends Dashboard
@@ -34,18 +27,16 @@ class SuperAdminDashboard extends Dashboard
 
     protected static ?int $navigationSort = 0;
 
+    public function mount(): void
+    {
+        // Landing here should always show the app launcher (Odoo-style).
+        AppContext::set(null);
+    }
+
     public function getWidgets(): array
     {
         return [
-            QuickActionsWidget::class,
-            MegaAdminOverviewWidget::class,
-            MegaAdminOperationsWidget::class,
-            MegaAdminDeliveryWidget::class,
-            WalletVolumeChartWidget::class,
-            NotificationDeliveryChartWidget::class,
-            RecentSecurityEventsWidget::class,
-            RecentNotificationsWidget::class,
-            RecentAuditLogsWidget::class,
+            AppLauncherWidget::class,
         ];
     }
 }

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 $prefix = config('filament-storefront-builder.public.prefix', 'storefront');
 
-Route::middleware(['web', 'resolve.site'])
+Route::middleware(['web', 'resolve.site', 'require.service:storefront'])
     ->prefix($prefix)
     ->group(function () {
         Route::get('sitemap.xml', SitemapController::class);

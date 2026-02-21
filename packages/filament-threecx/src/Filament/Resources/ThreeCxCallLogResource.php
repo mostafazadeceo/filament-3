@@ -23,6 +23,8 @@ class ThreeCxCallLogResource extends Resource
 {
     protected static ?string $model = ThreeCxCallLog::class;
 
+    protected static ?string $tenantOwnershipRelationshipName = 'tenant';
+
     protected static ?string $modelLabel = 'لاگ تماس';
 
     protected static ?string $pluralModelLabel = 'لاگ‌های تماس';

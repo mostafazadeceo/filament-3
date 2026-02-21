@@ -15,7 +15,10 @@ use Throwable;
 
 class MailuSyncService
 {
-    public function __construct(protected MailuClient $client) {}
+    public function __construct(
+        protected MailuClient $client,
+        protected DomainDnsAuditService $dnsAuditService
+    ) {}
 
     public function syncDomain(MailDomain $domain): MailDomain
     {
@@ -35,6 +38,26 @@ class MailuSyncService
                 'mailu_synced_at' => now(),
                 'dns_snapshot' => $dns ?: $domain->dns_snapshot,
             ]);
+
+            $domain = $this->dnsAuditService->applyToDomain($domain->refresh());
+        } catch (Throwable $exception) {
+            $this->markFailed($domain, $exception);
+        }
+
+        return $domain->refresh();
+    }
+
+    public function refreshDomainDnsSnapshot(MailDomain $domain): MailDomain
+    {
+        try {
+            $dns = $this->safeDomainDnsSnapshot($domain->name);
+            if ($dns !== null) {
+                $domain->update([
+                    'dns_snapshot' => $dns,
+                ]);
+            }
+
+            $domain = $this->dnsAuditService->applyToDomain($domain->refresh());
         } catch (Throwable $exception) {
             $this->markFailed($domain, $exception);
         }

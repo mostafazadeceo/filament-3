@@ -37,7 +37,7 @@ class CommerceCatalogServiceProvider extends PackageServiceProvider
         Gate::policy(CatalogProduct::class, CatalogProductPolicy::class);
         Gate::policy(CatalogCollection::class, CatalogCollectionPolicy::class);
 
-        if (class_exists(CapabilityRegistryInterface::class)) {
+        if (interface_exists(CapabilityRegistryInterface::class)) {
             $registry = $this->app->make(CapabilityRegistryInterface::class);
             CatalogCapabilities::register($registry);
         }

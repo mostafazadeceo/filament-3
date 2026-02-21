@@ -85,7 +85,7 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
                 \Filamat\IamSuite\Console\Commands\IamAutomationPruneCommand::class,
                 \Filamat\IamSuite\Console\Commands\IamPamDigestCommand::class,
             ])
-            ->hasRoutes(['api', 'web'])
+            ->hasRoutes(['api', 'web', 'oidc'])
             ->hasMigrations([
                 '2025_01_01_000001_create_organizations_table',
                 '2025_01_01_000002_create_tenants_table',
@@ -138,6 +138,8 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
                 '2025_01_01_000049_create_iam_ai_action_proposals_table',
                 '2025_01_01_000050_expand_webhook_secret_column',
                 '2025_01_01_000051_create_iam_quick_actions_table',
+                '2026_02_07_000060_create_iam_oidc_auth_codes_table',
+                '2026_02_07_000061_create_iam_oidc_refresh_tokens_table',
             ])
             ->runsMigrations();
     }
@@ -172,6 +174,10 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
         $this->app->singleton(SessionService::class);
         $this->app->singleton(ProtectedActionService::class);
         $this->app->singleton(MfaService::class);
+        $this->app->singleton(\Filamat\IamSuite\Services\Sso\OidcKeyManager::class);
+        $this->app->singleton(\Filamat\IamSuite\Services\Sso\OidcJwtService::class);
+        $this->app->singleton(\Filamat\IamSuite\Services\Sso\OidcClientResolver::class);
+        $this->app->singleton(\Filamat\IamSuite\Services\Sso\OidcService::class);
 
         $this->registerCapabilitySyncListeners();
 
@@ -263,14 +269,17 @@ class FilamatIamSuiteServiceProvider extends PackageServiceProvider
         });
 
         $this->app->make(Dispatcher::class)->listen(Logout::class, function (Logout $event) {
-            if (method_exists($event->user, 'forceFill')) {
-                $event->user->forceFill([
+            $user = $event->user;
+            if ($user && method_exists($user, 'forceFill')) {
+                $user->forceFill([
                     'last_logout_at' => now(),
                 ])->save();
             }
 
-            $this->app->make(NotificationService::class)->notifyLogout($event->user);
-            $this->app->make(SessionService::class)->recordLogout($event->user);
+            if ($user) {
+                $this->app->make(NotificationService::class)->notifyLogout($user);
+                $this->app->make(SessionService::class)->recordLogout($user);
+            }
         });
 
         $this->app->make(Dispatcher::class)->listen(Failed::class, function (Failed $event) {

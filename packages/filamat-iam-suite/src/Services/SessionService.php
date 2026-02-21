@@ -83,9 +83,13 @@ class SessionService
         ]);
     }
 
-    public function touch(string $sessionId): void
+    public function touch(?string $sessionId): void
     {
         if (! (bool) config('filamat-iam.sessions.record', true)) {
+            return;
+        }
+
+        if (! $sessionId) {
             return;
         }
 

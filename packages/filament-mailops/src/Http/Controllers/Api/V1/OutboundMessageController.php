@@ -43,7 +43,7 @@ class OutboundMessageController extends BaseController
         ];
     }
 
-    public function store(Request $request): \Illuminate\Http\Response
+    public function store(Request $request, ?int $parentId = null): \Illuminate\Http\Response
     {
         $validator = Validator::make($request->all(), $this->validationRules('store'));
         $validator->after(function ($validator) use ($request) {

@@ -1,4 +1,4 @@
-// File: /var/www/hub.haida.co/apps/web-pwa/src/app/(app)/page.tsx
+// File: /root/work/filament-3/apps/web-pwa/src/app/(app)/page.tsx
 import * as entry from '../../../../src/app/(app)/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

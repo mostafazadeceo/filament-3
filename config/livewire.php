@@ -11,7 +11,7 @@ return [
     | /livewire/* paths and ensures the published assets are used.
     |
     */
-    'asset_url' => env('LIVEWIRE_ASSET_URL', '/vendor/livewire'),
+    'asset_url' => env('LIVEWIRE_ASSET_URL', '/vendor/livewire/livewire.min.js'),
 
     /*
     |--------------------------------------------------------------------------

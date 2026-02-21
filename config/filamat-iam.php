@@ -32,8 +32,8 @@ return [
         'sessions' => true,
         'protected_actions' => true,
         'mfa' => true,
-        'sso' => false,
-        'scim' => false,
+        'sso' => (bool) env('FILAMAT_IAM_FEATURE_SSO', false),
+        'scim' => (bool) env('FILAMAT_IAM_FEATURE_SCIM', false),
     ],
 
     'access_requests' => [
@@ -75,9 +75,58 @@ return [
             'tenant_admin' => false,
         ],
     ],
+    'chat' => [
+        'shared_base_url' => env('FILAMAT_IAM_CHAT_BASE_URL', 'https://chat.abrak.org'),
+        'shared_connection_name' => env('FILAMAT_IAM_CHAT_CONNECTION_NAME', 'shared-rocket-chat'),
+        'shared_admin_user_id' => env('FILAMAT_IAM_CHAT_ADMIN_USER_ID', ''),
+        'shared_admin_token' => env('FILAMAT_IAM_CHAT_ADMIN_TOKEN', ''),
+        'default_team_prefix' => env('ROCKET_CHAT_TEAM_PREFIX', 'tenant-'),
+        'default_room_prefix' => env('ROCKET_CHAT_ROOM_PREFIX', 'room-'),
+        'owner_manage_flag' => env('FILAMAT_IAM_CHAT_OWNER_MANAGE_FLAG', 'tenant_owner_manage'),
+        // When the Rocket.Chat instance is shared across tenants, we still want to prevent
+        // Hub users without an active chat entitlement from logging into chat via SSO.
+        'oidc_client_id' => env('FILAMAT_IAM_RC_OIDC_CLIENT_ID', 'rocketchat-wordpress'),
+        'enforce_oidc_access' => (bool) env('FILAMAT_IAM_RC_OIDC_ENFORCE_CHAT_ACCESS', false),
+    ],
     'modules' => [
         'labels' => [
-            'filamat-iam-suite' => 'IAM Suite',
+            'filamat-iam-suite' => 'مدیریت هویت و دسترسی',
+            'filament-ai-core' => 'هوش مصنوعی',
+            'filament-meetings' => 'جلسات',
+            'filament-workhub' => 'رهگیری کارها',
+            'chat' => 'چت سازمانی',
+            'blog' => 'وبلاگ',
+            'content-cms' => 'مدیریت محتوا',
+            'site-builder-core' => 'سایت‌ساز',
+            'page-builder' => 'صفحه‌ساز',
+            'filament-storefront-builder' => 'فروشگاه‌ساز',
+            'tenancy-domains' => 'دامنه‌ها',
+            'platform-core' => 'هسته پلتفرم',
+            'feature-gates' => 'قفل قابلیت‌ها',
+            'commerce-catalog' => 'کاتالوگ',
+            'commerce-checkout' => 'پرداخت و تسویه',
+            'commerce-orders' => 'سفارش‌ها',
+            'filament-commerce-core' => 'تجارت',
+            'filament-commerce-experience' => 'تجربه خرید',
+            'filament-pos' => 'صندوق فروش',
+            'filament-loyalty-club' => 'باشگاه مشتریان',
+            'filament-crypto-core' => 'هسته رمزارز',
+            'filament-crypto-gateway' => 'درگاه رمزارز',
+            'filament-crypto-nodes' => 'نودهای رمزارز',
+            'filament-accounting-ir' => 'حسابداری ایران',
+            'filament-payroll-attendance' => 'حضور و غیاب',
+            'filament-payroll-attendance-ir' => 'حقوق و دستمزد',
+            'filament-petty-cash-ir' => 'تنخواه',
+            'filament-restaurant-ops' => 'عملیات رستوران',
+            'filament-marketplace-connectors' => 'اتصال مارکت‌پلیس',
+            'filament-payments' => 'پرداخت‌ها',
+            'payments-orchestrator' => 'هماهنگ‌ساز پرداخت',
+            'providers-core' => 'اتصال ارائه‌دهندگان',
+            'providers-esim-go' => 'eSIM Go',
+            'mailtrap' => 'میل‌ترپ',
+            'mailops' => 'عملیات ایمیل',
+            'filament-app-api' => 'اپلیکیشن',
+            'threecx' => 'مرکز تماس 3CX',
         ],
     ],
 
@@ -177,7 +226,17 @@ return [
         'allow_tenant_plans' => true,
         'enforce_access' => true,
         'active_statuses' => ['active', 'trialing'],
-        'exempt_permissions' => ['iam.view', 'iam.manage', 'subscription.view', 'subscription.manage'],
+        'exempt_permissions' => [
+            'iam.view',
+            'iam.manage',
+            'subscription.view',
+            'subscription.manage',
+            'chat.connection.view',
+            'chat.connection.manage',
+            'chat.user.view',
+            'chat.user.manage',
+            'chat.sync',
+        ],
     ],
 
     'governance' => [
@@ -238,10 +297,49 @@ return [
     ],
 
     'sso' => [
-        'enabled' => false,
+        'enabled' => (bool) env('FILAMAT_IAM_SSO_ENABLED', false),
         'providers' => [
             'oidc' => true,
             'saml' => false,
+        ],
+        'oidc' => [
+            'issuer' => env('FILAMAT_IAM_OIDC_ISSUER', env('APP_URL', '')),
+            'login_url' => env('FILAMAT_IAM_OIDC_LOGIN_URL', '/admin/login'),
+            'authorize_path' => env('FILAMAT_IAM_OIDC_AUTHORIZE_PATH', '/oidc/authorize'),
+            'token_path' => env('FILAMAT_IAM_OIDC_TOKEN_PATH', '/oidc/token'),
+            'userinfo_path' => env('FILAMAT_IAM_OIDC_USERINFO_PATH', '/oidc/userinfo'),
+            'jwks_path' => env('FILAMAT_IAM_OIDC_JWKS_PATH', '/oidc/jwks.json'),
+            'code_ttl_seconds' => (int) env('FILAMAT_IAM_OIDC_CODE_TTL', 300),
+            'token_ttl_seconds' => (int) env('FILAMAT_IAM_OIDC_TOKEN_TTL', 3600),
+            'refresh_ttl_seconds' => (int) env('FILAMAT_IAM_OIDC_REFRESH_TTL', 2592000),
+            'allowed_scopes' => ['openid', 'profile', 'email', 'roles'],
+            'key_path' => env('FILAMAT_IAM_OIDC_KEY_PATH', storage_path('app/oidc')),
+            // Static OIDC clients (e.g., Rocket.Chat OAuth client). Keep secrets in env, not in git.
+            'clients' => (static function (): array {
+                $clientId = trim((string) env('FILAMAT_IAM_RC_OIDC_CLIENT_ID', ''));
+                $clientSecret = (string) env('FILAMAT_IAM_RC_OIDC_CLIENT_SECRET', '');
+
+                if ($clientId === '' || $clientSecret === '') {
+                    return [];
+                }
+
+                $redirectUris = array_values(array_filter(array_map(
+                    'trim',
+                    explode(',', (string) env('FILAMAT_IAM_RC_OIDC_REDIRECT_URIS', '')),
+                )));
+
+                $scopes = preg_split('/\s+/', trim((string) env('FILAMAT_IAM_RC_OIDC_SCOPES', 'openid profile email roles'))) ?: [];
+                $scopes = array_values(array_filter(array_map('strval', $scopes)));
+
+                return [
+                    $clientId => [
+                        'name' => 'Abrak Chat',
+                        'client_secret' => $clientSecret,
+                        'redirect_uris' => $redirectUris,
+                        'scopes' => $scopes,
+                    ],
+                ];
+            })(),
         ],
     ],
 

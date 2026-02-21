@@ -27,7 +27,7 @@ class ResolveTenantFromHost
                 $tenant = Tenant::query()->where('slug', $tenantSlug)->first();
                 if ($tenant) {
                     TenantContext::setTenant($tenant);
-                    SiteContext::set($tenant->getKey(), null, $host);
+                    SiteContext::set($tenant->getKey(), null, $host, SiteDomain::SERVICE_ALL);
 
                     return $next($request);
                 }
@@ -52,7 +52,12 @@ class ResolveTenantFromHost
             $tenant = Tenant::query()->find($domain->tenant_id);
             if ($tenant) {
                 TenantContext::setTenant($tenant);
-                SiteContext::set($tenant->getKey(), $domain->site_id, $host);
+                SiteContext::set(
+                    $tenant->getKey(),
+                    $domain->site_id,
+                    $host,
+                    $domain->service ?: SiteDomain::SERVICE_ALL,
+                );
 
                 return $next($request);
             }

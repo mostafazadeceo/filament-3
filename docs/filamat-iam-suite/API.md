@@ -41,6 +41,17 @@
 | GET | /api/v1/scim/Groups | scim.view | scim.view | [ASSUMPTION] 60,1 | - |
 | GET | /api/v1/sso/providers | sso.view | sso.view | [ASSUMPTION] 60,1 | - |
 | POST | /api/v1/sso/oidc/callback | sso.manage | sso.manage | [ASSUMPTION] 60,1 | {"data":"..."} [ASSUMPTION] |
+
+## OIDC Provider (هاب)
+این مسیرها خارج از `/api/v1` هستند و برای اتصال سرویس‌هایی مثل Rocket.Chat استفاده می‌شوند.
+
+| Method | Path | شرح |
+| --- | --- | --- |
+| GET | /.well-known/openid-configuration | Discovery |
+| GET | /oidc/jwks.json | JWKS (کلیدهای عمومی) |
+| GET/POST | /oidc/authorize | Authorization Code |
+| POST | /oidc/token | Token/Refresh |
+| GET/POST | /oidc/userinfo | UserInfo |
 | GET | /filamat-iam/impersonation/stop | [ASSUMPTION] | [ASSUMPTION] | [ASSUMPTION] 60,1 | - |
 | POST | /api/v1/webhooks/notification-plugin | [ASSUMPTION] | [ASSUMPTION] | [ASSUMPTION] 60,1 | {"data":"..."} [ASSUMPTION] |
 | POST | /api/v1/webhooks/payment-provider | [ASSUMPTION] | [ASSUMPTION] | [ASSUMPTION] 60,1 | {"data":"..."} [ASSUMPTION] |
