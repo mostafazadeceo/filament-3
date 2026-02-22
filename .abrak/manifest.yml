@@ -1,0 +1,109 @@
+manifest_version: "1.0"
+
+repo:
+  slug: "abrak-hub"
+  title_fa: "هاب ابرک"
+  title_en: "Abrak Hub"
+  kind: "hub"
+  owner: "abrak-holding"
+  status: "active"
+  visibility: "private"
+  primary_language: "php"
+  secondary_languages: ["javascript"]
+  description_fa: "هاب مرکزی ابرک برای هویت، دسترسی، رویداد و حکمرانی سرویس‌ها"
+  description_en: "Central Abrak hub for identity, entitlements, events, and service governance"
+
+runtime:
+  deployment_style: "vm"
+  domains: ["hub.abrak.org", "license.abrak.org"]
+  envs: ["dev", "stage", "prod"]
+  data_stores:
+    - type: "db"
+      name: "hub_main_db"
+      criticality: "high"
+    - type: "cache"
+      name: "redis_cache"
+      criticality: "medium"
+    - type: "queue"
+      name: "queue_default"
+      criticality: "high"
+  secrets_policy:
+    rule: "No secrets in repo; use secret manager"
+  backup_policy:
+    required: true
+    notes: "Application config and data must have restorable backups before migrations"
+
+safety:
+  red_lines:
+    - "PC.HAIDA.CO"
+    - "CRM.HAIDA.CO"
+  never_touch_rules:
+    - "No restart/update/cleanup on red line systems"
+    - "No scanning or heavy ops affecting shared infra"
+  allowed_actions:
+    - "read-only discovery on unrelated hosts"
+    - "work only in isolated new environments"
+  change_control:
+    requires_adr: true
+    requires_backup_before_migration: true
+
+abrak_integration:
+  role: "both"
+  auth:
+    required: true
+    model: "single_sign_on"
+    token_type: "access_token"
+  entitlements:
+    uses_plans: true
+    uses_licenses: true
+    uses_feature_flags: true
+  events:
+    produces:
+      - name: "license.state.changed"
+        payload_schema_ref: "registry/services.yml#schemas/license_state_changed"
+      - name: "command.envelope"
+        payload_schema_ref: "registry/services.yml#schemas/command_envelope"
+    consumes:
+      - name: "usage.recorded"
+      - name: "order.paid"
+  billing:
+    usage_metering: true
+    pricing_model: "hybrid"
+  audit:
+    required: true
+    retention_days: 365
+
+dependencies:
+  repos:
+    - slug: "abrak-co"
+      relation: "governance"
+    - slug: "odoo-v2"
+      relation: "erp_integration"
+  external_services:
+    - name: "notification_providers"
+      purpose: "delivery of alerts and user communication"
+      risk: "medium"
+
+documentation:
+  primary_docs:
+    - id: "DOC-ABRAK-HUB-001"
+      fa: "docs/abrak/identity-events-center.fa.md"
+      en: "docs/abrak/identity-events-center.en.md"
+  runbooks:
+    - id: "RUN-ABRAK-HUB-001"
+      fa: "docs/99-release-checklist.md"
+      en: "docs/99-release-checklist.md"
+  adr_index:
+    fa: "docs/prs/"
+    en: "docs/prs/"
+
+release:
+  versioning: "semantic"
+  current_version: "0.1.0"
+  release_channels: ["dev", "stable"]
+  ci_required: true
+
+contact:
+  technical_owner: "hub-platform-team"
+  product_owner: "abrak-product"
+  support_notes: "Central identity/events center; verify cross-module regressions before release"

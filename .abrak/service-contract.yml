@@ -1,0 +1,40 @@
+contract_version: "1.0"
+
+service:
+  slug: "abrak-hub"
+  title_fa: "هاب ابرک - مرکز هویت و رویداد"
+  title_en: "Abrak Hub - Identity and Events Center"
+
+endpoints:
+  auth_callback: "/auth/callback"
+  usage_ingest: "/api/v1/events/usage"
+  command_listener: "/api/v1/commands"
+  health_check: "/health"
+
+events:
+  produce:
+    - "license.state.changed"
+    - "command.envelope"
+    - "plan.changed"
+  consume:
+    - "usage.recorded"
+    - "order.paid"
+    - "license.suspended"
+    - "license.activated"
+
+schemas:
+  usage_recorded:
+    required_fields: ["org_id", "user_id", "service_slug", "units", "unit_type", "timestamp", "trace_id"]
+  order_paid:
+    required_fields: ["org_id", "order_id", "amount", "currency", "paid_at", "trace_id"]
+
+security:
+  transport: "https"
+  signing: "required"
+  replay_protection: "required"
+  rate_limit: "required"
+
+operational:
+  idempotency: "required"
+  retries: "exponential_backoff"
+  dead_letter: "required"
